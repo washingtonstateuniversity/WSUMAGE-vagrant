@@ -12,15 +12,14 @@ class MAGEINSTALLER
     end
 
 
-    def create_file(path)
+    def create_dir(dir)
         require 'fileutils'
-        dir = File.dirname(path)
-        
+        dir=File.join(Dir.pwd, dir)
         if !File.exists?(dir)
-            Dir.mkdir(File.join(Dir.pwd, path), 0700) #=> 0
-            puts "ceated file #{path}\n"
+            Dir.mkdir(dir, 0700) #=> 0
+            puts "ceated file #{dir}\n"
         else
-            puts "existing file #{path}\n"
+            puts "existing file #{dir}\n"
         end
     end
     

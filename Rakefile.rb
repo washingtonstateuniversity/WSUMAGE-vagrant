@@ -16,6 +16,12 @@ load 'rake/helper.rb'
 desc "prepare  the system"
 task :init do
     mi =MAGEINSTALLER.new
+    puts "cearting default folders"
+    mi.create_dir("/www/")
+    mi.create_dir("/_BOXES/")
+    mi.create_dir("/database/data/")
+    
+    fresh=false
     
     file='_BOXES/precise32.box'
     if !File.exist?(file)
@@ -37,6 +43,7 @@ task :init do
         puts "installing highline gem"
         output = `gem install highline`
         puts output
+        fresh=true
     else
         puts "skipping highline gem, installed already"
     end
@@ -45,20 +52,22 @@ task :init do
         puts "installing launchy gem"
         output = `gem install launchy`
         puts output
+        fresh=true
     else
         puts "skipping launchy gem, installed already"
     end
     
-    puts "cearting default folders"
-    mi.create_file("/www/")
+
         
     puts "> We have settup everything, only last"
     puts "> thing to do when ready is `rake start`"
-    puts "Would you like to start? [y/n]"
-    input = STDIN.gets.strip
-    if input == 'y'
-        Rake::Task["start"].reenable
-        Rake::Task["start"].invoke
+    if !fresh
+        puts "Would you like to start? [y/n]"
+        input = STDIN.gets.strip
+        if input == 'y'
+            Rake::Task["start"].reenable
+            Rake::Task["start"].invoke
+        end
     end
 end
 
@@ -121,10 +130,20 @@ end
 
 
 
+task :hardclean do
+    output=`vagrant destroy -f`
+    puts output
+    Rake::Task["clean_mage_intsall"].reenable
+    Rake::Task["clean_mage_intsall"].invoke   
+
+    Rake::Task["clean_db"].reenable
+    Rake::Task["clean_db"].invoke
+end
+
 
 desc "Destroy the vagrant with call back functions run"
 task :end do
-    exec 'vagrant destroy -f'
+    output=`vagrant destroy -f`
     puts "Should the databases be cleared? [y/n]"
     input = STDIN.gets.strip
     if input == 'y'
