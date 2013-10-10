@@ -31,8 +31,6 @@ error_reporting ( E_ALL & ~ E_NOTICE );
 
 
 
-
-
 $cDat = new Mage_Core_Model_Config();
 
 echo "applying default store settings\n";
