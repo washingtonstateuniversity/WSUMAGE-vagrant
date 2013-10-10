@@ -4,6 +4,13 @@
 # Because this really is a working directory, ignore vagrant's files
 /.vagrant
 
+# skip boxes
+*.box
+
+# skip tmp settings files
+*/install_settings.sh
+
+
 # This is a file intended for hooking in a custom Vagrant configuration on up
 /Customfile
 
@@ -18,14 +25,10 @@
 # No need to share our mysql data with each other
 /database/data/*
 
-
-
-# BUT....
-
 # We do have some default nginx configs that should be included
 !/config/nginx-config/sites/default.conf
 
-# And we do have a default SQL file that should be included
+# default SQL file that should be included
 !/database/init.sql
 
 # And a few of our web directories are important to share.
