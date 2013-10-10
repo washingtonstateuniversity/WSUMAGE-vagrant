@@ -184,11 +184,7 @@ task :create_install_settings do
     mi.add_setting("MAGEversion=\"1.8.0.0\"\n")
     mi.add_setting("url=\"local.mage.dev\"\n")
 
-    mi.add_setting("adminuser=\"admin\"\n")
-    mi.add_setting("adminpass=\"admin2013\"\n")
-    mi.add_setting("adminfname=\"MC\"\n")
-    mi.add_setting("adminlname=\"Lovin\"\n")
-    mi.add_setting("adminemail=\"test.user@wsu.edu\"\n")
+
     
     puts "database host of mage? [default localhost]"
     input = STDIN.gets.strip
@@ -228,9 +224,9 @@ task :create_install_settings do
     puts "SAMPLE DATA *** would you like to install this?[y/n]"
     input = STDIN.gets.strip
     if input == 'y'
-        mi.add_setting("dbpass=\"true\"\n")
+        mi.add_setting("install_sample=\"true\"\n")
     else
-        mi.add_setting("dbpass=\"false\"\n")
+        mi.add_setting("install_sample=\"false\"\n")
     end
     
     puts "Add your own personal user?[y/n]  *** the default user is still installed ***"
@@ -239,7 +235,7 @@ task :create_install_settings do
         puts "Username: *** This must be your NID if using LDAP ***"
         uinput = STDIN.gets.strip
         if uinput != ''
-            mi.add_setting("adminuser=\"#{uinput}\"\n")
+            mi.add_setting("custom_adminuser=\"#{uinput}\"\n")
         end
         
         #so here is a good example of where we want to pull out so we can check and loop
@@ -247,23 +243,27 @@ task :create_install_settings do
         pass2 = ask("RE-Enter your password:") { |q| q.echo = "x" }
         if pass != '' && pass == pass
             pass=Digest::MD5.hexdigest(pass) #don't want usernames hanging around
-            mi.add_setting("adminpass=\"#{pass}\"\n")
+            mi.add_setting("custom_adminpass=\"#{pass}\"\n")
         end  
 
         puts "First name:"
         uinput = STDIN.gets.strip
         if uinput != ''
-            mi.add_setting("adminfname=\"#{uinput}\"\n")
+            mi.add_setting("custom_adminfname=\"#{uinput}\"\n")
         end      
         puts "Last name:"
         uinput = STDIN.gets.strip
         if uinput != ''
-            mi.add_setting("adminlname=\"#{uinput}\"\n")
+            mi.add_setting("custom_adminlname=\"#{uinput}\"\n")
         end
     end
     
     
-
+    mi.add_setting("adminuser=\"admin\"\n")
+    mi.add_setting("adminpass=\"admin2013\"\n")
+    mi.add_setting("adminfname=\"MC\"\n")
+    mi.add_setting("adminlname=\"Lovin\"\n")
+    mi.add_setting("adminemail=\"test.user@wsu.edu\"\n")
     
     
 
