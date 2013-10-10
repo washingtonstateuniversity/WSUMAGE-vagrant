@@ -1,4 +1,3 @@
-# Stuff that pops up locally for me - @jeremyfelt
 *.sublime*
 .DS_Store
 
@@ -19,12 +18,7 @@
 # No need to share our mysql data with each other
 /database/data/*
 
-# No need to share our individual sites with each other
-/www/*
 
-# And no need to share individual SQL files with each other
-*.sql
-*.sql.gz
 
 # BUT....
 
