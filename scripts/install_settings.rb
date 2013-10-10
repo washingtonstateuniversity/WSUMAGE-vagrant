@@ -1,0 +1,12 @@
+#!/bin/bash
+MAGEversion="1.8.0.0"
+dbhost="localhost"
+dbname="mage"
+dbuser="devsqluser"
+dbpass="devsqluser"
+url="local.mage.dev"
+adminuser="admin"
+adminpass="admin2013"
+adminfname="MC"
+adminlname="Lovin"
+adminemail="test.user@wsu.edu"
