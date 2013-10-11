@@ -117,9 +117,10 @@ task :start do
     puts "Finished lets go [any key to continue]"
     input = STDIN.gets.strip
     
-    exec 'vagrant up'   ## for now just start here but look to 
-                        ## http://tech.natemurray.com/2007/03/ruby-shell-commands.html or
-                        ## or try to get to vagrant CLI
+    system( "vagrant up" )
+    Rake::Task["open"].reenable
+    Rake::Task["open"].invoke
+    
 end
 
 #note just for testing
