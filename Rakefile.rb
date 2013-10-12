@@ -185,97 +185,112 @@ desc "Create a setting file"#maybe abstract this
 task :create_install_settings do
     require 'highline/import'
     require 'digest/md5'
-
     
     mi =MAGEINSTALLER.new
 
-    #MAGEversion="1.8.0.0"
-    #dbhost="localhost"
-    #dbname="mage"
-    #dbuser="devsqluser"
-    #dbpass="devsqluser"
-    #url="local.mage.dev"
-    #adminuser="admin"
-    #adminpass="admin2013"
-    #adminfname="Mc"       
-    #adminlname="Lovin"
-    #adminemail="test.user@wsu.edu"
     mi.add_setting("#!/bin/bash\n")
     mi.add_setting("MAGEversion=\"1.8.0.0\"\n")
     mi.add_setting("url=\"local.mage.dev\"\n")
 
 
-    
-    puts "database host of mage? [default localhost]"
-    input = STDIN.gets.strip
-    if input == ''
+    uinput = agree("database HOST, use the default <%= color('`localhost`', :bold) %>? [y/n]")
+    if uinput
         #maybe check vagrant?
         #if not lets go the hard coded, but for
         #now we'll localhost
         mi.add_setting("dbhost=\"localhost\"\n")
     else
+        input = ask("database host:")
         mi.add_setting("dbhost=\"#{input}\"\n")
     end
-
-    puts "database name of mage? [default mage]"
-    input = STDIN.gets.strip
-    if input == ''
+#dbname
+    uinput = agree("database NAME, use the default <%= color('`mage`', :bold) %>? [y/n]")
+    if uinput
         mi.add_setting("dbname=\"mage\"\n")
     else
-        mi.add_setting("dbname=\"#{input}\"\n")
+        mi.add_setting("dbname=\"#{uinput}\"\n")
     end
-
-    puts "database user of mage? [default devsqluser]"
-    input = STDIN.gets.strip
-    if input == ''
+#dbuser
+    uinput = agree("database USER, use the default <%= color('`devsqluser`', :bold) %>? [y/n]")
+    if uinput
         mi.add_setting("dbuser=\"devsqluser\"\n")
     else
+        input = ask("database user:")
         mi.add_setting("dbuser=\"#{input}\"\n")
     end
-
-    puts "database user's password of mage? [default devsqluser]"
-    input = STDIN.gets.strip
-    if input == ''
+#dbpass
+    uinput = agree("database USER PASS, use the default <%= color('`devsqluser`', :bold) %>? [y/n]")
+    if uinput
         mi.add_setting("dbpass=\"devsqluser\"\n")
     else
-        mi.add_setting("dbpass=\"#{input}\"\n")
+        input = ask("database password:")
+        mi.add_setting("dbuser=\"#{input}\"\n")
     end
-
+#install sample data
     puts "SAMPLE DATA *** would you like to install this?[y/n]"
-    input = STDIN.gets.strip
-    if input == 'y'
+    uinput = agree("Install <%= color('`SAMPLE DATA`', :bold) %>? [y/n]")
+    if uinput
         mi.add_setting("install_sample=\"true\"\n")
     else
         mi.add_setting("install_sample=\"false\"\n")
     end
     
-    puts "Add your own personal user?[y/n]  *** the default user is still installed ***"
-    input = STDIN.gets.strip
-    if input == 'y'
-        puts "Username: *** This must be your NID if using LDAP ***"
-        uinput = STDIN.gets.strip
+#add your nid for LDAP based tests
+    uinput = ask("Add your own personal user?[y/n]  <%= color('*** the default user is still installed ***', :bold, :yellow, :on_black) %>") { |q| q.validate = /\A[y|n]\Z/ }
+    if uinput == 'y'
+        
+        uinput = ask("<%= color('*** This must be your NID if using LDAP ***', :bold, :yellow, :on_black) %>\nUsername:") do |q| 
+                    q.validate = /\A\w+\Z/
+                    q.responses[:not_valid]    = 'Must not be blank'
+                    q.responses[:ask_on_error] = :question
+                end
         if uinput != ''
             mi.add_setting("custom_adminuser=\"#{uinput}\"\n")
         end
-        
-        #so here is a good example of where we want to pull out so we can check and loop
-        pass = ask("Enter your password: *** must be alphanumeric *** When using LDAP it's your AD password ***") { |q| q.echo = "x" }
-        pass2 = ask("RE-Enter your password:") { |q| q.echo = "x" }
-        if pass != '' && pass == pass
-            pass=Digest::MD5.hexdigest(pass) #don't want usernames hanging around
-            mi.add_setting("custom_adminpass=\"#{pass}\"\n")
-        end  
 
-        puts "First name:"
-        uinput = STDIN.gets.strip
+#user pass
+        say("<%= color('*** must be alphanumeric \n*** When using LDAP it is your AD password', :bold, :yellow, :on_black) %>\n")
+        pass = ask("<%= @key %>:  ") do |q|
+            q.echo = '*'
+            q.verify_match = true
+            q.validate  = /^(?=[A-Za-z0-9]).{8,}$/
+            q.responses[:not_valid]    = "<%= color('password must be min 8 characters with numbers', :bold, :red, :on_black) %>"
+            q.gather = {"Enter a password" => '',
+                        "Verify password" => ''}
+        end
+        #not working, recheck this
+        if(!(pass =~ /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$  /).nil?)
+            puts "That password very weak? try again? [y/n]"
+            input = STDIN.gets.strip
+            if input == 'y'
+                puts "NOTE:"
+                puts "*** must be alphanumeric *** When using LDAP it's your AD password ***"
+                puts "Try two uppercase letters/one special case letter (!@#$&*)/two digits/three lowercase"
+                puts "letters with a min length of 8 charcters"
+                pass = ask("<%= @key %>:  ") do |q|
+                    q.echo = '*'
+                    q.verify_match = true
+                    q.validate  = /^(?=[A-Za-z0-9]).{8,}$/
+                  q.gather = {"Enter a password: *** must be alphanumeric *** When using LDAP it's your AD password ***" => '',
+                              "Please type it again for verification" => ''}
+                end
+            end    
+        end
+        pass=Digest::MD5.hexdigest(pass) #don't want usernames hanging around
+        mi.add_setting("custom_adminpass=\"#{pass}\"\n")
+
+#first name
+        uinput = ask("First name:") { |q| q.validate = /\A\w+\Z/ }
         if uinput != ''
             mi.add_setting("custom_adminfname=\"#{uinput}\"\n")
-        end      
-        puts "Last name:"
-        uinput = STDIN.gets.strip
+        end  
+        
+#last name
+        uinput = ask("Last name:") { |q| q.validate = /\A\w+\Z/ }
         if uinput != ''
             mi.add_setting("custom_adminlname=\"#{uinput}\"\n")
-        end
+        end  
+
     end
     
     
