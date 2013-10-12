@@ -188,55 +188,64 @@ task :create_install_settings do
     
     mi =MAGEINSTALLER.new
 
-    mi.add_setting("#!/bin/bash\n")
-    mi.add_setting("MAGEversion=\"1.8.0.0\"\n")
-    mi.add_setting("url=\"local.mage.dev\"\n")
+    file="scripts/install_settings.sh"
+    mi.file_remove(file); #clear fisrt
+    mi.add_setting(file,"#!/bin/bash\n")
+    mi.add_setting(file,"MAGEversion=\"1.8.0.0\"\n")
+    mi.add_setting(file,"url=\"local.mage.dev\"\n")
 
-
+#host
     uinput = agree("database HOST, use the default <%= color('`localhost`', :bold) %>? [y/n]")
     if uinput
-        #maybe check vagrant?
-        #if not lets go the hard coded, but for
-        #now we'll localhost
-        mi.add_setting("dbhost=\"localhost\"\n")
+        #maybe check vagrant? if not lets go the hard coded, but for now we'll localhost
+        mi.add_setting(file,"dbhost=\"localhost\"\n")
     else
         input = ask("database host:")
-        mi.add_setting("dbhost=\"#{input}\"\n")
+        mi.add_setting(file,"dbhost=\"#{input}\"\n")
     end
 #dbname
     uinput = agree("database NAME, use the default <%= color('`mage`', :bold) %>? [y/n]")
     if uinput
-        mi.add_setting("dbname=\"mage\"\n")
+        mi.add_setting(file,"dbname=\"mage\"\n")
     else
-        mi.add_setting("dbname=\"#{uinput}\"\n")
+        mi.add_setting(file,"dbname=\"#{uinput}\"\n")
     end
 #dbuser
     uinput = agree("database USER, use the default <%= color('`devsqluser`', :bold) %>? [y/n]")
     if uinput
-        mi.add_setting("dbuser=\"devsqluser\"\n")
+        mi.add_setting(file,"dbuser=\"devsqluser\"\n")
     else
         input = ask("database user:")
-        mi.add_setting("dbuser=\"#{input}\"\n")
+        mi.add_setting(file,"dbuser=\"#{input}\"\n")
     end
 #dbpass
     uinput = agree("database USER PASS, use the default <%= color('`devsqluser`', :bold) %>? [y/n]")
     if uinput
-        mi.add_setting("dbpass=\"devsqluser\"\n")
+        mi.add_setting(file,"dbpass=\"devsqluser\"\n")
     else
         input = ask("database password:")
-        mi.add_setting("dbuser=\"#{input}\"\n")
+        mi.add_setting(file,"dbuser=\"#{input}\"\n")
     end
 #install sample data
     puts "SAMPLE DATA *** would you like to install this?[y/n]"
     uinput = agree("Install <%= color('`SAMPLE DATA`', :bold) %>? [y/n]")
     if uinput
-        mi.add_setting("install_sample=\"true\"\n")
+        mi.add_setting(file,"install_sample=\"true\"\n")
     else
-        mi.add_setting("install_sample=\"false\"\n")
+        mi.add_setting(file,"install_sample=\"false\"\n")
+    end
+    
+#install sample data
+    uinput = agree("turn on <%= color('LDAP', :bold) %>? [y/n] <%= color('NOTE: n', :bold, :yellow, :on_black) %>")
+    if uinput
+        mi.add_setting(file,"use_ldap\"true\"\n")
+    else
+        mi.add_setting(file,"use_ldap=\"false\"\n")
     end
     
 #add your nid for LDAP based tests
     uinput = ask("Add your own personal user?[y/n]  <%= color('*** the default user is still installed ***', :bold, :yellow, :on_black) %>") { |q| q.validate = /\A[y|n]\Z/ }
+    
     if uinput == 'y'
         
         uinput = ask("<%= color('*** This must be your NID if using LDAP ***', :bold, :yellow, :on_black) %>\nUsername:") do |q| 
@@ -245,21 +254,21 @@ task :create_install_settings do
                     q.responses[:ask_on_error] = :question
                 end
         if uinput != ''
-            mi.add_setting("custom_adminuser=\"#{uinput}\"\n")
+            mi.add_setting(file,"custom_adminuser=\"#{uinput}\"\n")
         end
 
 #user pass
-        say("<%= color('*** must be alphanumeric \n*** When using LDAP it is your AD password', :bold, :yellow, :on_black) %>\n")
+        say("<%= color('*** must be alphanumeric and min 8 length \n*** When using LDAP it is your AD password', :bold, :yellow, :on_black) %>\n")
         pass = ask("<%= @key %>:  ") do |q|
             q.echo = '*'
             q.verify_match = true
-            q.validate  = /^(?=[A-Za-z0-9]).{8,}$/
+            q.validate  = /^(?=.*[0-9])(?=.*[A-Za-z]).{8,}$/
             q.responses[:not_valid]    = "<%= color('password must be min 8 characters with numbers', :bold, :red, :on_black) %>"
             q.gather = {"Enter a password" => '',
                         "Verify password" => ''}
         end
         #not working, recheck this
-        if(!(pass =~ /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8}$  /).nil?)
+        if(!(pass =~ /^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z]).{8,}$  /))
             puts "That password very weak? try again? [y/n]"
             input = STDIN.gets.strip
             if input == 'y'
@@ -277,30 +286,35 @@ task :create_install_settings do
             end    
         end
         pass=Digest::MD5.hexdigest(pass) #don't want usernames hanging around
-        mi.add_setting("custom_adminpass=\"#{pass}\"\n")
+        mi.add_setting(file,"custom_adminpass=\"#{pass}\"\n")
 
 #first name
         uinput = ask("First name:") { |q| q.validate = /\A\w+\Z/ }
         if uinput != ''
-            mi.add_setting("custom_adminfname=\"#{uinput}\"\n")
+            mi.add_setting(file,"custom_adminfname=\"#{uinput}\"\n")
         end  
         
 #last name
         uinput = ask("Last name:") { |q| q.validate = /\A\w+\Z/ }
         if uinput != ''
-            mi.add_setting("custom_adminlname=\"#{uinput}\"\n")
+            mi.add_setting(file,"custom_adminlname=\"#{uinput}\"\n")
         end  
-
+#email
+        uinput = ask("Email:") { |q| 
+            q.validate  = mi.test_email
+            q.responses[:not_valid]    = "<%= color('you must use a valid email.', :bold, :red, :on_black) %>"
+        }
+        if uinput != ''
+            mi.add_setting(file,"custom_adminlemail=\"#{uinput}\"\n")
+        end  
     end
     
     
-    mi.add_setting("adminuser=\"admin\"\n")
-    mi.add_setting("adminpass=\"admin2013\"\n")
-    mi.add_setting("adminfname=\"MC\"\n")
-    mi.add_setting("adminlname=\"Lovin\"\n")
-    mi.add_setting("adminemail=\"test.user@wsu.edu\"\n")
-    
-    
+    mi.add_setting(file,"adminuser=\"admin\"\n")
+    mi.add_setting(file,"adminpass=\"admin2013\"\n")
+    mi.add_setting(file,"adminfname=\"MC\"\n")
+    mi.add_setting(file,"adminlname=\"Lovin\"\n")
+    mi.add_setting(file,"adminemail=\"test.user@wsu.edu\"\n")
 
     puts "the installer setting have been created"
 end
