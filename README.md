@@ -2,7 +2,7 @@
 ## Overview
 The goal of this project is to make a very simple way for someone to do development against the production version of the Magento solution.  It's done in a way that should let the user follow only a few steps before then can login to the admin area and begin development work. 
 
-1. install GITHUB ([win](http://windows.github.com/)|[mac](http://mac.github.com/))/[Vagrant](https://www.virtualbox.org/)/[VirtualBox](https://www.virtualbox.org/)/(win)[Ruby](http://rubyinstaller.org/)
+1. install GITHUB ([win](http://windows.github.com/)|[mac](http://mac.github.com/)) / [Vagrant](https://www.virtualbox.org/) / [VirtualBox](https://www.virtualbox.org/) / [Ruby](http://rubyinstaller.org/)(win)
 1. run in powershell/command line `git clone git://github.com/washingtonstateuniversity/WSUMAGE-vagrant.git vvvbox`
 1. move to the new directory `cd vvvbox`
 1. run in powershell/command line `rake init`
@@ -31,6 +31,7 @@ All Magento admin usernames and passwords for the installations included by defa
 
 ### What do you get?
 A bunch of stuff!
+
 1. [Ubuntu](http://ubuntu.com) 12.04 LTS (Precise Pangolin)
 1. [nginx](http://nginx.org) 1.4.2
 1. [mysql](http://mysql.com) 5.5.32
