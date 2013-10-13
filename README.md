@@ -1,4 +1,4 @@
-# WSU Magento Vagrant 
+# WSU Magento Development platform 
 ## Overview
 The goal of this project is to make a very simple way for someone to do development against the 
 production version of the Magento solution.  This setup is done in a way that should let the user follow 
@@ -35,8 +35,47 @@ What this project is designed to do it wrap Vagrant in a `rake` task for Ruby.  
 perform tests that the host system is ready to `vagrant up` and can ask questions verse requiring 
 the developer to mess around with the configs.  This means you can bring up and down a box much faster.
 
-### Credentials and Such
+###Rake Tasks
+Although you could just use the Vagrant commands, the whole point of this project is that there 
+are questions about the envoiroment you want to set up.  In order to take advantage of this, here are a list of the rake tasks:
 
+    1. `rake test` :: this is for testing that all the plugins are there, if not then install them?
+    1. `rake open` :: Opens up your default browser and loads your url from settings
+    1. `rake init` :: setup the system ***(more for testing)***
+    1. `rake start` :: vagrant up but with prompts
+    1. `rake end` :: destroy with options to clean up
+    1. `rake up` :: vagrant up ***(only adds timer and events)***
+    1. `rake destory` :: vagrant destory ***(only adds timer and events)***
+    1. `rake halt` :: vagrant halt ***(only adds timer and events)***
+    1. `rake reload` :: vagrant reload ***(only adds timer and events)***
+    1. `rake resume` :: vagrant resume ***(only adds timer and events)***
+    1. `rake suspend` :: vagrant suspend ***(only adds timer and events)***
+    1. `rake pull` :: match the local to the production
+    1. `rake push` :: push up to production ***(would need to authenticate)***
+    1. `rake hardclean` :: runs all the cleaners
+    1. `rake clean_db` ::  This is to clear the shared database folder
+    1. `rake clean_www` :: This is to clear the shared web folder
+    1. `rake create_install_settings` :: create the settings for the installer
+
+
+
+### Events
+Because this is a ruby rake task wraper for Vagrant, we can add a few helpers to improve the process.
+One of the first things is that there are event hooks that you can inject your personal parts to.  
+All event files are located in `/rake/events` and will have the file name in the format  of `{Event_type}_{Task_name}.rb`.
+The events that are set up for you are
+    
+    1. Pre
+    1. Post
+    
+So for example if you wanting to do something before everything else when `rake start` is ran, then you would need 
+to add your event file named, `Pre_start.rb`  There is a smaple file to look at as well in the `/rake` folder (`EXAMPLE_Pre_start.rb`).
+From there you area now able to do more custom actions like copying some files in place or something.
+
+
+
+##Custom parts
+### Credentials and Such
 All database usernames and passwords for Magento installations included by default are 
 `devsqluser` and `devsqluser`.  You may also use the prompts to as everything is setting up 
 to change this but changing the setting file.
@@ -59,8 +98,6 @@ This is to match the production environment as closely as possible, and lot all 
 Given that by default the xDebug is turned on, this can run slower.  When a module is vetted but 
 a peer review, this environment will be used.  As of yet there is no unit tests, but when there are
 they will be loaded in this development area.
-
-
 
 
 #### Magento Stable
@@ -88,7 +125,7 @@ There are 3 servers that run when mirroring the production servers, or just one 
 1. [ngrep](http://ngrep.sourceforge.net/usage.html)
 1. [dos2unix](http://dos2unix.sourceforge.net/)
 1. [phpMemcachedAdmin](https://code.google.com/p/phpmemcacheadmin/) 1.2.2 BETA
-1. [adminer](http://www.adminer.org/)
+1. [adminer](http://www.adminer.org/) ** will not be found on production ever! **
 1. [Magento 1.8.0](http://www.magentocommerce.com/download)
     Plugings Loaded:
     
@@ -117,4 +154,10 @@ There are 3 servers that run when mirroring the production servers, or just one 
     1. [Enhanced Admin Grids](https://github.com/mage-eag/mage-enhanced-admin-grids.git)
 
 ### Feedback?
-keep it to your self.. no tell it like it is but atm there is no area to yell at us.
+keep it to your self.. no tell it like it is but atm there is no area to yell at except on here.
+
+### Rightfully questioning this project extensiveness 
+So moving forward, the ruby wrapper is built out to be able to have use for Wordpress (or any other setup) 
+like many of the other vagrant projects, but should it be totally abstracted enough for that?  Maybe 
+if there is interest it would be and at which point then there would be a wrapper project on its own 
+and this would be reduced do to only the Magento parts of the environment.
