@@ -39,23 +39,22 @@ the developer to mess around with the configs.  This means you can bring up and 
 Although you could just use the Vagrant commands, the whole point of this project is that there 
 are questions about the envoiroment you want to set up.  In order to take advantage of this, here are a list of the rake tasks:
 
-    1. `rake test` :: this is for testing that all the plugins are there, if not then install them?
-    1. `rake open` :: Opens up your default browser and loads your url from settings
-    1. `rake init` :: setup the system ***(more for testing)***
-    1. `rake start` :: vagrant up but with prompts
-    1. `rake end` :: destroy with options to clean up
-    1. `rake up` :: vagrant up ***(only adds timer and events)***
-    1. `rake destory` :: vagrant destory ***(only adds timer and events)***
-    1. `rake halt` :: vagrant halt ***(only adds timer and events)***
-    1. `rake reload` :: vagrant reload ***(only adds timer and events)***
-    1. `rake resume` :: vagrant resume ***(only adds timer and events)***
-    1. `rake suspend` :: vagrant suspend ***(only adds timer and events)***
-    1. `rake pull` :: match the local to the production
-    1. `rake push` :: push up to production ***(would need to authenticate)***
-    1. `rake hardclean` :: runs all the cleaners
-    1. `rake clean_db` ::  This is to clear the shared database folder
-    1. `rake clean_www` :: This is to clear the shared web folder
-    1. `rake create_install_settings` :: create the settings for the installer
+1. `rake test` :: this is for testing that all the plugins are there, if not then install them?
+1. `rake open` :: Opens up your default browser and loads your url from settings
+1. `rake init` :: setup the system ***(more for testing)***
+1. `rake start` :: vagrant up but with prompts
+1. `rake end` :: destroy with options to clean up
+1. `rake up` :: vagrant up ***(only adds timer and events)***
+1. `rake destory` :: vagrant destory ***(only adds timer and events)***
+1. `rake halt` :: vagrant halt ***(only adds timer and events)***
+1. `rake reload` :: vagrant reload ***(only adds timer and events)***
+1. `rake suspend` :: vagrant suspend ***(only adds timer and events)***
+1. `rake pull` :: match the local to the production
+1. `rake push` :: push up to production ***(would need to authenticate)***
+1. `rake hardclean` :: runs all the cleaners
+1. `rake clean_db` ::  This is to clear the shared database folder
+1. `rake clean_www` :: This is to clear the shared web folder
+1. `rake create_install_settings` :: create the settings for the installer
 
 
 
@@ -65,8 +64,8 @@ One of the first things is that there are event hooks that you can inject your p
 All event files are located in `/rake/events` and will have the file name in the format  of `{Event_type}_{Task_name}.rb`.
 The events that are set up for you are
     
-    1. Pre
-    1. Post
+1. Pre
+1. Post
     
 So for example if you wanting to do something before everything else when `rake start` is ran, then you would need 
 to add your event file named, `Pre_start.rb`  There is a smaple file to look at as well in the `/rake` folder (`EXAMPLE_Pre_start.rb`).
