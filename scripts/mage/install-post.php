@@ -1,7 +1,14 @@
 <?php
 //just as a guide, no real purpose
 echo getcwd() . " (working from)\n";
+$argv = $_SERVER['argv'];
 
+parse_str($argv[2], $output);
+
+var_dump($output);
+echo $output["adminuser"];
+
+//exit();die();
 //set up the store instance
 require_once "app/Mage.php";
 umask(0);
@@ -51,10 +58,11 @@ function csv_to_array($filename='', $delimiter=','){
      }
      return $data;
  }
-$cDat = new Mage_Core_Model_Config();
-$seetingstarray = csv_to_array('scripts/settings.config');
 
-foreach($seetingstarray as $item){
+$cDat = new Mage_Core_Model_Config();
+$settingsarray = csv_to_array('../scripts/mage/settings.config');
+var_dump($settingsarray);
+foreach($settingsarray as $item){
     $val =  $item['value']=="NULL"?NULL:$item['value'];
     $cDat->saveConfig($item['path'], $val, 'default', 0);
 }
@@ -177,5 +185,4 @@ try {
     } else {
         echo "AsyncCachedoesn't exist.";
     }   
-
 

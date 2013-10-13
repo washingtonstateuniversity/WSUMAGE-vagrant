@@ -9,12 +9,11 @@ then
 fi
 cd /srv/www/mage/
 
-MAGEversion="1.8.0.0"
 #ensure we have the core files for mage
-if [ ! -f /srv/www/mage/magento-$MAGEversion.tar.gz ]
+if [ ! -f /srv/www/mage/magento-$bs_MAGEversion.tar.gz ]
     then
         URLS=(
-            http://www.magentocommerce.com/downloads/assets/$MAGEversion/magento-$MAGEversion.tar.gz
+            http://www.magentocommerce.com/downloads/assets/$bs_MAGEversion/magento-$bs_MAGEversion.tar.gz
             http://www.magentocommerce.com/downloads/assets/1.6.1.0/magento-sample-data-1.6.1.0.tar.gz
         )
         for u in "${URLS[@]}"

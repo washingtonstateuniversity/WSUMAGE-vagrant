@@ -7,19 +7,19 @@ reset_mage(){
 }
 
 cd /srv/www/mage/ #move to the root web folder
-if [ -z "$dbhost" ]
-then
-    MAGEversion="1.8.0.0"
-    dbhost="localhost"
-    dbname="mage"
-    dbuser="devsqluser"
-    dbpass="devsqluser"
-    url="local.mage.dev"
-    adminuser="admin"
-    adminpass="admin2013"
-    adminfname="Mc"       
-    adminlname="Lovin"
-    adminemail="test.user@wsu.edu"
+if [ -z "$bs_dbhost" ]
+then #should remove this
+    bs_MAGEversion="1.8.0.0"
+    bs_dbhost="localhost"
+    bs_dbname="mage"
+    bs_dbuser="devsqluser"
+    bs_dbpass="devsqluser"
+    bs_url="local.mage.dev"
+    bs_adminuser="admin"
+    bs_adminpass="admin2013"
+    bs_adminfname="Mc"       
+    bs_adminlname="Lovin"
+    bs_adminemail="test.user@wsu.edu"
 fi
 
 
@@ -43,43 +43,47 @@ echo "--Clear old caches reports and sessions"
 echo
 if [ -f /srv/www/scripts/mage/clean.sql ]
 then
-    mysql -u root -pblank $dbname < /srv/www/scripts/mage/clean.sql | echo -e "\n Initial custom mage cleaning MySQL scripting..."
+    mysql -u root -pblank $bs_dbname < /srv/www/scripts/mage/clean.sql | echo -e "\n Initial custom mage cleaning MySQL scripting..."
 else
     echo -e "\n COUNLDN'T FIND THE CLEANER SQL FILE"
 fi
-
-
-
-echo "Now installing Magento with sample data..."
-
 
 
 #chack to see if there is already the files ready for instalation
 if [ ! -f /srv/www/mage/app/Mage.php ]
 then
 
-    if [ ! -f /srv/www/mage/magento-$MAGEversion.tar.gz ]
+    if [ ! -f /srv/www/mage/magento-$bs_MAGEversion.tar.gz ]
     then
     
         echo
         echo "didn't find the packages, so now Downloading them..."
         echo
     
-        wget http://www.magentocommerce.com/downloads/assets/$MAGEversion/magento-$MAGEversion.tar.gz
-        wget http://www.magentocommerce.com/downloads/assets/1.6.1.0/magento-sample-data-1.6.1.0.tar.gz
+        wget http://www.magentocommerce.com/downloads/assets/$bs_MAGEversion/magento-$bs_MAGEversion.tar.gz
+        if [[ $bs_install_sample == "true" ]]
+        then
+            wget http://www.magentocommerce.com/downloads/assets/1.6.1.0/magento-sample-data-1.6.1.0.tar.gz
+        fi
     fi
     
     echo
     echo "Extracting data..."
     echo    
-        pv -per magento-$MAGEversion.tar.gz | tar xzf - -C ./
-        pv -per magento-sample-data-1.6.1.0.tar.gz | tar xzf - -C ./
+        pv -per magento-$bs_MAGEversion.tar.gz | tar xzf - -C ./
+        if [[ $bs_install_sample == "true" ]]
+        then
+            pv -per magento-sample-data-1.6.1.0.tar.gz | tar xzf - -C ./
+        fi
         
     echo
     echo "Moving files..."
-    echo        
-        cp -af magento-sample-data-1.6.1.0/media/* media/
-        cp -af magento-sample-data-1.6.1.0/magento_sample_data_for_1.6.1.0.sql data.sql
+    echo   
+        if [[ $bs_install_sample == "true" ]]
+        then
+            cp -af magento-sample-data-1.6.1.0/media/* media/
+            cp -af magento-sample-data-1.6.1.0/magento_sample_data_for_1.6.1.0.sql data.sql
+        fi
         cp -af magento/* magento/.htaccess .
 
         cd /srv/www/mage/ #move to the root web folder
@@ -101,13 +105,16 @@ echo
 echo "Installing Adminer..."
 if [ ! -f /srv/www/mage/adminer.php ]
 then
-    wget http://downloads.sourceforge.net/adminer/adminer-3.7.1-mysql-en.php > adminer.php
+    wget "http://downloads.sourceforge.net/project/adminer/Adminer/Adminer%203.7.1/editor-3.7.1-mysql-en.php"  -O adminer.php
 fi
 
-echo
-echo "Importing sample products..."
-mysql -h $dbhost -u $dbuser -p$dbpass $dbname < data.sql
-
+if [[ $bs_install_sample == "true" ]]
+then
+    echo "Now installing Magento with sample data..."
+    echo
+    echo "Importing sample products..."
+    mysql -h $bs_dbhost -u $bs_dbuser -p$bs_dbpass $bs_dbname < data.sql
+fi
 
 
 
@@ -144,21 +151,21 @@ echo "Installing Magento..."
     --locale en_US \
     --timezone America/Los_Angeles \
     --default_currency USD \
-    --db_host $dbhost \
-    --db_name $dbname \
-    --db_user $dbuser \
-    --db_pass $dbpass \
-    --url $url \
+    --db_host $bs_dbhost \
+    --db_name $bs_dbname \
+    --db_user $bs_dbuser \
+    --db_pass $bs_dbpass \
+    --url $bs_url \
     --use_rewrites yes \
     --skip_url_validation yes \
     --use_secure no \
     --secure_base_url "" \
     --use_secure_admin no \
-    --admin_firstname "$adminfname" \
-    --admin_lastname "$adminlname" \
-    --admin_email "$adminemail" \
-    --admin_username "$adminuser" \
-    --admin_password "$adminpass"
+    --admin_firstname "$bs_adminfname" \
+    --admin_lastname "$bs_adminlname" \
+    --admin_email "$bs_adminemail" \
+    --admin_username "$bs_adminuser" \
+    --admin_password "$bs_adminpass"
 
 if [ ! -f /srv/www/mage/app/etc/local.xml ]
 then
@@ -194,15 +201,15 @@ else
     echo "prime the cach"
     reset_mage
 
-    echo "Starting to import base WSU modules fro github"
+    echo "Starting to import base WSU modules from github"
     declare -A gitRepos
     #[repo]=gitUser
     gitRepos=(
-        [wsu_admin_base]=jeremyBass
-        [wsu_base_theme]=jeremyBass
+        [WSUMAGE-admin-base]=washingtonstateuniversity
+        [WSUMAGE-theme-base]=washingtonstateuniversity
         [eventTickets]=jeremyBass
         [Storeutilities]=jeremyBass
-        [StructuredData]=jeremyBass
+        [WSUMAGE-structured-data]=washingtonstateuniversity
         [Storeuser]=jeremyBass
         [sitemaps]=jeremyBass
         [webmastertools]=jeremyBass
@@ -212,7 +219,7 @@ else
         [dropshippers]=jeremyBass
         [Aoe_FilePicker]=jeremyBass
         [mailing_services]=jeremyBass
-        [Interdepartmental_Requisition_invoice]=jeremyBass
+        [WSUMAGE-iri-gateway]=washingtonstateuniversity
         #[custom_pdf_invoice]=jeremyBass
         [Aoe_Profiler]=jeremyBass           #https://github.com/fbrnc/Aoe_Profiler.git
         [Aoe_ManageStores]=jeremyBass       #https://github.com/fbrnc/Aoe_ManageStores.git
@@ -247,12 +254,19 @@ else
     #rm -rf app/design/adminhtml/default/default/template/paypal/*
     echo "come back to this.. must remove any and all etra modules for the lightest base possible"
 
-
-    #run actions that are hard to do direct sql quries on 
-    php /srv/www/scripts/mage/install-post.php
+    cp /srv/www/scripts/mage/settings.config settings.config #remove this I think.
 
 
-    
+    #pass the shell variables to php via a query string to trun to an object in the post script
+    query=
+    for var in ${!bs_*}; do
+        if [ -n "$query" ];
+        then query="$query&"
+        fi
+        query="$query${var#bs_}=${!var}"
+    done
+    php /srv/www/scripts/mage/install-post.php -- "$query"
+
     
     echo
     echo "doing the first index"
@@ -260,7 +274,7 @@ else
     cd shell && php -f indexer.php reindexall
 
     reset_mage
-    mysql -u root -pblank $dbname -e "DELETE FROM $dbname.adminnotification_inbox;" | echo -e "\n >> Removed admin notifications ..."
+    mysql -u root -pblank $bs_dbname -e "DELETE FROM $bs_dbname.adminnotification_inbox;" | echo -e "\n >> Removed admin notifications ..."
 
     # Enable developer mode
     #if [ $MAG_DEVELOPER_MODE == 1 ]; then
@@ -275,4 +289,3 @@ else
     echo
  
  fi
-    

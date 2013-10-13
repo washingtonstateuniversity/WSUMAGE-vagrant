@@ -6,9 +6,6 @@
 # configurations included with Varying Vagrant Vagrants. 
 # It's worth noting that you dont' need the normal #!/bin/bash for this included file
 
-# By storing the date now, we can calculate the duration of provisioning at the
-# end of this script.
-start_seconds=`date +%s`
 
 ## since we are generating from Mac or Windows this is needed 
 apt-get install dos2unix
@@ -20,7 +17,6 @@ cd /srv/www/
 . scripts/install-functions.sh
 
 . scripts/install_settings.sh
-
 
 if [[ has_network ]]
 then
@@ -48,10 +44,6 @@ then
     cd /srv/www/
     #. scripts/wp-install.sh   
 
-    #check and install phpmyadmin
-    cd /srv/www/
-    #. scripts/phpmyadmin-install.sh   
-
     #check and install magento
     cd /srv/www/
     . scripts/mage-install.sh      
@@ -66,9 +58,8 @@ if ! grep -q "$DOMAINS" /etc/hosts
 then echo "127.0.0.1 $DOMAINS" >> /etc/hosts
 fi
 
-end_seconds=`date +%s`
+
 echo "-----------------------------"
-echo "Provisioning complete in `expr $end_seconds - $start_seconds` seconds"
 if [[ has_network ]]
 then
 	echo "External network connection established, packages up to date."
@@ -79,25 +70,25 @@ then
     echo
     echo "-------------------------"
     echo
-    echo "Database Host (usually localhost): $dbhost"
+    echo "Database Host (usually localhost): $bs_bs_dbhost"
     echo
-    echo "Database Name: $dbname"
+    echo "Database Name: $bs_dbname"
     echo
-    echo "Database User: $dbuser"
+    echo "Database User: $bs_dbuser"
     echo
-    echo "Database Password: $dbpass"
+    echo "Database Password: $bs_dbpass"
     echo
-    echo "Store URL: $url"
+    echo "Store URL: $bs_url"
     echo
-    echo "Admin Username: $adminuser"
+    echo "Admin Username: $bs_adminuser"
     echo
-    echo "Admin Password: $adminpass"
+    echo "Admin Password: $bs_adminpass"
     echo
-    echo "Admin First Name: $adminfname"
+    echo "Admin First Name: $bs_adminfname"
     echo
-    echo "Admin Last Name: $adminlname"
+    echo "Admin Last Name: $bs_adminlname"
     echo
-    echo "Admin Email Address: $adminemail"
+    echo "Admin Email Address: $bs_adminemail"
     echo
     echo "For further setup instructions, visit http://$vvv_ip"
 else

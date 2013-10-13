@@ -79,6 +79,9 @@ end
 
 desc "Set up the VM"
 task :start do
+    start = Time.now
+
+    
     require 'fileutils'
     mi =MAGEINSTALLER.new
     
@@ -116,8 +119,20 @@ task :start do
 
     puts "Finished lets go [any key to continue]"
     input = STDIN.gets.strip
+    # code to time
     
-    system( "vagrant up" )
+        system( "vagrant up" )
+    
+    finish = Time.now
+    diff = finish - start
+
+    hours = diff / 3600.to_i
+    mins = (diff / 60 - hours * 60).to_i
+    secs = (diff - (mins * 60 + hours * 3600))
+    printf("%02d:%02d:%02d\n", hours, mins, secs)
+
+    puts "time taken  for set up:  #{hours}:#{mins}:#{secs} "
+
     Rake::Task["open"].reenable
     Rake::Task["open"].invoke
     
@@ -144,7 +159,7 @@ end
 
 desc "Destroy the vagrant with call back functions run"
 task :end do
-    output=`vagrant destroy -f`
+    system( "vagrant destroy -f" )
     puts "Should the databases be cleared? [y/n]"
     input = STDIN.gets.strip
     if input == 'y'
@@ -234,14 +249,15 @@ task :create_install_settings do
     else
         mi.add_setting(file,"install_sample=\"false\"\n")
     end
-    
-#install sample data
+
+#use ldap
     uinput = agree("turn on <%= color('LDAP', :bold) %>? [y/n] <%= color('NOTE: n', :bold, :yellow, :on_black) %>")
     if uinput
         mi.add_setting(file,"use_ldap\"true\"\n")
     else
         mi.add_setting(file,"use_ldap=\"false\"\n")
     end
+######
     
 #add your nid for LDAP based tests
     uinput = ask("Add your own personal user?[y/n]  <%= color('*** the default user is still installed ***', :bold, :yellow, :on_black) %>") { |q| q.validate = /\A[y|n]\Z/ }
