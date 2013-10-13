@@ -23,8 +23,8 @@ only a few steps before then can login to the admin area and begin development w
         
         > rake init
 
-Now if this is the first time you you have ever run then the `rake init` task will install anything 
-that is needed and check to make sure everything is ok.  I'll prompt you as it goes, but after a 
+Now if this is the first time you have ever run then the `rake init` task will install anything 
+that is needed and check to make sure everything is ok.  It'll prompt you as it goes, but after a 
 few minutes the first time around, you will have the admin area for Magento up and ready to log in.
 It really is as simple as these 4 steps to get up and running.  On a fresh system, seeing the Magento
 admin page took about 5mins.  After that, it takes as little as 60 seconds (depending on your system's resources)
@@ -47,6 +47,21 @@ if you change this in the settings file.
 
 ## Overall Sturcture
 ***note this need to be writen, short if 3 servers, admin/frontend/database***
+###Option One development lite:
+This option is designed for a lighter environment to aid in quick development.  Some
+of the core parts of the production servers are rolled up into a single  server.  The upside
+to this is that if you have a system that is not so robust then you shouldn't see lags.  Also
+For most module development you are not depending on any other module, so matching production
+in it's structure is not needed.  9 out of 10 projects will be fine starting with this.
+
+###Option Two production match:
+This is to match the production environment as closely as possible, and lot all modules as well.
+Given that by default the xDebug is turned on, this can run slower.  When a module is vetted but 
+a peer review, this environment will be used.  As of yet there is no unit tests, but when there are
+they will be loaded in this development area.
+
+
+
 
 #### Magento Stable
 * URL: `http://local.mage.dev`
