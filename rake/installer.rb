@@ -45,11 +45,11 @@ class MageInstaller
         puts "> thing to do when ready is `rake start`"
         uinput = agree("Would you like to start? <%= color('[y/n]', :bold) %>")
         if uinput
-            Rake::Task["start"].reenable
-            Rake::Task["start"].invoke
+            #Rake::Task["start"].reenable
+            #Rake::Task["start"].invoke
+            self.start()
         end
     end
-    
 #test
     def test()
         mi_h = MAGEINSTALLER_Helper.new
@@ -95,7 +95,7 @@ class MageInstaller
               q.responses[:ask_on_error] = :question
             end
     #todo still basicly add a global lite or match?
-            if mode=="l"
+            if mode=="l"||mode=="lite"
                 puts "working on the lite mode"
             else
                 puts "working on the match mode"
@@ -125,20 +125,25 @@ class MageInstaller
     
                     FileUtils.rm_rf(file)
                     say("<%= color('removed file #{file}', :bold, :red, :on_black) %>")
+
+                    mi_h.start_settings_file()
+                    mi_h.add_setting(file,"bs_mode=\"#{mode}\"\n")         
+ 
                     Rake::Task["create_install_settings"].reenable
                     Rake::Task["create_install_settings"].invoke
                   else
                     puts "using the past installer settings"
                 end
             else
+                mi_h.start_settings_file()
+                mi_h.add_setting(file,"bs_mode=\"#{mode}\"\n")    
                 Rake::Task["create_install_settings"].reenable
                 Rake::Task["create_install_settings"].invoke
             end
             
             
-            puts "Finished lets go [any key to continue]"
-            input = STDIN.gets.strip
-            # code to time
+            say("Finished lets go [press <%= color('enter', :bold) %> to continue]")
+
             system( "vagrant up" )
         end
     
@@ -184,32 +189,12 @@ class MageInstaller
     end
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #setting file
     def create_settings_file()
         mi_h = MAGEINSTALLER_Helper.new
         require 'digest/md5'
     
         file="scripts/install_settings.sh"
-        mi_h.file_remove(file); #clear fisrt
-        mi_h.add_setting(file,"#!/bin/bash\n")
         mi_h.add_setting(file,"bs_MAGEversion=\"1.8.0.0\"\n")
         mi_h.add_setting(file,"bs_url=\"local.mage.dev\"\n")
     
@@ -246,6 +231,7 @@ class MageInstaller
             mi_h.add_setting(file,"bs_dbuser=\"#{input}\"\n")
         end
     #install sample data
+        #only if we are in lite mode.  Match would have the products?  or maybe to much?
         puts "SAMPLE DATA *** would you like to install this?[y/n]"
         uinput = agree("Install <%= color('`SAMPLE DATA`', :bold) %>? [y/n]")
         if uinput

@@ -7,7 +7,7 @@ reset_mage(){
 }
 
 cd /srv/www/mage/ #move to the root web folder
-if [ -z "$bs_dbhost" ]
+if [ -z "$bs_dbhost" ]  #this should be removed // 
 then #should remove this
     bs_MAGEversion="1.8.0.0"
     bs_dbhost="localhost"
@@ -21,8 +21,6 @@ then #should remove this
     bs_adminlname="Lovin"
     bs_adminemail="test.user@wsu.edu"
 fi
-
-
 
 
 echo
@@ -184,7 +182,6 @@ else
     
     cd /srv/www/mage/
     echo "Starting to import base WSU modules from connect"
-    #./mage install http://connect20.magentocommerce.com/community Flagbit_ChangeAttributeSet
     ./mage config-set preferred_state alpha
     ./mage clear-cache
     ./mage sync
@@ -212,7 +209,7 @@ else
         [WSUMAGE-admin-base]=washingtonstateuniversity
         [WSUMAGE-theme-base]=washingtonstateuniversity
         [eventTickets]=jeremyBass
-        [Storeutilities]=jeremyBass
+        [WSUMAGE-store-utilities]=washingtonstateuniversity
         [WSUMAGE-structured-data]=washingtonstateuniversity
         [Storeuser]=jeremyBass
         [sitemaps]=jeremyBass

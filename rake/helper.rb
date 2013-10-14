@@ -34,6 +34,12 @@ class MAGEINSTALLER_Helper
           f.write(opts)
         end
     end
+    def start_settings_file()
+        file="scripts/install_settings.sh"
+        self.file_remove(file); #clear fisrt
+        self.add_setting(file,"#!/bin/bash\n")    
+    end
+    
     
     #sudo task events
     def get_pre_task()
