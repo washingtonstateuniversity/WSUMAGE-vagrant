@@ -26,14 +26,14 @@ Vagrant.configure("2") do |config|
         #web_config.vm.forward_port 22, 2210
         
         #remove
-        web_config.vm.synced_folder "database/", "/srv/database"
-        web_config.vm.synced_folder "database/data/", "/var/lib/mysql", :mount_options => [ "dmode=777", "fmode=777" ]
+        web_config.vm.synced_folder "database/", "/srv/database", nfs: true
+        web_config.vm.synced_folder "database/data/", "/var/lib/mysql", :mount_options => [ "dmode=777", "fmode=777" ], nfs: true
         #end
         
-        web_config.vm.synced_folder "config/", "/srv/config"
-        web_config.vm.synced_folder "config/nginx-config/sites/", "/etc/nginx/custom-sites"
-        web_config.vm.synced_folder "www/", "/srv/www/", :owner => "www-data", :mount_options => ['dmode=775,fmode=774']
-        web_config.vm.synced_folder "scripts/", "/srv/www/scripts/", :owner => "www-data", :mount_options => ['dmode=775,fmode=774']
+        web_config.vm.synced_folder "config/", "/srv/config", nfs: true
+        web_config.vm.synced_folder "config/nginx-config/sites/", "/etc/nginx/custom-sites", nfs: true
+        web_config.vm.synced_folder "www/", "/srv/www/", :owner => "www-data", :mount_options => ['dmode=775,fmode=774'], nfs: true
+        web_config.vm.synced_folder "scripts/", "/srv/www/scripts/", :owner => "www-data", :mount_options => ['dmode=775,fmode=774'], nfs: true
         web_config.vm.provision :shell, :path => File.join( "provision", "provision.sh" )
     end
     
