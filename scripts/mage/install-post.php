@@ -5,9 +5,6 @@ $argv = $_SERVER['argv'];
 
 parse_str($argv[2], $output);
 
-var_dump($output);
-echo $output["adminuser"];
-
 //exit();die();
 //set up the store instance
 require_once "app/Mage.php";
@@ -35,10 +32,6 @@ $writeConnection = $resource->getConnection('core_write');
 
 // switch off error reporting
 error_reporting ( E_ALL & ~ E_NOTICE );
-
-
-
-
 
 function csv_to_array($filename='', $delimiter=','){
      if(!file_exists($filename) || !is_readable($filename))

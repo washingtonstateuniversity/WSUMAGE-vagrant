@@ -229,7 +229,14 @@ task :halt do
     stopwatch.end
 end
 
-
+desc "here to provide consistency  with Vagrant, that and adds a timer and pre/post events"
+task :reload do
+    stopwatch = Stopwatch.new
+    mi.get_pre_task()
+    system( "vagrant reload" )
+    mi.get_post_task()
+    stopwatch.end
+end
 
 #note just for testing/ like a bonus
 task :open do

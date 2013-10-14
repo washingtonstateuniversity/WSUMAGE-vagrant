@@ -32,17 +32,13 @@ has_network(){
 install_repo(){
     if [ $2 ]
     then
-        echo "just 1"
         git clone $1 -q
     else
-        echo "just 1 and 2"
         git clone $1 $2 -q
     fi
     success=$?
     if [[ $success -eq 0 ]];
     then
-        echo "Repository successfully cloned."
-        echo "cleaning"
         cd $r/
         rm -rf LICENSE.txt STATUS.txt README.md RELEASE_NOTES.txt modman
         cd ../
@@ -50,7 +46,7 @@ install_repo(){
         rm -rf $r/
 
         rm -rf var/cache/*
-        echo "installing"
+        echo "cloned adn installing $r"
         php "/srv/www/mage/index.php"
         #eval $3
 
@@ -75,9 +71,9 @@ install_repolist(){
         echo "Adding $r From $giturl"
         if [ -z "$r" ];
         then
-            echo
+            echo ""
         else
-        #dbl check that the item is not null or 0
+            #dbl check that the item is not null or 0
             if [ $r ]
             then
                 install_repo $giturl $2 $3
