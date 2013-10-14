@@ -11,7 +11,6 @@ module Rake
     end
   end #class Task
 end #module Rake 
-
 class Stopwatch
     def initialize(params=nil)
         @start = Time.now
@@ -26,10 +25,7 @@ class Stopwatch
         puts "time taken  for set up:  #{time}"
     end
 end
-
-
-
-class MAGEINSTALLER
+class MAGEINSTALLER_Helper
     require 'fileutils'
     
     #kinda hard coded
