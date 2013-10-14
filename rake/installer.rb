@@ -1,15 +1,13 @@
+#todo fix the mi_h = MAGEINSTALLER_Helper.new need
+
+
 class MageInstaller
     load 'rake/helper.rb'
-    
     def initialize(params=nil)
-        
         require 'fileutils'
-        
-        
         self.load_gem("highline")
         self.load_gem("launchy")
-        require 'highline/import' 
-
+        require 'highline/import'
     end
 
     def load_gems(utility=nil)
@@ -168,13 +166,22 @@ class MageInstaller
     end
     
 
-
-
-
-
-
-
-
+#hardclean
+    def hardclean()
+        mi_h = MAGEINSTALLER_Helper.new
+        stopwatch = Stopwatch.new
+        mi_h.get_pre_task()
+        output=`vagrant destroy -f`
+        puts output
+        Rake::Task["clean_www"].reenable
+        Rake::Task["clean_www"].invoke   
+    
+        Rake::Task["clean_db"].reenable
+        Rake::Task["clean_db"].invoke
+        
+        mi_h.get_post_task()
+        stopwatch.end
+    end
 
 
 

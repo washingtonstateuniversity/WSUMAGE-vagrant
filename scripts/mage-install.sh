@@ -106,7 +106,10 @@ echo "Installing Adminer..."
 if [ ! -f /srv/www/mage/adminer.php ]
 then
     wget "http://www.adminer.org/latest-mysql-en.php"  -O adminer.php
-    wget "https://raw.github.com/vrana/adminer/master/designs/nette/adminer.css"  -O adminer.css
+    wget "https://raw.github.com/vrana/adminer/master/designs/haeckel/adminer.css"  -O adminer.css
+    
+    #maybe this one later.  Dev package we put together
+    #http://kahi.cz/blog/images/adminer-makeup/adminer331-kahi.zip
 fi
 
 if [[ $bs_install_sample == "true" ]]

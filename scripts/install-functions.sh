@@ -46,7 +46,7 @@ install_repo(){
         rm -rf $r/
 
         rm -rf var/cache/*
-        echo "cloned adn installing $r"
+        echo "cloned and installing $r"
         php "/srv/www/mage/index.php"
         #eval $3
 

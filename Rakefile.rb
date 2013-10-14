@@ -4,7 +4,7 @@
 
 ##note not happy with the start init loop, work on that
 load 'rake/installer.rb'
-
+mi = MageInstaller.new
 =begin
     Maybe what is needed is a first run type thing.  Test for everything
     task list
@@ -34,23 +34,23 @@ load 'rake/installer.rb'
 
 desc "prepare  the system"
 task :init do
-    MageInstaller.new.init()
+    mi.init()
 end
 
 desc "test  the system"
 task :test do
-    MageInstaller.new.test()
+    mi.test()
 end
 
 
 desc "Set up the VM with questions"
 task :start do
-    MageInstaller.new.start()
+    mi.start()
 end
 
 desc "Destroy the vagrant with call back functions run"
 task :end do
-    MageInstaller.new.end()
+    mi.end()
 end
 
 
@@ -60,6 +60,7 @@ end
 
 desc "here to provide consistency  with Vagrant, that and adds a timer and pre/post events"
 task :up do
+    mi_h = MAGEINSTALLER_Helper.new
     stopwatch = Stopwatch.new
     mi_h.get_pre_task()
     system( "vagrant up" )
@@ -71,6 +72,7 @@ end
 
 desc "here to provide consistency  with Vagrant, that and adds a timer and pre/post events"
 task :destroy do
+    mi_h = MAGEINSTALLER_Helper.new
     stopwatch = Stopwatch.new
     mi_h.get_pre_task()
     system( "vagrant destroy" )
@@ -89,6 +91,7 @@ end
 
 desc "here to provide consistency  with Vagrant, that and adds a timer and pre/post events"
 task :reload do
+    mi_h = MAGEINSTALLER_Helper.new
     stopwatch = Stopwatch.new
     mi_h.get_pre_task()
     system( "vagrant reload" )
@@ -98,6 +101,7 @@ end
 
 #note just for testing/ like a bonus
 task :open do
+    mi_h = MAGEINSTALLER_Helper.new
     stopwatch = Stopwatch.new
     mi_h.get_pre_task()
     require 'launchy'
@@ -112,44 +116,33 @@ end
 
 #these should maybe be extracted out?
 task :hardclean do
-    stopwatch = Stopwatch.new
-    mi_h.get_pre_task()
-    output=`vagrant destroy -f`
-    puts output
-    Rake::Task["clean_www"].reenable
-    Rake::Task["clean_www"].invoke   
-
-    Rake::Task["clean_db"].reenable
-    Rake::Task["clean_db"].invoke
-    
-    mi_h.get_post_task()
-    stopwatch.end
+    mi.hardclean()
 end
 
 desc "clean the database"
 task :clean_db do
-  puts "cleaning the database"
-  FileUtils.rm_rf(Dir.glob('database/data/*'))
-  puts "database is clean"
+    puts "cleaning the database"
+    FileUtils.rm_rf(Dir.glob('database/data/*'))
+    puts "database is clean"
 end
 
 #maybe abstract this of other apps
 desc "clean the database"
 task :clean_www do
-  puts "cleaning the WWW folder"
-  FileUtils.rm_rf(Dir.glob('www/*'))
-  puts "The WWW has been cleaned"
+    puts "cleaning the WWW folder"
+    FileUtils.rm_rf(Dir.glob('www/*'))
+    puts "The WWW has been cleaned"
 end
 
 
 desc "push to production"#note this would be from a setting file
 task :deploy do
-   puts "push to the server"
+    puts "push to the server"
 end
 
 desc "pull from production"#note this would be from a setting file
 task :pull do
-   puts "grabbing files and things"
+    puts "grabbing files and things"
 end
 
 
@@ -157,7 +150,7 @@ end
 
 desc "Create a setting file"#maybe abstract this 
 task :create_install_settings do
-        MageInstaller.new.create_settings_file()
+    MageInstaller.new.create_settings_file()
 end
 
 
