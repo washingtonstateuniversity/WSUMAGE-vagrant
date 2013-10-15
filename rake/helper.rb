@@ -78,7 +78,10 @@ class MAGEINSTALLER_Helper
     
     #a method to provide feedback simply 
     def download(from,to)
-        ['net/http','uri'].each_with_index {|i| require i}
+        #['net/http','uri'].each_with_index {|i| require i}#seems to fail on Macs
+        
+        require 'net/http'
+        require 'uri'
         
         counter = 0
 
