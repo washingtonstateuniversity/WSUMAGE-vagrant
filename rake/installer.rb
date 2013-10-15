@@ -8,9 +8,8 @@ class MageInstaller
         require 'fileutils'
         self.load_gem("highline")
         self.load_gem("launchy")
-<<<<<<< HEAD
         require 'highline'
-=======
+
         if @fresh
             puts "there were a few things needed to install so you need to do `rake start` again."
             abort("type rake start")
@@ -18,7 +17,7 @@ class MageInstaller
         else
             require 'highline/import'
         end
->>>>>>> bc5442cd77137cdb28ac8a24935ed1aeb615332f
+
     end
 
     def load_gems(utility=nil)
