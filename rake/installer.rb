@@ -1,5 +1,5 @@
 #todo fix the mi_h = MAGEINSTALLER_Helper.new need
-
+require 'rubygems'
 
 class MageInstaller
     load 'rake/helper.rb'
@@ -14,7 +14,7 @@ class MageInstaller
             abort("type rake start")
             return
         else
-            require 'highline'
+            require 'highline/import'
         end
     end
 
