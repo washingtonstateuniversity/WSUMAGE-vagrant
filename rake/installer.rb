@@ -5,6 +5,18 @@ class MageInstaller
     load 'rake/helper.rb'
     fresh=false
     def initialize(params=nil)
+        
+        version = RUBY_VERSION.split(".")[0]
+        subversion = RUBY_VERSION.split(".")[1]
+        puts version
+        puts subversion
+        if (version.to_i >= 1 && subversion.to_i > 8) || (version.to_i == 2 )
+            puts "you have a version great enough"
+        else         
+            abort("ruby version to low, must update see http://rvm.io/ if on Mac")
+        end
+
+        
         require 'fileutils'
         self.load_gem("highline")
         self.load_gem("launchy")
