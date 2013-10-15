@@ -7,7 +7,7 @@ class MageInstaller
         require 'fileutils'
         self.load_gem("highline")
         self.load_gem("launchy")
-        require 'highline/import'
+        require 'highline'
     end
 
     def load_gems(utility=nil)
