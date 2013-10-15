@@ -3,11 +3,22 @@
 
 class MageInstaller
     load 'rake/helper.rb'
+    fresh=false
     def initialize(params=nil)
         require 'fileutils'
         self.load_gem("highline")
         self.load_gem("launchy")
+<<<<<<< HEAD
         require 'highline'
+=======
+        if @fresh
+            puts "there were a few things needed to install so you need to do `rake start` again."
+            abort("type rake start")
+            return
+        else
+            require 'highline/import'
+        end
+>>>>>>> bc5442cd77137cdb28ac8a24935ed1aeb615332f
     end
 
     def load_gems(utility=nil)
@@ -15,13 +26,18 @@ class MageInstaller
     end    
     def load_gem(gem=nil)
         output = `gem list`
+        sudo=""  
+        is_windows = (ENV['OS'] == 'Windows_NT')
+        if !is_windows
+            sudo="sudo"    
+        end
         if !output.include? gem
             puts "installing #{gem} gem"
-            output = `gem install #{gem}`
+            output = `#{sudo} gem install #{gem}`
             puts output
-            fresh=true
+            @fresh=true
         else
-            puts "highline #{gem} loaded"
+            puts "#{gem} gem loaded"
         end
     end
 
@@ -53,7 +69,7 @@ class MageInstaller
 #test
     def test()
         mi_h = MAGEINSTALLER_Helper.new
-        say("testing the system now")
+        puts "testing the system now"
         fresh=false
         puts "insuring default folders"
         mi_h.create_dir("/www/")
