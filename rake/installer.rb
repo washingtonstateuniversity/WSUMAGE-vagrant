@@ -194,6 +194,11 @@ class MageInstaller
         Rake::Task["clean_db"].reenable
         Rake::Task["clean_db"].invoke
         
+        puts "cleaning the depo folder"
+        FileUtils.rm_rf(Dir.glob('depo/*'))
+        puts "The depo has been cleaned"
+        
+        
         mi_h.get_post_task()
         stopwatch.end("finished hard clean up in:")
     end

@@ -14,6 +14,5 @@ class Pre_start < MageInstaller
         else
             puts "mage package exists"
         end
-
     end
 end

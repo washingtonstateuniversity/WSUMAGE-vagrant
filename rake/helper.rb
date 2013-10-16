@@ -81,6 +81,7 @@ class MAGEINSTALLER_Helper
             puts "must redo the settings file"
         end
     end
+    
     def begin_settings_file()
         mi_h = MAGEINSTALLER_Helper.new
         file="scripts/installer_settings.json"
