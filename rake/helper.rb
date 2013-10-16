@@ -15,14 +15,18 @@ class Stopwatch
     def initialize(params=nil)
         @start = Time.now
     end
-    def end()
+    def end(message=nil)
         finish = Time.now
         diff = finish - @start
         hours = (diff / 3600).to_i
         mins = (diff / 60 - hours * 60).to_i
         secs = (diff - (mins * 60 + hours * 3600)).to_i
         time=sprintf("%02d:%02d:%02d", hours, mins, secs)
-        puts "time taken  for set up:  #{time}"
+        if message==nil 
+            puts "time taken  for set up:  #{time}"
+        else
+            puts "#{message} #{time}"
+        end
     end
 end
 class MAGEINSTALLER_Helper
@@ -54,6 +58,52 @@ class MAGEINSTALLER_Helper
             Object::const_get(event).new
         end
     end
+    
+    #REFACTOR THIS LATER
+    def load_settings()
+        require 'json'
+        file = File.open("scripts/installer_settings.json", "rb")
+        contents = file.read
+        file.close
+        if contents.length > 5 #note this should be changed for a better content check.. ie:valid json
+            begin
+                parsed = JSON.parse(contents)
+            rescue SystemCallError
+                puts "must redo the settings file"
+            else    
+                puts parsed['bs_mode']
+                parsed.each do |key, value|
+                    puts "#{key}=>#{value}"
+                    instance_variable_set("@" + key, value)
+                end
+            end
+        else
+            puts "must redo the settings file"
+        end
+    end
+    def begin_settings_file()
+        mi_h = MAGEINSTALLER_Helper.new
+        file="scripts/installer_settings.json"
+        FileUtils.rm_rf(file)
+        mi_h.add_setting(file,"{") 
+    end
+    
+    def end_settings_file()
+        mi_h = MAGEINSTALLER_Helper.new
+        file_path="scripts/installer_settings.json"
+        file = File.open(file_path, "rb") #opeing as bin for ease
+        contents = file.read
+        contents = contents.gsub(/,+$/, '')
+        
+        file.close
+        file = File.open(file_path, "w") #reopen forstr ops
+            file.write(contents)
+        file.close
+        mi_h.add_setting(file,"}") 
+    end
+    
+    
+    
     
     
     #error handled file methods 

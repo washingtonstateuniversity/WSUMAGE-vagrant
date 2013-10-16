@@ -58,14 +58,14 @@ class MageInstaller
         mi_h.create_dir("/_BOXES/")
         mi_h.create_dir("/database/data/")
         #this is where we would build the Vagrant file to suite if abstracted to account for 
-        #more then this project    
+        #more then this project would allow for new boxes is approprate too.  
         file='_BOXES/precise32.box'
         if !File.exist?(file)
             mi_h.download('http://hc-vagrant-files.s3.amazonaws.com/precise32.box',file)
         else
             puts "base box esited"
         end
-    
+
         output = `vagrant plugin list`
         if !output.include? "vagrant-hostsupdater"
             puts "installing vagrant-hostsupdater plugin"
@@ -78,48 +78,7 @@ class MageInstaller
     
     
     
-    #REFACTOR THIS LATER
-    def load_settings()
-        require 'json'
-        file = File.open("scripts/installer_settings.json", "rb")
-        contents = file.read
-        file.close
-        if contents.length > 5 #note this should be changed for a better content check.. ie:valid json
-            begin
-                parsed = JSON.parse(contents)
-            rescue SystemCallError
-                puts "must redo the settings file"
-            else    
-                puts parsed['bs_mode']
-                parsed.each do |key, value|
-                    puts key
-                    puts value
-                end
-            end
-        else
-            puts "must redo the settings file"
-        end
-    end
-    def begin_settings_file()
-        mi_h = MAGEINSTALLER_Helper.new
-        file="scripts/installer_settings.json"
-        FileUtils.rm_rf(file)
-        mi_h.add_setting(file,"{") 
-    end
-    
-    def end_settings_file()
-        mi_h = MAGEINSTALLER_Helper.new
-        file_path="scripts/installer_settings.json"
-        file = File.open(file_path, "rb") #opeing as bin for ease
-        contents = file.read
-        contents = contents.gsub(/,+$/, '')
-        
-        file.close
-        file = File.open(file_path, "w") #reopen forstr ops
-            file.write(contents)
-        file.close
-        mi_h.add_setting(file,"}") 
-    end
+
     
     
 
@@ -127,10 +86,12 @@ class MageInstaller
     def start()
         mi_h = MAGEINSTALLER_Helper.new
         stopwatch = Stopwatch.new
-        Rake::Task["test"].reenable
-        Rake::Task["test"].invoke
-        self.load_settings()#maybe more global?
+
+        self.test()
+         
+        mi_h.load_settings()#maybe more global?
         mi_h.get_pre_task()
+        
         uinput = agree("Use last run's set up? <%= color('[y/n]', :bold) %>")
         if uinput
             system( "vagrant up" )
@@ -149,9 +110,6 @@ class MageInstaller
                 FileUtils.cp_r('Vagrantfile-match', 'Vagrantfile')
                 mode = "match"
             end
-            
-            
-            
             
     #www root folder
             if Dir['www/*'].empty?
@@ -177,20 +135,20 @@ class MageInstaller
                 if uinput
                     FileUtils.rm_rf(file)
                     say("<%= color('removed file #{file}', :bold, :red, :on_black) %>")
-                    self.begin_settings_file()
+                    mi_h.begin_settings_file()
                         mi_h.add_setting(file,"\"bs_mode\":\"#{mode}\",")         
                         Rake::Task["create_install_settings"].reenable
                         Rake::Task["create_install_settings"].invoke
-                    self.end_settings_file()
+                    mi_h.end_settings_file()
                   else
                     puts "using the past installer settings"
                 end
             else
-                self.begin_settings_file()
+                mi_h.begin_settings_file()
                     mi_h.add_setting(file,"\"bs_mode\":\"#{mode}\",")    
                     Rake::Task["create_install_settings"].reenable
                     Rake::Task["create_install_settings"].invoke
-                self.end_settings_file()
+                mi_h.end_settings_file()
             end
             
             
@@ -219,7 +177,7 @@ class MageInstaller
         end
         
         mi_h.get_post_task()
-        stopwatch.end
+        stopwatch.end("finished shutdown in:")
     end
     
 
@@ -237,7 +195,7 @@ class MageInstaller
         Rake::Task["clean_db"].invoke
         
         mi_h.get_post_task()
-        stopwatch.end
+        stopwatch.end("finished hard clean up in:")
     end
 
 
