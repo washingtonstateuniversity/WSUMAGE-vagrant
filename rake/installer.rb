@@ -5,10 +5,8 @@ class MageInstaller
     load 'rake/helper.rb'
     fresh=false
     def initialize(params=nil)
-        ver_array=RUBY_VERSION.split(".")
-        version = ver_array[0]
-        subversion = ver_array[1]
-        if (version.to_i >= 1 && subversion.to_i > 8) || (version.to_i == 2 )
+        if Gem::Version.new(RUBY_VERSION) > Gem::Version.new('1.8')
+            abort("ruby version just right")
             require 'fileutils'
             self.load_gem("highline")
             self.load_gem("launchy")
