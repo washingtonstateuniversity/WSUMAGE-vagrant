@@ -6,7 +6,6 @@ class MageInstaller
     fresh=false
     def initialize(params=nil)
         if Gem::Version.new(RUBY_VERSION) > Gem::Version.new('1.8')
-            abort("ruby version just right")
             require 'fileutils'
             self.load_gem("highline")
             self.load_gem("launchy")
