@@ -45,28 +45,7 @@ class MageInstaller
 ##################    
 #tasks
 ##################
-    
-#init
-    def init()
-        mi_h = MAGEINSTALLER_Helper.new
-        stopwatch = Stopwatch.new
-        mi_h.get_pre_task()
-    
-        Rake::Task["test"].reenable
-        Rake::Task["test"].invoke
-        
-        mi_h.get_post_task()
-        stopwatch.end
-    
-        puts "> We have settup everything, only last"
-        puts "> thing to do when ready is `rake start`"
-        uinput = agree("Would you like to start? <%= color('[y/n]', :bold) %>")
-        if uinput
-            #Rake::Task["start"].reenable
-            #Rake::Task["start"].invoke
-            self.start()
-        end
-    end
+
 #test
     def test()
         mi_h = MAGEINSTALLER_Helper.new
