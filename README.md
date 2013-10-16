@@ -19,11 +19,11 @@ only a few steps before then can login to the admin area and begin development w
         
         > cd vvvbox
 
-1. run in powershell/command line 
+1. run in powershell/command line/terminal 
         
-        > rake init
+        > rake start
 
-Now if this is the first time you have ever run then the `rake init` task will install anything 
+Now if this is the first time you have ever run then the `rake start` task will install anything 
 that is needed and check to make sure everything is ok.  It'll prompt you as it goes, but after a 
 few minutes the first time around, you will have the admin area for Magento up and ready to log in.
 It really is as simple as these 4 steps to get up and running.  On a fresh system, seeing the Magento
@@ -41,7 +41,6 @@ are questions about the envoiroment you want to set up.  In order to take advant
 
 1. `rake test` :: this is for testing that all the plugins are there, if not then install them?
 1. `rake open` :: Opens up your default browser and loads your url from settings
-1. `rake init` :: setup the system ***(more for testing)***
 1. `rake start` :: vagrant up but with prompts
 1. `rake end` :: destroy with options to clean up
 1. `rake up` :: vagrant up ***(only adds timer and events)***
