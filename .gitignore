@@ -9,7 +9,10 @@
 
 # skip tmp settings files
 */install_settings.sh
+*/installer_settings.json
 
+#skipping the vagrant as it's generated
+/Vagrantfile
 
 # This is a file intended for hooking in a custom Vagrant configuration on up
 /Customfile

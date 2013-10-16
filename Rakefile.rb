@@ -5,6 +5,7 @@
 ##note not happy with the start init loop, work on that
 load 'rake/installer.rb'
 mi = MageInstaller.new
+mode = "lite"
 =begin
     Maybe what is needed is a first run type thing.  Test for everything
     task list
