@@ -22,8 +22,8 @@ if [[ has_network ]]
 then
     apt-get install pv
 
-    cd /srv/www/
-    . scripts/install-prep.sh
+    #cd /srv/www/
+    #. scripts/install-prep.sh
 
     cd /srv/www/
     . scripts/main-install.sh

@@ -10,7 +10,7 @@ class Pre_start
         if version==nil
             uinput = agree("There was no config, would you like to use the 1.8.0 version of Magento <%= color('[y/n]', :bold) %>")
             if uinput
-                version="1.8.0"
+                version="1.8.0.0"
               else
                 version = ask("version to use:")  do |q| 
                     q.validate = /.+/ 
@@ -25,5 +25,9 @@ class Pre_start
         else
             puts "mage package exists"
         end
+        if File.exist?(file)
+            untar_gz(file,"www")
+        end
+        
     end
 end

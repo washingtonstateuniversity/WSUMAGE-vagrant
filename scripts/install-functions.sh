@@ -47,7 +47,7 @@ install_repo(){
 
         rm -rf var/cache/*
         echo "cloned and installing $r"
-        php "/srv/www/mage/index.php"
+        php "/srv/www/magento/index.php"
         #eval $3
 
         #if [ -z "$3" ]

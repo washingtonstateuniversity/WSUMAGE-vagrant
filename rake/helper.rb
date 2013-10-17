@@ -74,7 +74,7 @@ module MAGEINSTALLER_Helper
             else    
                 puts parsed['bs_mode']
                 parsed.each do |key, value|
-                    puts "#{key}=>#{value}"
+                    #puts "#{key}=>#{value}"
                     instance_variable_set("@" + key, value)
                 end
             end
@@ -156,6 +156,42 @@ module MAGEINSTALLER_Helper
         end
         puts "completed download for #{url_path}\n"
     end
+
+
+    def untar_gz(from,to)
+        require 'rubygems/package'
+        require 'zlib'
+        
+        tar_longlink = '././@LongLink'
+
+        Gem::Package::TarReader.new( Zlib::GzipReader.open from ) do |tar|
+          dest = nil
+          tar.each do |entry|
+            if entry.full_name == tar_longlink
+                dest = File.join to, entry.read.strip
+                next
+            end
+            dest ||= File.join to, entry.full_name
+            if entry.directory?
+              File.delete dest if File.file? dest
+              FileUtils.mkdir_p dest, :mode => entry.header.mode, :verbose => false
+            elsif entry.file?
+              FileUtils.rm_rf dest if File.directory? dest
+              File.open dest, "wb" do |f|
+                f.print entry.read
+              end
+              FileUtils.chmod entry.header.mode, dest, :verbose => false
+            elsif entry.header.typeflag == '2' #Symlink!
+              File.symlink entry.header.linkname, dest
+            end
+            dest = nil
+          end
+        end
+    end
+
+
+    
+
 
     
     def test_email()

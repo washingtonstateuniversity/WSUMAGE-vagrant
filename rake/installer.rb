@@ -89,12 +89,11 @@ class MageInstaller
 
 #start
     def start()
-
         stopwatch = Stopwatch.new
 
         self.test()
          
-        load_settings()#maybe more global?
+        load_settings()
         get_pre_task()
         
         uinput = agree("Use last run's set up? <%= color('[y/n]', :bold) %>")
@@ -218,7 +217,16 @@ class MageInstaller
         stopwatch.end("finished hard clean up in:")
     end
 
-
+#open
+    def open()
+        stopwatch = Stopwatch.new
+        get_pre_task()
+        require 'launchy'
+        Launchy.open("http://local.mage.dev/admin") #note this should be from setting file
+        
+        get_post_task()
+        stopwatch.end
+    end
 #setting file
     def create_settings_file()
 

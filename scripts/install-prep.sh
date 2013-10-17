@@ -3,14 +3,14 @@
 #run some wgets in the back groung to speed up the installation
 cd /srv/www/
 
-if [ ! -d /srv/www/mage/ ]
+if [ ! -d /srv/www/magento/ ]
 then
     mkdir mage
 fi
-cd /srv/www/mage/
+cd /srv/www/magento/
 
 #ensure we have the core files for mage
-if [ ! -f /srv/www/mage/magento-$bs_MAGEversion.tar.gz ]
+if [ ! -f /srv/www/magento/magento-$bs_MAGEversion.tar.gz ]
     then
         URLS=(
             http://www.magentocommerce.com/downloads/assets/$bs_MAGEversion/magento-$bs_MAGEversion.tar.gz

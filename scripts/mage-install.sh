@@ -1,12 +1,12 @@
 #!/bin/bash
 
 reset_mage(){
-    cd /srv/www/mage/
+    cd /srv/www/magento/
     rm -rf var/cache/*
-    php "/srv/www/mage/index.php"
+    php "/srv/www/magento/index.php"
 }
 
-cd /srv/www/mage/ #move to the root web folder
+cd /srv/www/magento/ #move to the root web folder
 if [ -z "$bs_dbhost" ]  #this should be removed // 
 then #should remove this
     bs_MAGEversion="1.8.0.0"
@@ -26,32 +26,32 @@ fi
 echo
 echo "We will clear any past install"
 #check to see if mage is installed already
-if [ -f /srv/www/mage/app/etc/local.xml ]
+if [ -f /srv/www/magento/app/etc/local.xml ]
 then
     echo "--clearing the installed mage"
-    rm -rf /srv/www/mage/app/etc/local.xml #un-install mage
-    rm -rf /srv/www/mage/app/code/community/* #un-install modules
-    rm -rf /srv/www/mage/app/code/local/* #un-install modules
+    rm -rf /srv/www/magento/app/etc/local.xml #un-install mage
+    rm -rf /srv/www/magento/app/code/community/* #un-install modules
+    rm -rf /srv/www/magento/app/code/local/* #un-install modules
 fi
 
 echo "--Clear old caches reports and sessions"
-    cd /srv/www/mage/ #move to the root web folder
+    cd /srv/www/magento/ #move to the root web folder
     rm -rf ./var/cache/* ./var/session/* ./var/report/* ./var/locks/*
     rm -rf ./var/log/* ./app/code/core/Zend/Cache/* ./media/css/* ./media/js/*
 echo
 if [ -f /srv/www/scripts/mage/clean.sql ]
 then
-    mysql -u root -pblank $bs_dbname < /srv/www/scripts/mage/clean.sql | echo -e "\n Initial custom mage cleaning MySQL scripting..."
+    mysql -u root -pblank $bs_dbname < /srv/www/scripts/magento/clean.sql | echo -e "\n Initial custom mage cleaning MySQL scripting..."
 else
     echo -e "\n COUNLDN'T FIND THE CLEANER SQL FILE"
 fi
 
 
 #chack to see if there is already the files ready for instalation
-if [ ! -f /srv/www/mage/app/Mage.php ]
+if [ ! -f /srv/www/magento/app/Mage.php ]
 then
 
-    if [ ! -f /srv/www/mage/magento-$bs_MAGEversion.tar.gz ]
+    if [ ! -f /srv/www/depo/magento-$bs_MAGEversion.tar.gz ]
     then
     
         echo
@@ -68,7 +68,7 @@ then
     echo
     echo "Extracting data..."
     echo    
-        pv -per magento-$bs_MAGEversion.tar.gz | tar xzf - -C ./
+        pv -per /srv/www/depo/magento-$bs_MAGEversion.tar.gz | tar xzf - -C ./
         if [[ $bs_install_sample == "true" ]]
         then
             pv -per magento-sample-data-1.6.1.0.tar.gz | tar xzf - -C ./
@@ -84,7 +84,7 @@ then
         fi
         cp -af magento/* magento/.htaccess .
 
-        cd /srv/www/mage/ #move to the root web folder
+        cd /srv/www/magento/ #move to the root web folder
     echo
     echo "Setting permissions..."
     echo
@@ -101,7 +101,7 @@ fi
 
 echo
 echo "Installing Adminer..."
-if [ ! -f /srv/www/mage/adminer.php ]
+if [ ! -f /srv/www/magento/adminer.php ]
 then
     wget "http://www.adminer.org/latest-mysql-en.php"  -O adminer.php
     wget "https://raw.github.com/vrana/adminer/master/designs/haeckel/adminer.css"  -O adminer.css
@@ -169,7 +169,7 @@ echo "Installing Magento..."
     --admin_username "$bs_adminuser" \
     --admin_password "$bs_adminpass"
 
-if [ ! -f /srv/www/mage/app/etc/local.xml ]
+if [ ! -f /srv/www/magento/app/etc/local.xml ]
 then
     echo "failed install try it again"
 else
@@ -180,7 +180,7 @@ else
         echo -e "\nNo custom MySQL scripting found in database/init-mage.sql, skipping..."
     fi
     
-    cd /srv/www/mage/
+    cd /srv/www/magento/
     echo "Starting to import base WSU modules from connect"
     ./mage config-set preferred_state alpha
     ./mage clear-cache
@@ -231,12 +231,12 @@ else
         [Aoe_ClassPathCache]=AOEmedia       #https://github.com/AOEmedia/Aoe_ClassPathCache.git
         [mage-enhanced-admin-grids]=mage-eag
     )
-    cd /srv/www/mage/
+    cd /srv/www/magento/
     install_repolist $gitRepos 0 reset_mage
     unset gitRepos         #unset and re-declare to clear associative arrays
     declare -A gitRepos
 
-    cd /srv/www/mage/
+    cd /srv/www/magento/
 
     echo "importing WSU favicon"
     wget -q http://images.wsu.edu/favicon.ico -O favicon.ico
@@ -250,12 +250,12 @@ else
     fi
 
     echo "Removing unwanted bloat by uninstalling modules like paypal"
-    cd /srv/www/mage/
+    cd /srv/www/magento/
     #rm -rf app/code/core/Mage/Paypal/* app/code/core/Mage/Paypal/*
     #rm -rf app/design/adminhtml/default/default/template/paypal/*
     echo "come back to this.. must remove any and all etra modules for the lightest base possible"
 
-    cp /srv/www/scripts/mage/settings.config settings.config #remove this I think.
+    cp /srv/www/scripts/magento/settings.config settings.config #remove this I think.
 
 
     #pass the shell variables to php via a query string to trun to an object in the post script
@@ -266,7 +266,7 @@ else
         fi
         query="$query${var#bs_}=${!var}"
     done
-    php /srv/www/scripts/mage/install-post.php -- "$query"
+    php /srv/www/scripts/magento/install-post.php -- "$query"
 
     
     echo

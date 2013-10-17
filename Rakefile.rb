@@ -103,14 +103,7 @@ end
 
 #note just for testing/ like a bonus
 task :open do
-    mi_h = MAGEINSTALLER_Helper.new
-    stopwatch = Stopwatch.new
-    mi_h.get_pre_task()
-    require 'launchy'
-    Launchy.open("http://local.mage.dev/admin") #note this should be from setting file
-    
-    mi_h.get_post_task()
-    stopwatch.end
+    mi.open()
 end
 
 

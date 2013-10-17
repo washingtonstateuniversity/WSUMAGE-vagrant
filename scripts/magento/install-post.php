@@ -53,7 +53,7 @@ function csv_to_array($filename='', $delimiter=','){
  }
 
 $cDat = new Mage_Core_Model_Config();
-$settingsarray = csv_to_array('../scripts/mage/settings.config');
+$settingsarray = csv_to_array('../scripts/magento/settings.config');
 foreach($settingsarray as $item){
     $val =  $item['value']=="NULL"?NULL:$item['value'];
     $cDat->saveConfig($item['path'], $val, 'default', 0);
