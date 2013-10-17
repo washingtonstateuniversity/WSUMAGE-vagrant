@@ -39,10 +39,12 @@ the developer to mess around with the configs.  This means you can bring up and 
 Although you could just use the Vagrant commands, the whole point of this project is that there 
 are questions about the envoiroment you want to set up.  In order to take advantage of this, here are a list of the rake tasks:
 
-1. `rake test` :: this is for testing that all the plugins are there, if not then install them?
-1. `rake open` :: Opens up your default browser and loads your url from settings
-1. `rake start` :: vagrant up but with prompts
+Primary Tasks
+1. `rake start` :: vagrant up but with prompts (this runs a few other tasks to ensure that the system is ready to `vagrant up`)
 1. `rake end` :: destroy with options to clean up
+1. `rake hardclean` :: runs all the cleaners
+
+Tasks to match Vagrant
 1. `rake up` :: vagrant up ***(only adds timer and events)***
 1. `rake destory` :: vagrant destory ***(only adds timer and events)***
 1. `rake halt` :: vagrant halt ***(only adds timer and events)***
@@ -50,10 +52,13 @@ are questions about the envoiroment you want to set up.  In order to take advant
 1. `rake suspend` :: vagrant suspend ***(only adds timer and events)***
 1. `rake pull` :: match the local to the production
 1. `rake push` :: push up to production ***(would need to authenticate)***
-1. `rake hardclean` :: runs all the cleaners
+
+Utility tasks
 1. `rake clean_db` ::  This is to clear the shared database folder
 1. `rake clean_www` :: This is to clear the shared web folder
 1. `rake create_install_settings` :: create the settings for the installer
+1. `rake test` :: this is for testing that all the plugins are there, if not then install them?
+1. `rake open` :: Opens up your default browser and loads your url from settings
 
 
 
