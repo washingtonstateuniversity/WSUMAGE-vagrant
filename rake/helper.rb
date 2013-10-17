@@ -29,6 +29,18 @@ class Stopwatch
         end
     end
 end
+
+module JSON
+  def self.is_json?(foo)
+    begin
+      return false unless foo.is_a?(String)
+      JSON.parse(foo).all?
+    rescue JSON::ParserError
+      false
+    end 
+  end
+end
+
 module MAGEINSTALLER_Helper
     require 'fileutils'
     
@@ -65,7 +77,8 @@ module MAGEINSTALLER_Helper
         file = File.open("scripts/installer_settings.json", "rb")
         contents = file.read
         file.close
-        if contents.length > 5 #note this should be changed for a better content check.. ie:valid json
+        if JSON.is_json?(contents)
+        #if contents.length > 5 #note this should be changed for a better content check.. ie:valid json
             begin
                 parsed = JSON.parse(contents)
                 @CONFIG = parsed
@@ -82,7 +95,10 @@ module MAGEINSTALLER_Helper
             puts "must redo the settings file"
         end
     end
-    
+
+    #note JSON.generate(data) will replace this
+    #http://flori.github.io/json/doc/index.html
+    #json = JSON.generate [1, 2, {"a"=>3.141}, false, true, nil, 4..10]
     def begin_settings_file()
         file="scripts/installer_settings.json"
         FileUtils.rm_rf(file)
@@ -122,37 +138,31 @@ module MAGEINSTALLER_Helper
     
     #a method to provide feedback simply 
     def download(from,to)
-        #['net/http','uri'].each_with_index {|i| require i}#seems to fail on Macs
-        
         require 'net/http'
         require 'uri'
-        
+
         counter = 0
 
         url_base = from.split('/')[2]
         url_path = '/'+from.split('/')[3..-1].join('/')
              
-        puts "starting download for #{url_path}\n"
+        puts "starting download for #{from}\n"
+        puts "to #{to}\n"
         Net::HTTP.start(url_base) do |http|
-          begin
-            file = open(to, 'wb')
-            file.binmode
-
+            file = File.open(to, "wb")
             http.request_get(url_path) do |response|
                 size = 0
                 total = response.header["Content-Length"].to_f
-              response.read_body do |chunk|
+                response.read_body do |chunk|
                     file << chunk
                     counter += 1
                     size += chunk.size
                     new_progress = (size.to_f / total.to_f * 100.0).round(2)
                     progress = "#" * (new_progress / 10)
                     print "#{progress} --#{new_progress}%--\r"
-              end
+                end
             end
-          ensure
             file.close
-          end
         end
         puts "completed download for #{url_path}\n"
     end

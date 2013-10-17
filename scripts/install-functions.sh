@@ -59,7 +59,7 @@ install_repo(){
     else
         echo "Something went wrong!"
     fi
-    sleep 1 # slow it down to insure that we have the items put in place.
+    #sleep 1 # slow it down to insure that we have the items put in place.
 }
 
 #declare -A list = ( [repo]=gitUser )

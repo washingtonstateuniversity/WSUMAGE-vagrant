@@ -50,44 +50,38 @@ fi
 #chack to see if there is already the files ready for instalation
 if [ ! -f /srv/www/magento/app/Mage.php ]
 then
-
-    if [ ! -f /srv/www/depo/magento-$bs_MAGEversion.tar.gz ]
+#downloading
+ #mage
+    if [ ! -f /srv/www/_depo/magento-$bs_MAGEversion.tar.gz ]
     then
-    
-        echo
-        echo "didn't find the packages, so now Downloading them..."
-        echo
-    
+        echo -n "Magento package present, now Downloading..."
         wget http://www.magentocommerce.com/downloads/assets/$bs_MAGEversion/magento-$bs_MAGEversion.tar.gz
-        if [[ $bs_install_sample == "true" ]]
+    fi
+ #sample
+    if [[ $bs_install_sample == "true" ]]
+    then
+        if [ ! -f /srv/www/_depo/magento-$bs_MAGEversion.tar.gz ]
         then
+            echo -n "Sample Data package present, now Downloading..."
             wget http://www.magentocommerce.com/downloads/assets/1.6.1.0/magento-sample-data-1.6.1.0.tar.gz
         fi
     fi
-    
-    echo
-    echo "Extracting data..."
-    echo    
-        pv -per /srv/www/depo/magento-$bs_MAGEversion.tar.gz | tar xzf - -C ./
+    echo -n "Extracting data..."  
+        pv -per /srv/www/_depo/magento-$bs_MAGEversion.tar.gz | tar xzf - -C ./
         if [[ $bs_install_sample == "true" ]]
         then
             pv -per magento-sample-data-1.6.1.0.tar.gz | tar xzf - -C ./
         fi
-        
-    echo
-    echo "Moving files..."
-    echo   
-        if [[ $bs_install_sample == "true" ]]
-        then
-            cp -af magento-sample-data-1.6.1.0/media/* media/
-            cp -af magento-sample-data-1.6.1.0/magento_sample_data_for_1.6.1.0.sql data.sql
-        fi
-        cp -af magento/* magento/.htaccess .
+    echo -n "Moving files..."  
+    if [[ $bs_install_sample == "true" ]]
+    then
+        cp -af magento-sample-data-1.6.1.0/media/* media/
+        cp -af magento-sample-data-1.6.1.0/magento_sample_data_for_1.6.1.0.sql data.sql
+    fi
+    cp -af magento/* magento/.htaccess .
 
-        cd /srv/www/magento/ #move to the root web folder
-    echo
-    echo "Setting permissions..."
-    echo
+    cd /srv/www/magento/ #move to the root web folder
+    echo -n "Setting permissions..."
    
     chmod o+w var var/.htaccess app/etc
     chmod -R o+w media

@@ -1,17 +1,24 @@
-#todo fix the mi_h = MAGEINSTALLER_Helper.new need
 require 'rubygems'
-
 class MageInstaller
     
     load 'rake/helper.rb'
     include MAGEINSTALLER_Helper
+    
     fresh=false
+    
     def initialize(params=nil)
         if Gem::Version.new(RUBY_VERSION) > Gem::Version.new('1.8')
             require 'fileutils'
             self.load_gem("json")
             self.load_gem("highline")
             self.load_gem("launchy")
+            output = `vagrant plugin list`
+            if !output.include? "vagrant-hostsupdater"
+                puts "installing vagrant-hostsupdater plugin"
+                puts `vagrant plugin install vagrant-hostsupdater`
+            else
+                puts "vagrant-hostsupdater plugin loaded"
+            end
             if @fresh
                 puts "there were a few things needed to install so you need to do `rake start` again."
                 abort("type rake start")
@@ -52,40 +59,26 @@ class MageInstaller
 
 #test
     def test()
-
         puts "testing the system now"
         fresh=false
         puts "insuring default folders"
         create_dir("/www/")
+        create_dir("/_depo/")
         create_dir("/_BOXES/")
         create_dir("/database/data/")
-        if !File.exist?("scripts/installer_settings.json") 
-            File.open("scripts/installer_settings.json", "w+") { |file| file.write("") }
+        if !File.exist?("#{Dir.pwd}/scripts/installer_settings.json") 
+            File.open("#{Dir.pwd}/scripts/installer_settings.json", "w+") { |file| file.write("") }
         end
         #this is where we would build the Vagrant file to suite if abstracted to account for 
         #more then this project would allow for new boxes is approprate too.  
-        file='_BOXES/precise32.box'
+        file="#{Dir.pwd}/_BOXES/precise32.box"
         if !File.exist?(file)
             download('http://hc-vagrant-files.s3.amazonaws.com/precise32.box',file)
         else
             puts "base box esited"
         end
-
-        output = `vagrant plugin list`
-        if !output.include? "vagrant-hostsupdater"
-            puts "installing vagrant-hostsupdater plugin"
-            output = `vagrant plugin install vagrant-hostsupdater`
-            puts output
-        else
-            puts "vagrant-hostsupdater plugin loaded"
-        end
+        say("System seems ready <%= color('proceeding forward', :bold) %>")
     end
-    
-    
-    
-
-    
-    
 
 #start
     def start()

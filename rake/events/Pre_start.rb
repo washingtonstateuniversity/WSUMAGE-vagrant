@@ -19,15 +19,21 @@ class Pre_start
                 end
             end
         end
-        file="depo/magento-#{version}.tar.gz"
+        file="_depo/magento-#{version}.tar.gz"
         if !File.exist?(file)
             download("http://www.magentocommerce.com/downloads/assets/#{version}/magento-#{version}.tar.gz",file)
         else
             puts "mage package exists"
         end
         if File.exist?(file)
+            puts "extracting mage package contents"
             untar_gz(file,"www")
         end
-        
+        file="_depo/magento-sample-data-1.6.1.0.tar.gz"
+        if !File.exist?(file)
+            download("http://www.magentocommerce.com/downloads/assets/1.6.1.0/magento-sample-data-1.6.1.0.tar.gz",file)
+        else
+            puts "mage sample data package exists"
+        end
     end
 end
