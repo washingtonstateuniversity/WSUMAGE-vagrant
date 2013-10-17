@@ -6,6 +6,7 @@
 load 'rake/installer.rb'
 mi = MageInstaller.new
 mode = "lite"
+
 =begin
     Maybe what is needed is a first run type thing.  Test for everything
     task list
@@ -122,17 +123,13 @@ end
 
 desc "clean the database"
 task :clean_db do
-    puts "cleaning the database"
-    FileUtils.rm_rf(Dir.glob('database/data/*'))
-    puts "database is clean"
+    mi.clean_db()
 end
 
 #maybe abstract this of other apps
-desc "clean the database"
+desc "clean the web folder"
 task :clean_www do
-    puts "cleaning the WWW folder"
-    FileUtils.rm_rf(Dir.glob('www/*'))
-    puts "The WWW has been cleaned"
+     mi.clean_www()
 end
 
 

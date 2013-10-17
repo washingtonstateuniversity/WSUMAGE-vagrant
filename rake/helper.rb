@@ -29,7 +29,7 @@ class Stopwatch
         end
     end
 end
-class MAGEINSTALLER_Helper
+module MAGEINSTALLER_Helper
     require 'fileutils'
     
     #kinda hard coded
@@ -68,6 +68,7 @@ class MAGEINSTALLER_Helper
         if contents.length > 5 #note this should be changed for a better content check.. ie:valid json
             begin
                 parsed = JSON.parse(contents)
+                @CONFIG = parsed
             rescue SystemCallError
                 puts "must redo the settings file"
             else    
@@ -83,14 +84,12 @@ class MAGEINSTALLER_Helper
     end
     
     def begin_settings_file()
-        mi_h = MAGEINSTALLER_Helper.new
         file="scripts/installer_settings.json"
         FileUtils.rm_rf(file)
-        mi_h.add_setting(file,"{") 
+        add_setting(file,"{") 
     end
     
     def end_settings_file()
-        mi_h = MAGEINSTALLER_Helper.new
         file_path="scripts/installer_settings.json"
         file = File.open(file_path, "rb") #opeing as bin for ease
         contents = file.read
@@ -100,7 +99,7 @@ class MAGEINSTALLER_Helper
         file = File.open(file_path, "w") #reopen forstr ops
             file.write(contents)
         file.close
-        mi_h.add_setting(file,"}") 
+        add_setting(file,"}") 
     end
     
     

@@ -2,7 +2,9 @@
 require 'rubygems'
 
 class MageInstaller
+    
     load 'rake/helper.rb'
+    include MAGEINSTALLER_Helper
     fresh=false
     def initialize(params=nil)
         if Gem::Version.new(RUBY_VERSION) > Gem::Version.new('1.8')
@@ -50,18 +52,21 @@ class MageInstaller
 
 #test
     def test()
-        mi_h = MAGEINSTALLER_Helper.new
+
         puts "testing the system now"
         fresh=false
         puts "insuring default folders"
-        mi_h.create_dir("/www/")
-        mi_h.create_dir("/_BOXES/")
-        mi_h.create_dir("/database/data/")
+        create_dir("/www/")
+        create_dir("/_BOXES/")
+        create_dir("/database/data/")
+        if !File.exist?("scripts/installer_settings.json") 
+            File.open("scripts/installer_settings.json", "w+") { |file| file.write("") }
+        end
         #this is where we would build the Vagrant file to suite if abstracted to account for 
         #more then this project would allow for new boxes is approprate too.  
         file='_BOXES/precise32.box'
         if !File.exist?(file)
-            mi_h.download('http://hc-vagrant-files.s3.amazonaws.com/precise32.box',file)
+            download('http://hc-vagrant-files.s3.amazonaws.com/precise32.box',file)
         else
             puts "base box esited"
         end
@@ -84,13 +89,13 @@ class MageInstaller
 
 #start
     def start()
-        mi_h = MAGEINSTALLER_Helper.new
+
         stopwatch = Stopwatch.new
 
         self.test()
          
-        mi_h.load_settings()#maybe more global?
-        mi_h.get_pre_task()
+        load_settings()#maybe more global?
+        get_pre_task()
         
         uinput = agree("Use last run's set up? <%= color('[y/n]', :bold) %>")
         if uinput
@@ -135,20 +140,20 @@ class MageInstaller
                 if uinput
                     FileUtils.rm_rf(file)
                     say("<%= color('removed file #{file}', :bold, :red, :on_black) %>")
-                    mi_h.begin_settings_file()
-                        mi_h.add_setting(file,"\"bs_mode\":\"#{mode}\",")         
+                    begin_settings_file()
+                        add_setting(file,"\"bs_mode\":\"#{mode}\",")         
                         Rake::Task["create_install_settings"].reenable
                         Rake::Task["create_install_settings"].invoke
-                    mi_h.end_settings_file()
+                    end_settings_file()
                   else
                     puts "using the past installer settings"
                 end
             else
-                mi_h.begin_settings_file()
-                    mi_h.add_setting(file,"\"bs_mode\":\"#{mode}\",")    
+                begin_settings_file()
+                    add_setting(file,"\"bs_mode\":\"#{mode}\",")    
                     Rake::Task["create_install_settings"].reenable
                     Rake::Task["create_install_settings"].invoke
-                mi_h.end_settings_file()
+                end_settings_file()
             end
             
             
@@ -157,7 +162,7 @@ class MageInstaller
             system( "vagrant up" )
         end
     
-        mi_h.get_post_task()
+        get_post_task()
         stopwatch.end
     
         Rake::Task["open"].reenable
@@ -166,26 +171,36 @@ class MageInstaller
     
 #end
     def end()
-        mi_h = MAGEINSTALLER_Helper.new
         stopwatch = Stopwatch.new
-        mi_h.get_pre_task()
+        get_pre_task()
         system( "vagrant destroy -f" )
         uinput = agree("Should all the databases be cleared?   <%= color('[y/n]', :bold) %>")
         if uinput
             Rake::Task["clean_db"].reenable
             Rake::Task["clean_db"].invoke
         end
-        
-        mi_h.get_post_task()
+        get_post_task()
         stopwatch.end("finished shutdown in:")
     end
-    
+
+#clean_db
+    def clean_db()
+        puts "cleaning the database"
+        FileUtils.rm_rf(Dir.glob('database/data/*'))
+        puts "database is clean"
+    end
+
+#clean_www
+    def clean_www()
+        puts "cleaning the WWW folder"
+        FileUtils.rm_rf(Dir.glob('www/*'))
+        puts "The WWW has been cleaned"
+    end
 
 #hardclean
     def hardclean()
-        mi_h = MAGEINSTALLER_Helper.new
         stopwatch = Stopwatch.new
-        mi_h.get_pre_task()
+        get_pre_task()
         output=`vagrant destroy -f`
         puts output
         Rake::Task["clean_www"].reenable
@@ -199,18 +214,18 @@ class MageInstaller
         puts "The depo has been cleaned"
         
         
-        mi_h.get_post_task()
+        get_post_task()
         stopwatch.end("finished hard clean up in:")
     end
 
 
 #setting file
     def create_settings_file()
-        mi_h = MAGEINSTALLER_Helper.new
+
         require 'digest/md5'
     
         file="scripts/installer_settings.json"
-        mi_h.add_setting(file,"\"bs_MAGEversion\":\"1.8.0.0\",")
+        add_setting(file,"\"bs_MAGEversion\":\"1.8.0.0\",")
 #use defaults?
         uinput = agree("use default settings? <%= color('[y/n]', :bold) %>? ")
         if uinput
@@ -218,19 +233,19 @@ class MageInstaller
         else
     #url
             input = ask("Site Url:")
-            mi_h.add_setting(file,"\"bs_url\":\"#{input}\",")   
+            add_setting(file,"\"bs_url\":\"#{input}\",")   
     #host
             input = ask("database host:")
-            mi_h.add_setting(file,"\"bs_dbhost\":\"#{input}\",")
+            add_setting(file,"\"bs_dbhost\":\"#{input}\",")
     #dbname
             input = ask("database name:")
-            mi_h.add_setting(file,"\"bs_dbname\":\"#{input}\",")
+            add_setting(file,"\"bs_dbname\":\"#{input}\",")
     #dbuser
             input = ask("database user:")
-            mi_h.add_setting(file,"\"bs_dbuser\":\"#{input}\",")
+            add_setting(file,"\"bs_dbuser\":\"#{input}\",")
     #dbpass
             input = ask("database password:")
-            mi_h.add_setting(file,"\"bs_dbuser\":\"#{input}\",")
+            add_setting(file,"\"bs_dbuser\":\"#{input}\",")
         end
         
 #install sample data
@@ -238,45 +253,44 @@ class MageInstaller
         puts "SAMPLE DATA *** would you like to install this?[y/n]"
         uinput = agree("Install <%= color('`SAMPLE DATA`', :bold) %>? [y/n]")
         if uinput
-            mi_h.add_setting(file,"\"bs_install_sample\":\"true\",")
+            add_setting(file,"\"bs_install_sample\":\"true\",")
         else
-            mi_h.add_setting(file,"\"bs_install_sample\":\"false\",")
+            add_setting(file,"\"bs_install_sample\":\"false\",")
         end
     
 #use ldap
         uinput = agree("turn on <%= color('LDAP', :bold) %>? [y/n] <%= color('NOTE: must be within network', :bold, :yellow, :on_black) %>")
         if uinput
-            mi_h.add_setting(file,"\"bs_use_ldap\":\"true\",")
+            add_setting(file,"\"bs_use_ldap\":\"true\",")
         else
-            mi_h.add_setting(file,"\"bs_use_ldap\":\"false\",")
+            add_setting(file,"\"bs_use_ldap\":\"false\",")
         end
     ######
     
         self.set_custom_user_settings()
 
         #default user must be there
-        mi_h.add_setting(file,"\"bs_adminuser\":\"admin\",")
-        mi_h.add_setting(file,"\"bs_adminpass\":\"admin2013\",")
-        mi_h.add_setting(file,"\"bs_adminfname\":\"MC\",")
-        mi_h.add_setting(file,"\"bs_adminlname\":\"Lovin\",")
-        mi_h.add_setting(file,"\"bs_adminemail\":\"test.user@wsu.edu\",")      
+        add_setting(file,"\"bs_adminuser\":\"admin\",")
+        add_setting(file,"\"bs_adminpass\":\"admin2013\",")
+        add_setting(file,"\"bs_adminfname\":\"MC\",")
+        add_setting(file,"\"bs_adminlname\":\"Lovin\",")
+        add_setting(file,"\"bs_adminemail\":\"test.user@wsu.edu\",")      
     end
 
 
     def set_settings_defaults()
-        mi_h = MAGEINSTALLER_Helper.new
         require 'digest/md5'
         file="scripts/installer_settings.json"
-        mi_h.add_setting(file,"\"bs_MAGEversion\":\"1.8.0.0\",")
-        mi_h.add_setting(file,"\"bs_url\":\"local.mage.dev\",")
-        mi_h.add_setting(file,"\"bs_dbhost\":\"localhost\",") # if in lite mode then 
-        mi_h.add_setting(file,"\"bs_dbname\":\"mage\",")
-        mi_h.add_setting(file,"\"bs_dbuser\":\"devsqluser\",")
-        mi_h.add_setting(file,"\"bs_dbpass\":\"devsqluser\",")
+        add_setting(file,"\"bs_MAGEversion\":\"1.8.0.0\",")
+        add_setting(file,"\"bs_url\":\"local.mage.dev\",")
+        add_setting(file,"\"bs_dbhost\":\"localhost\",") # if in lite mode then 
+        add_setting(file,"\"bs_dbname\":\"mage\",")
+        add_setting(file,"\"bs_dbuser\":\"devsqluser\",")
+        add_setting(file,"\"bs_dbpass\":\"devsqluser\",")
     end
 
     def set_custom_user_settings()
-        mi_h = MAGEINSTALLER_Helper.new
+
         require 'digest/md5'
         file="scripts/installer_settings.json"
 #add your nid for LDAP based tests
@@ -288,7 +302,7 @@ class MageInstaller
                         q.responses[:ask_on_error] = :question
                     end
             if uinput != ''
-                mi_h.add_setting(file,"\"bs_custom_adminuser\":\"#{uinput}\",")
+                add_setting(file,"\"bs_custom_adminuser\":\"#{uinput}\",")
             end
     
     #user pass
@@ -320,7 +334,7 @@ class MageInstaller
                 end    
             end
             pass=Digest::MD5.hexdigest(pass) #don't want usernames hanging around
-            mi_h.add_setting(file,"\"bs_custom_adminpass\":\"#{pass}\",")
+            add_setting(file,"\"bs_custom_adminpass\":\"#{pass}\",")
     
     #first name
             uinput = ask("First name:") do |q| 
@@ -328,7 +342,7 @@ class MageInstaller
                 q.responses[:not_valid]    = 'Must not be blank'
                 q.responses[:ask_on_error] = :question
             end
-            mi_h.add_setting(file,"\"bs_custom_adminfname\":\"#{uinput}\",")
+            add_setting(file,"\"bs_custom_adminfname\":\"#{uinput}\",")
             
     #last name
             uinput = ask("Last name:")  do |q| 
@@ -336,14 +350,14 @@ class MageInstaller
                 q.responses[:not_valid]    = 'Must not be blank'
                 q.responses[:ask_on_error] = :question
             end
-            mi_h.add_setting(file,"\"bs_custom_adminlname\":\"#{uinput}\",")
+            add_setting(file,"\"bs_custom_adminlname\":\"#{uinput}\",")
      
     #email
             uinput = ask("Email:") { |q| 
-                q.validate  = mi_h.test_email
+                q.validate  = test_email
                 q.responses[:not_valid]    = "<%= color('you must use a valid email.', :bold, :red, :on_black) %>"
             }
-            mi_h.add_setting(file,"\"bs_custom_adminlemail\":\"#{uinput}\",")
+            add_setting(file,"\"bs_custom_adminlemail\":\"#{uinput}\",")
      
         end
     end
