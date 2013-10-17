@@ -114,6 +114,12 @@ task :hardclean do
     mi.hardclean()
 end
 
+task :fresh do
+    mi.hardclean()
+end
+
+
+
 desc "clean the database"
 task :clean_db do
     mi.clean_db()

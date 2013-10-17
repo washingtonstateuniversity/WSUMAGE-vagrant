@@ -189,6 +189,13 @@ class MageInstaller
         puts "The WWW has been cleaned"
     end
 
+#fresh
+    def fresh()
+        self.hardclean()
+        puts "needs to uninstall gems and what not"
+    end
+
+
 #hardclean
     def hardclean()
         stopwatch = Stopwatch.new
