@@ -16,7 +16,12 @@ find . -type f -exec dos2unix {} \;
 cd /srv/www/
 . scripts/install-functions.sh
 
-. scripts/install_settings.sh
+. scripts/system/ticktick.sh
+DATA=`scripts/installer_settings.json`
+tickParse "$DATA"
+
+
+
 
 if [[ has_network ]]
 then
@@ -27,14 +32,6 @@ then
 
     cd /srv/www/
     . scripts/main-install.sh
-
-else
-	echo -e "\nNo network connection available, skipping package installation"
-fi
-
-
-if [[ has_network ]]
-then
 
     #check and install wp
     cd /srv/www/

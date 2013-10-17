@@ -226,7 +226,8 @@ else
         [mage-enhanced-admin-grids]=mage-eag
     )
     cd /srv/www/magento/
-    install_repolist $gitRepos 0 reset_mage
+    #install_repolist $gitRepos 0 reset_mage
+    install_tarrepo_list $gitRepos 0 reset_mage
     unset gitRepos         #unset and re-declare to clear associative arrays
     declare -A gitRepos
 

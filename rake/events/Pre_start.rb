@@ -26,8 +26,11 @@ class Pre_start
             puts "mage package exists"
         end
         if File.exist?(file)
-            puts "extracting mage package contents"
-            untar_gz(file,"www")
+            if !File.exist?("#{Dir.pwd}/www/magento/installed.txt") 
+                puts "extracting mage package contents"
+                untar_gz(file,"www")
+                File.open("#{Dir.pwd}/www/magento/installed.txt", "w+") { |file| file.write("") }
+            end
         end
         file="_depo/magento-sample-data-1.6.1.0.tar.gz"
         if !File.exist?(file)

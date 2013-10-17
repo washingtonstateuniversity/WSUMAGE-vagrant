@@ -11,6 +11,9 @@
 */install_settings.sh
 */installer_settings.json
 
+/_depo/*
+
+
 #skipping the vagrant as it's generated
 /Vagrantfile
 

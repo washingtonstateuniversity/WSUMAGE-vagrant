@@ -147,7 +147,7 @@ end
 
 desc "Create a setting file"#maybe abstract this 
 task :create_install_settings do
-    MageInstaller.new.create_settings_file()
+    mi.new.create_settings_file()
 end
 
 

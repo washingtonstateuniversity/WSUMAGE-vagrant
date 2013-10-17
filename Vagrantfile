@@ -18,8 +18,7 @@ Vagrant.configure("2") do |config|
               "local.mage.dev"
             ]
         end
-            
-        
+
         web_config.vm.box = "precise32"
         web_config.vm.box_url = "_BOXES/precise32.box"   ##"http://files.vagrantup.com/precise32.box"
         web_config.vm.network :private_network, ip: "192.168.50.4"

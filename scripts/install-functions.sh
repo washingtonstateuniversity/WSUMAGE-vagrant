@@ -83,3 +83,34 @@ install_repolist(){
     done
     return 1
 }
+
+
+
+
+
+install_tarrepo(){
+    repozip=/srv/www/_depo/$2.zip
+    if [ ! -f $repozip ]
+    then
+        wget -O $repozip $1
+        echo "cloned and installing $2"
+
+        unzip $repozip -d /srv/www/magento/
+    else
+        echo "$2 existed and installing "
+    fi
+    php "/srv/www/magento/index.php"
+    #sleep 1 # slow it down to insure that we have the items put in place.
+}
+#declare -A list = ( [repo]=gitUser )
+install_tarrepo_list(){
+    gitRepos=$1
+    for r in "${!gitRepos[@]}" #loop with key as the var
+    do
+        giturl="https://github.com/${gitRepos[$r]}/$r/archive/master.zip"
+        echo "Adding $r From $giturl"
+        install_tarrepo $giturl $r
+        echo
+    done
+    return 1
+}

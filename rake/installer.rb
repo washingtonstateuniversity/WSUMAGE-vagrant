@@ -1,3 +1,7 @@
+#right now this is geared to a Magento dev env. here but with a little more 
+#refactoring we will be able to have this handle a few types like WP to more 
+#complicated ones.
+
 require 'rubygems'
 class MageInstaller
     
@@ -112,16 +116,18 @@ class MageInstaller
             if Dir['www/*'].empty?
                 uinput = agree("Should WWW folder be cleared? <%= color('[y/n]', :bold) %>")
                 if uinput
-                    Rake::Task["clean_www"].reenable
-                    Rake::Task["clean_www"].invoke
+                    #Rake::Task["clean_www"].reenable
+                    #Rake::Task["clean_www"].invoke
+                    self.clean_www()
                 end
             end
     #database
             if Dir['database/data/*'].empty?
                 uinput = agree("Should all the databases be cleared? <%= color('[y/n]', :bold) %>")
                 if uinput
-                    Rake::Task["clean_db"].reenable
-                    Rake::Task["clean_db"].invoke
+                    #Rake::Task["clean_db"].reenable
+                    #Rake::Task["clean_db"].invoke
+                    self.clean_db()
                 end
             end
     #installer settings
@@ -134,8 +140,9 @@ class MageInstaller
                     say("<%= color('removed file #{file}', :bold, :red, :on_black) %>")
                     begin_settings_file()
                         add_setting(file,"\"bs_mode\":\"#{mode}\",")         
-                        Rake::Task["create_install_settings"].reenable
-                        Rake::Task["create_install_settings"].invoke
+                        #Rake::Task["create_install_settings"].reenable
+                        #Rake::Task["create_install_settings"].invoke
+                        self.create_settings_file()
                     end_settings_file()
                   else
                     puts "using the past installer settings"
@@ -143,13 +150,14 @@ class MageInstaller
             else
                 begin_settings_file()
                     add_setting(file,"\"bs_mode\":\"#{mode}\",")    
-                    Rake::Task["create_install_settings"].reenable
-                    Rake::Task["create_install_settings"].invoke
+                    #Rake::Task["create_install_settings"].reenable
+                    #Rake::Task["create_install_settings"].invoke
+                    self.create_settings_file()
                 end_settings_file()
             end
             
             
-            say("[<%= color('Starting the Vagrant', :bold,:red) %>]")
+            say("[<%= color('Starting the Vagrant', :bold,:green) %>]")
             
             system( "vagrant up" )
         end
@@ -157,8 +165,9 @@ class MageInstaller
         get_post_task()
         stopwatch.end
     
-        Rake::Task["open"].reenable
-        Rake::Task["open"].invoke  
+        self.open()
+        #Rake::Task["open"].reenable
+        #Rake::Task["open"].invoke  
     end
     
 #end
