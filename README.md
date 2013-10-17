@@ -10,7 +10,7 @@ only a few steps before then can login to the admin area and begin development w
     > 1. [Vagrant](https://www.virtualbox.org/)
     > 1. [VirtualBox](https://www.virtualbox.org/)
     > 1. [Ruby](http://rubyinstaller.org/)(only needed if using windows)
-
+    > Note: if your on a mac you must have ruby 1.9 or above.  Look to [this articel to update your ruby](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
 1. run in powershell/command line 
         
         > git clone git://github.com/washingtonstateuniversity/WSUMAGE-vagrant.git vvvbox
