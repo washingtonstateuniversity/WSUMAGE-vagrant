@@ -40,11 +40,14 @@ Although you could just use the Vagrant commands, the whole point of this projec
 are questions about the envoiroment you want to set up.  In order to take advantage of this, here are a list of the rake tasks:
 
 Primary Tasks
+
 1. `rake start` :: vagrant up but with prompts (this runs a few other tasks to ensure that the system is ready to `vagrant up`)
 1. `rake end` :: destroy with options to clean up
 1. `rake hardclean` :: runs all the cleaners
+2. `rake fresh` :: takes the system back to basic (will prompt to uninstall gems and vagrant plugins)
 
 Tasks to match Vagrant
+
 1. `rake up` :: vagrant up ***(only adds timer and events)***
 1. `rake destory` :: vagrant destory ***(only adds timer and events)***
 1. `rake halt` :: vagrant halt ***(only adds timer and events)***
@@ -54,6 +57,7 @@ Tasks to match Vagrant
 1. `rake push` :: push up to production ***(would need to authenticate)***
 
 Utility tasks
+
 1. `rake clean_db` ::  This is to clear the shared database folder
 1. `rake clean_www` :: This is to clear the shared web folder
 1. `rake create_install_settings` :: create the settings for the installer
