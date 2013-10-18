@@ -9,6 +9,8 @@
 
 ## since we are generating from Mac or Windows this is needed 
 apt-get install dos2unix
+
+
 cd /srv/www/scripts/
 find . -type f -exec dos2unix {} \; 
 
@@ -16,10 +18,28 @@ find . -type f -exec dos2unix {} \;
 cd /srv/www/
 . scripts/install-functions.sh
 
+#so we would put this as a loop over and detact if keeped this way
+cd /srv/www/
+. scripts/magento/functions.sh
+
 . scripts/system/ticktick.sh
-DATA=`scripts/installer_settings.json`
+DATA = `cat scripts/installer_settings.json`
 tickParse "$DATA"
 
+i=0
+for setting in ``$DATA.items()``; do
+    ${!DATA[$i]} = $setting
+    echo $setting
+    echo ${!DATA[$i]}
+    $i+=1
+done
+
+
+echo $bs_MAGEversion
+echo $bs_dbhost
+
+
+exit
 
 
 
@@ -43,7 +63,7 @@ then
 
     #check and install magento
     cd /srv/www/
-    . scripts/mage-install.sh      
+    . scripts/magento/mage-install.sh      
 
 else
 	echo -e "\nNo network available, skipping network installations"

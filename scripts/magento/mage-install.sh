@@ -6,6 +6,7 @@ reset_mage(){
     php "/srv/www/magento/index.php"
 }
 
+
 cd /srv/www/magento/ #move to the root web folder
 if [ -z "$bs_dbhost" ]  #this should be removed // 
 then #should remove this

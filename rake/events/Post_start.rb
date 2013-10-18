@@ -6,8 +6,9 @@ class Post_start
         load_settings
         uinput = agree("Would you like to package this box? <%= color('[y/n]', :bold) %>")
         if uinput
-            system("vagrant package precise32 precise32_alt --precise32_alt.box")
-            system("vagrant box add precise32_alt precise32_alt.box")
+            system("vagrant package --output _BOXES/precise32_alt.box --base precise32")
+            system("vagrant box add precise32_alt _BOXES/precise32_alt.box")
+            
         end
     end
 end
