@@ -94,11 +94,11 @@ install_tarrepo(){
     then
         wget -O $repozip $1
         echo "cloned and installing $2"
-
-        unzip $repozip -d /srv/www/magento/
     else
         echo "$2 existed and installing "
     fi
+    #unzip $repozip -d /srv/www/magento/
+    unzip $repozip "$2-master/*" -d /srv/www/magento/
     php "/srv/www/magento/index.php"
     #sleep 1 # slow it down to insure that we have the items put in place.
 }
