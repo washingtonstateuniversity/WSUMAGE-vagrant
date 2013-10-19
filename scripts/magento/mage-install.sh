@@ -8,20 +8,47 @@ reset_mage(){
 
 
 cd /srv/www/magento/ #move to the root web folder
-if [ -z "$bs_dbhost" ]  #this should be removed // 
-then #should remove this
-    bs_MAGEversion="1.8.0.0"
-    bs_dbhost="localhost"
-    bs_dbname="mage"
-    bs_dbuser="devsqluser"
-    bs_dbpass="devsqluser"
-    bs_url="local.mage.dev"
-    bs_adminuser="admin"
-    bs_adminpass="admin2013"
-    bs_adminfname="Mc"       
-    bs_adminlname="Lovin"
-    bs_adminemail="test.user@wsu.edu"
-fi
+#if [ -z "$bs_dbhost" ]  #this should be removed // 
+#then #should remove this
+#    bs_MAGEversion="1.8.0.0"
+#    bs_dbhost="localhost"
+#    bs_dbname="mage"
+#    bs_dbuser="devsqluser"
+#    bs_dbpass="devsqluser"
+#    bs_url="local.mage.dev"
+#    bs_adminuser="admin"
+#    bs_adminpass="admin2013"
+#    bs_adminfname="Mc"       
+#    bs_adminlname="Lovin"
+#    bs_adminemail="test.user@wsu.edu"
+#fi
+
+
+
+ticklist=(
+    bs_mode
+    bs_MAGEversion
+    bs_dbhost
+    bs_dbname
+    bs_dbuser
+    bs_dbpass
+    bs_url
+    bs_adminuser
+    bs_adminpass
+    bs_adminfname
+    bs_adminlname
+    bs_adminemail
+)
+for r in $ticklist
+do
+    a="$r"
+    eval $a=``$r``
+    echo $a
+done
+echo $bs_mode
+echo $bs_dbhost
+
+exit
 
 
 echo

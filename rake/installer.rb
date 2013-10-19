@@ -23,6 +23,12 @@ class MageInstaller
             else
                 puts "vagrant-hostsupdater plugin loaded"
             end
+            if !output.include? "vagrant-cachier"
+                puts "installing vagrant-cachier plugin"
+                puts `vagrant plugin install vagrant-cachier`
+            else
+                puts "vagrant-cachier plugin loaded"
+            end
             if @fresh
                 puts "there were a few things needed to install so you need to do `rake start` again."
                 abort("type rake start")
@@ -166,8 +172,6 @@ class MageInstaller
         stopwatch.end
     
         self.open()
-        #Rake::Task["open"].reenable
-        #Rake::Task["open"].invoke  
     end
     
 #end
@@ -228,14 +232,70 @@ class MageInstaller
 
 #open
     def open()
-        stopwatch = Stopwatch.new
+        
+        #note we would want to check for the browser bing open already
+        #so we don't annoy people
+        
         get_pre_task()
         require 'launchy'
         Launchy.open("http://local.mage.dev/admin") #note this should be from setting file
-        
+        get_post_task()
+    end
+
+
+#up
+    def up()
+        stopwatch = Stopwatch.new
+        self.test()
+        load_settings()
+        get_pre_task()
+        system( "vagrant up" )
+        get_post_task()
+        stopwatch.end("box brought up in:")
+        self.open()
+    end
+
+#reload
+    def reload()
+        stopwatch = Stopwatch.new
+        get_pre_task()
+        system( "vagrant reload" )
+        get_post_task()
+        stopwatch.end("reloaded in:")
+        self.open()
+    end
+
+#destroy
+    def destroy()
+        stopwatch = Stopwatch.new
+        get_pre_task()
+        system( "vagrant destroy" )
         get_post_task()
         stopwatch.end
     end
+
+#halt
+    def halt()
+        stopwatch = Stopwatch.new
+        get_pre_task()
+        system( "vagrant halt" )
+        get_post_task()
+        stopwatch.end
+    end
+
+#restart
+    def restart()
+        stopwatch = Stopwatch.new
+        get_pre_task()
+        self.end()
+        self.up()
+        get_post_task()
+        stopwatch.end("restarted in:")
+    end
+
+
+
+
 #setting file
     def create_settings_file()
 

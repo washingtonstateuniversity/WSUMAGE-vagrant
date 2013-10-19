@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
         web_config.vm.hostname  = "web"
         
         if defined? VagrantPlugins::HostsUpdater
-            config.hostsupdater.aliases = [
+            web_config.hostsupdater.aliases = [
               "web",
               "local.mage.dev"
             ]
@@ -21,6 +21,12 @@ Vagrant.configure("2") do |config|
 
         web_config.vm.box = "precise32"
         web_config.vm.box_url = "_BOXES/precise32.box"   ##"http://files.vagrantup.com/precise32.box"
+        if defined? VagrantPlugins::Cachier
+            web_config.cache.auto_detect = true
+            web_config.cache.enable :apt
+            web_config.cache.enable :yum
+        end
+
         web_config.vm.network :private_network, ip: "192.168.50.4"
         #web_config.vm.forward_port 22, 2210
         

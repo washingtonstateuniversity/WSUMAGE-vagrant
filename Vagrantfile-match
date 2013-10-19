@@ -9,20 +9,26 @@ Vagrant.configure("2") do |config|
     # to speed things up
 
     config.vm.define "db" do |db_config|
-        web_config.vm.provider :virtualbox do |v|
-            v.customize ["modifyvm", :id, "--memory", 1024]
+        db_config.vm.provider :virtualbox do |v|
+            v.customize ["modifyvm", :id, "--memory", 512]
         end
-        web_config.ssh.forward_agent = true
-        web_config.vm.hostname  = "db"
+        db_config.ssh.forward_agent = true
+        db_config.vm.hostname  = "db"
         
         if defined? VagrantPlugins::HostsUpdater
-            config.hostsupdater.aliases = [
+            db_config.hostsupdater.aliases = [
               "db", "db.mage.dev"
             ]
         end
-        web_config.vm.box = "precise32"
-        web_config.vm.box_url = "_BOXES/precise32.box"   ##"http://files.vagrantup.com/precise32.box"
-        web_config.vm.network :private_network, ip: "192.168.50.5"
+        db_config.vm.box = "precise32"
+        db_config.vm.box_url = "_BOXES/precise32.box"   ##"http://files.vagrantup.com/precise32.box"
+        if defined? VagrantPlugins::Cachier
+            db_config.cache.auto_detect = true
+            db_config.cache.enable :apt
+            db_config.cache.enable :yum
+        end
+
+        db_config.vm.network :private_network, ip: "192.168.50.5"
         #web_config.vm.forward_port 22, 2210
         db_config.vm.synced_folder "database/", "/srv/database"
         db_config.vm.synced_folder "database/data/", "/var/lib/mysql", :mount_options => [ "dmode=777", "fmode=777" ]
@@ -38,7 +44,7 @@ Vagrant.configure("2") do |config|
         web_config.vm.hostname  = "web"
         
         if defined? VagrantPlugins::HostsUpdater
-            config.hostsupdater.aliases = [
+            web_config.hostsupdater.aliases = [
               "web",
               "local.mage.dev"
             ]
@@ -46,6 +52,12 @@ Vagrant.configure("2") do |config|
         
         web_config.vm.box = "precise32"
         web_config.vm.box_url = "_BOXES/precise32.box"   ##"http://files.vagrantup.com/precise32.box"
+        if defined? VagrantPlugins::Cachier
+            web_config.cache.auto_detect = true
+            web_config.cache.enable :apt
+            web_config.cache.enable :yum
+        end
+
         web_config.vm.network :private_network, ip: "192.168.50.4"
         #web_config.vm.forward_port 22, 2210
 

@@ -41,10 +41,11 @@ are questions about the envoiroment you want to set up.  In order to take advant
 
 Primary Tasks
 
-1. `rake start` :: vagrant up but with prompts (this runs a few other tasks to ensure that the system is ready to `vagrant up`)
-1. `rake end` :: destroy with options to clean up
+1. `rake start` :: basicly `vagrant up` but with prompts (this runs a few other tasks to ensure that the system is ready to `vagrant up`)
+1. `rake end` :: this task is `vagrant destroy` with options to clean up the database if it needs it.
 1. `rake hardclean` :: runs all the cleaners
-2. `rake fresh` :: takes the system back to basic (will prompt to uninstall gems and vagrant plugins)
+1. `rake fresh` :: takes the system back to basic (will prompt to uninstall gems and vagrant plugins)
+1. `rake restart` :: this task will time the runing of `rake end` and then `rake up` which should provide a very fast full down and up
 
 Tasks to match Vagrant
 

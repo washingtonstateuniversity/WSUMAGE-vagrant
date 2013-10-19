@@ -62,44 +62,28 @@ end
 
 desc "here to provide consistency  with Vagrant, that and adds a timer and pre/post events"
 task :up do
-    mi_h = MAGEINSTALLER_Helper.new
-    stopwatch = Stopwatch.new
-    mi_h.get_pre_task()
-    system( "vagrant up" )
-    mi_h.get_post_task()
-    stopwatch.end
-    Rake::Task["open"].reenable
-    Rake::Task["open"].invoke
+    mi.up()
 end
 
 desc "here to provide consistency  with Vagrant, that and adds a timer and pre/post events"
 task :destroy do
-    mi_h = MAGEINSTALLER_Helper.new
-    stopwatch = Stopwatch.new
-    mi_h.get_pre_task()
-    system( "vagrant destroy" )
-    mi_h.get_post_task()
-    stopwatch.end
+    mi.destroy()
+
 end
 
 desc "here to provide consistency  with Vagrant, that and adds a timer and pre/post events"
 task :halt do
-    stopwatch = Stopwatch.new
-    mi_h.get_pre_task()
-    system( "vagrant halt" )
-    mi_h.get_post_task()
-    stopwatch.end
+    mi.halt()
 end
 
 desc "here to provide consistency  with Vagrant, that and adds a timer and pre/post events"
 task :reload do
-    mi_h = MAGEINSTALLER_Helper.new
-    stopwatch = Stopwatch.new
-    mi_h.get_pre_task()
-    system( "vagrant reload" )
-    mi_h.get_post_task()
-    stopwatch.end
+    mi.reload()
 end
+
+
+
+
 
 #note just for testing/ like a bonus
 task :open do
@@ -117,7 +101,9 @@ end
 task :fresh do
     mi.hardclean()
 end
-
+task :restart do
+    mi.restart()
+end
 
 
 desc "clean the database"
