@@ -7,50 +7,33 @@ reset_mage(){
 }
 
 
+cd /srv/www/
+
+
+#. scripts/system/ticktick.sh
+#DATA=`cat scripts/installer_settings.json`
+#tickParse "$DATA"
+
+DATA=`cat scripts/installer_settings.json`
+
+bs_MAGEversion=`jsonval $DATA "bs_MAGEversion"`
+bs_dbhost=`jsonval $DATA "bs_dbhost"`
+bs_dbname=`jsonval $DATA "bs_dbname"`
+bs_dbuser=`jsonval $DATA "bs_dbuser"`
+bs_dbpass=`jsonval $DATA "bs_dbpass"`
+bs_url=`jsonval $DATA "bs_url"`
+bs_adminfname=`jsonval $DATA "bs_adminfname"`
+bs_adminlname=`jsonval $DATA "bs_adminlname"`
+bs_adminemail=`jsonval $DATA "bs_adminemail"`
+bs_adminuser=`jsonval $DATA "bs_adminuser"`
+bs_adminpass=`jsonval $DATA "bs_adminpass"`
+bs_install_sample=`jsonval $DATA "bs_install_sample"`
+
+
+echo "a value at ${bs_MAGEversion}"
+
+
 cd /srv/www/magento/ #move to the root web folder
-#if [ -z "$bs_dbhost" ]  #this should be removed // 
-#then #should remove this
-#    bs_MAGEversion="1.8.0.0"
-#    bs_dbhost="localhost"
-#    bs_dbname="mage"
-#    bs_dbuser="devsqluser"
-#    bs_dbpass="devsqluser"
-#    bs_url="local.mage.dev"
-#    bs_adminuser="admin"
-#    bs_adminpass="admin2013"
-#    bs_adminfname="Mc"       
-#    bs_adminlname="Lovin"
-#    bs_adminemail="test.user@wsu.edu"
-#fi
-
-
-
-ticklist=(
-    bs_mode
-    bs_MAGEversion
-    bs_dbhost
-    bs_dbname
-    bs_dbuser
-    bs_dbpass
-    bs_url
-    bs_adminuser
-    bs_adminpass
-    bs_adminfname
-    bs_adminlname
-    bs_adminemail
-)
-for r in $ticklist
-do
-    a="$r"
-    eval $a=``$r``
-    echo $a
-done
-echo $bs_mode
-echo $bs_dbhost
-
-exit
-
-
 echo
 echo "We will clear any past install"
 #check to see if mage is installed already
@@ -75,45 +58,22 @@ else
 fi
 
 
-#chack to see if there is already the files ready for instalation
-if [ ! -f /srv/www/magento/app/Mage.php ]
-then
-#downloading
- #mage
-    if [ ! -f /srv/www/_depo/magento-$bs_MAGEversion.tar.gz ]
-    then
-        echo -n "Magento package present, now Downloading..."
-        wget http://www.magentocommerce.com/downloads/assets/$bs_MAGEversion/magento-$bs_MAGEversion.tar.gz
-    fi
- #sample
-    if [[ $bs_install_sample == "true" ]]
-    then
-        if [ ! -f /srv/www/_depo/magento-$bs_MAGEversion.tar.gz ]
-        then
-            echo -n "Sample Data package present, now Downloading..."
-            wget http://www.magentocommerce.com/downloads/assets/1.6.1.0/magento-sample-data-1.6.1.0.tar.gz
-        fi
-    fi
-    echo -n "Extracting data..."  
-        pv -per /srv/www/_depo/magento-$bs_MAGEversion.tar.gz | tar xzf - -C ./
-        if [[ $bs_install_sample == "true" ]]
-        then
-            pv -per magento-sample-data-1.6.1.0.tar.gz | tar xzf - -C ./
-        fi
-    echo -n "Moving files..."  
-    if [[ $bs_install_sample == "true" ]]
-    then
-        cp -af magento-sample-data-1.6.1.0/media/* media/
-        cp -af magento-sample-data-1.6.1.0/magento_sample_data_for_1.6.1.0.sql data.sql
-    fi
-    cp -af magento/* magento/.htaccess .
 
+#sample
+if [[ $bs_install_sample == "true" ]]
+then
+    echo -n "Sample Data package present, now unzipping..."
+    cp -af magento-sample-data-1.6.1.0/media/* media/
+    cp -af magento-sample-data-1.6.1.0/magento_sample_data_for_1.6.1.0.sql data.sql
     cd /srv/www/magento/ #move to the root web folder
-    echo -n "Setting permissions..."
-   
     chmod o+w var var/.htaccess app/etc
     chmod -R o+w media
-
+    
+    echo "Now installing Magento with sample data..."
+    echo
+    echo "Importing sample products..."
+    mysql -h $bs_dbhost -u $bs_dbuser -p$bs_dbpass $bs_dbname < data.sql
+    
 fi
 
 
@@ -131,15 +91,6 @@ then
     #maybe this one later.  Dev package we put together
     #http://kahi.cz/blog/images/adminer-makeup/adminer331-kahi.zip
 fi
-
-if [[ $bs_install_sample == "true" ]]
-then
-    echo "Now installing Magento with sample data..."
-    echo
-    echo "Importing sample products..."
-    mysql -h $bs_dbhost -u $bs_dbuser -p$bs_dbpass $bs_dbname < data.sql
-fi
-
 
 
 #pear mage-setup .
@@ -191,10 +142,7 @@ echo "Installing Magento..."
     --admin_username "$bs_adminuser" \
     --admin_password "$bs_adminpass"
 
-if [ ! -f /srv/www/magento/app/etc/local.xml ]
-then
-    echo "failed install try it again"
-else
+
     if [ -f /srv/database/init-mage.sql ]
     then
         mysql -u root -pblank < /srv/database/init-mage.sql | echo -e "\nInitial custom mage MySQL scripting..."
@@ -254,7 +202,6 @@ else
         [mage-enhanced-admin-grids]=mage-eag
     )
     cd /srv/www/magento/
-    #install_repolist $gitRepos 0 reset_mage
     install_tarrepo_list $gitRepos 0 reset_mage
     unset gitRepos         #unset and re-declare to clear associative arrays
     declare -A gitRepos
@@ -281,7 +228,8 @@ else
     cp /srv/www/scripts/magento/settings.config settings.config #remove this I think.
 
 
-    #pass the shell variables to php via a query string to trun to an object in the post script
+    ##pass the shell variables to php via a query string to trun to an object in the post script
+    ##maybe we should just load the installer settings json file from within the php?
     query=
     for var in ${!bs_*}; do
         if [ -n "$query" ];
@@ -311,5 +259,3 @@ else
     echo
     echo "Finished installing Magento"
     echo
- 
- fi

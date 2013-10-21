@@ -1,4 +1,5 @@
 #!/bin/bash
+
 install_repo(){
     if [ $2 ]
     then
@@ -55,6 +56,11 @@ install_repolist(){
 }
 
 
+jsonval() {
+    temp=`echo $1 | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $2`
+    echo ${temp##*|}
+}
+ 
 
 
 
@@ -67,15 +73,18 @@ install_tarrepo(){
     else
         echo "$2 existed and installing "
     fi
-
-    unzip $repozip -d /srv/www/magento/
-    cd /srv/www/magento/
-    cp -af "/srv/www/magento/$2-master/*" .
-    rm -rf "/srv/www/magento/$2-master/"
+    package="$2-master"
+    
+    unzip -q $repozip -d /srv/www/magento/
+    
+    #unzip $repozip -d /srv/www/magento/
+    cd $package/
     rm -rf LICENSE.txt STATUS.txt README.md RELEASE_NOTES.txt modman
+    cd ../
+    cp -af $package/* .
+    rm -rf $package/
     rm -rf var/cache/*
     php "/srv/www/magento/index.php"
-    #sleep 1 # slow it down to insure that we have the items put in place.
 }
 #declare -A list = ( [repo]=gitUser )
 install_tarrepo_list(){

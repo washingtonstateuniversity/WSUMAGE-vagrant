@@ -2,6 +2,9 @@
 #refactoring we will be able to have this handle a few types like WP to more 
 #complicated ones.
 
+#is there room to improve adn abstract this, yes!  throw ideas out adn let us see what sticks
+
+
 require 'rubygems'
 class MageInstaller
     
@@ -162,6 +165,17 @@ class MageInstaller
                 end_settings_file()
             end
             
+            load_settings()
+            if @bs_install_sample
+                file="_depo/magento-sample-data-1.6.1.0.tar.gz"
+                if File.exist?(file)
+                    if !File.exist?("#{Dir.pwd}/www/magento/sample_installed.txt") 
+                        puts "extracting mage package contents"
+                        untar_gz(file,"www/magento")
+                        File.open("#{Dir.pwd}/www/magento/sample_installed.txt", "w+") { |file| file.write("") }
+                    end
+                end
+            end
             
             say("[<%= color('Starting the Vagrant', :bold,:green) %>]")
             

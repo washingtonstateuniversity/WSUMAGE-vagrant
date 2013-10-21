@@ -3,8 +3,6 @@
 class Pre_start
     include MAGEINSTALLER_Helper
     def initialize(params=nil)
-        puts 'World'
-        
         load_settings
         version = @bs_MAGEversion
         if version==nil

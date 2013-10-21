@@ -6,87 +6,41 @@
 # configurations included with Varying Vagrant Vagrants. 
 # It's worth noting that you dont' need the normal #!/bin/bash for this included file
 
-
 ## since we are generating from Mac or Windows this is needed 
 apt-get install dos2unix
-
 
 cd /srv/www/scripts/
 find . -type f -exec dos2unix {} \; 
 
 
-cd /srv/www/
-. scripts/install-functions.sh
-
-#so we would put this as a loop over and detact if keeped this way
-cd /srv/www/
-. scripts/magento/functions.sh
-
-. scripts/system/ticktick.sh
-DATA=`cat scripts/installer_settings.json`
-tickParse "$DATA"
-
-bs_mode=``bs_mode``
-echo $bs_mode
-
-tickticklist=(
-    "bs_mode"
-    "bs_MAGEversion"
-    "bs_dbhost"
-    "bs_dbname"
-    "bs_dbuser"
-    "bs_dbpass"
-    "bs_url"
-    "bs_adminuser"
-    "bs_adminpass"
-    "bs_adminfname"
-    "bs_adminlname"
-    "bs_adminemail"
-)
-for r in $tickticklist
-do
-    a=$r
-    eval tmp = ``${!r}``
-    eval $a=$tmp
-    echo $a
-done
-echo $bs_mode
-echo $bs_dbhost
-
-#i=0
-#for setting in ``$DATA.items()``; do
-#    echo $setting
-#    ${!DATA[$i]} = $setting
-#    echo $setting
-#    echo ${!DATA[$i]}
-#    $i+=1
-#done
-#echo $bs_mode
-#cd /srv/www/scripts/system/
-#. JSON.sh 
-#json_parse < ../installer_settings.json
-
-
-
+cd /srv/www/scripts/
+. install-functions.sh
 
 if [[ has_network ]]
 then
+
+
+    #so we would put this as a loop over and detect if kept this way
+    cd /srv/www/scripts/
+    . magento/functions.sh
+
+
     apt-get install pv
 
-    cd /srv/www/
-    . scripts/main-install.sh
+    cd /srv/www/scripts/
+    . main-install.sh
 
     #check and install wp
-    cd /srv/www/
-    . scripts/db-install.sh   
+    cd /srv/www/scripts/
+    . db-install.sh   
 
     #check and install wp
     cd /srv/www/
     #. scripts/wp-install.sh   
 
     #check and install magento
-    cd /srv/www/
-    . scripts/magento/mage-install.sh      
+    cd /srv/www/scripts/
+    . magento/mage-install.sh      
 
 else
 	echo -e "\nNo network available, skipping network installations"
