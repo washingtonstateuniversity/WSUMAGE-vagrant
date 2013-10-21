@@ -10,7 +10,7 @@ only a few steps before then can login to the admin area and begin development w
     > 1. [Vagrant](https://www.virtualbox.org/)
     > 1. [VirtualBox](https://www.virtualbox.org/)
     > 1. [Ruby](http://rubyinstaller.org/)(only needed if using windows)
-    > Note: if your on a mac you must have ruby 1.9 or above.  Look to [this articel to update your ruby](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
+    > Note: if your on a mac you must have ruby 1.9 or above.  Look to [this article to update your ruby](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
 1. run in powershell/command line 
         
         > git clone git://github.com/washingtonstateuniversity/WSUMAGE-vagrant.git vvvbox
@@ -37,20 +37,20 @@ the developer to mess around with the configs.  This means you can bring up and 
 
 ###Rake Tasks
 Although you could just use the Vagrant commands, the whole point of this project is that there 
-are questions about the envoiroment you want to set up.  In order to take advantage of this, here are a list of the rake tasks:
+are questions about the environment you want to set up.  In order to take advantage of this, here are a list of the rake tasks:
 
 Primary Tasks
 
-1. `rake start` :: basicly `vagrant up` but with prompts (this runs a few other tasks to ensure that the system is ready to `vagrant up`)
+1. `rake start` :: basically `vagrant up` but with prompts (this runs a few other tasks to ensure that the system is ready to `vagrant up`)
 1. `rake end` :: this task is `vagrant destroy` with options to clean up the database if it needs it.
 1. `rake hardclean` :: runs all the cleaners
 1. `rake fresh` :: takes the system back to basic (will prompt to uninstall gems and vagrant plugins)
-1. `rake restart` :: this task will time the runing of `rake end` and then `rake up` which should provide a very fast full down and up
+1. `rake restart` :: this task will time the running of `rake end` and then `rake up` which should provide a very fast full down and up
 
 Tasks to match Vagrant
 
 1. `rake up` :: vagrant up ***(only adds timer and events)***
-1. `rake destory` :: vagrant destory ***(only adds timer and events)***
+1. `rake destroy` :: vagrant destroy ***(only adds timer and events)***
 1. `rake halt` :: vagrant halt ***(only adds timer and events)***
 1. `rake reload` :: vagrant reload ***(only adds timer and events)***
 1. `rake suspend` :: vagrant suspend ***(only adds timer and events)***
@@ -68,7 +68,7 @@ Utility tasks
 
 
 ### Events
-Because this is a ruby rake task wraper for Vagrant, we can add a few helpers to improve the process.
+Because this is a ruby rake task wrapper for Vagrant, we can add a few helpers to improve the process.
 One of the first things is that there are event hooks that you can inject your personal parts to.  
 All event files are located in `/rake/events` and will have the file name in the format  of `{Event_type}_{Task_name}.rb`.
 The events that are set up for you are
@@ -77,7 +77,7 @@ The events that are set up for you are
 1. Post
     
 So for example if you wanting to do something before everything else when `rake start` is ran, then you would need 
-to add your event file named, `Pre_start.rb`  There is a smaple file to look at as well in the `/rake` folder (`EXAMPLE_Pre_start.rb`).
+to add your event file named, `Pre_start.rb`  There is a sample file to look at as well in the `/rake` folder (`EXAMPLE_Pre_start.rb`).
 From there you area now able to do more custom actions like copying some files in place or something.
 
 
@@ -93,7 +93,7 @@ are `admin` and `admin2013`.  Magento requires a number in the admin password, s
 if you change this in the settings file.
 
 ## Overall Sturcture
-***note this need to be writen, short if 3 servers, admin/frontend/database***
+***note this need to be written, short if 3 servers, admin/frontend/database***
 ###Option One development lite:
 This option is designed for a lighter environment to aid in quick development.  Some
 of the core parts of the production servers are rolled up into a single  server.  The upside
@@ -118,7 +118,7 @@ they will be loaded in this development area.
 
 
 ### What's loaded on the systems?
-There are 3 servers that run when mirroring the production servers, or just one if you want a deveploment base.
+There are 3 servers that run when mirroring the production servers, or just one if you want a development base.
 
 1. [Ubuntu](http://ubuntu.com) 12.04 LTS (Precise Pangolin)
 1. [nginx](http://nginx.org) 1.4.2
