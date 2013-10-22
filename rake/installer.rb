@@ -24,13 +24,17 @@ class MageInstaller
                 puts "installing vagrant-hostsupdater plugin"
                 puts `vagrant plugin install vagrant-hostsupdater`
             else
-                puts "vagrant-hostsupdater plugin loaded"
+                if @fresh
+                    puts "vagrant-hostsupdater plugin loaded"
+                end
             end
             if !output.include? "vagrant-cachier"
                 puts "installing vagrant-cachier plugin"
                 puts `vagrant plugin install vagrant-cachier`
             else
-                puts "vagrant-cachier plugin loaded"
+                if @fresh
+                    puts "vagrant-cachier plugin loaded"
+                end
             end
             if @fresh
                 puts "there were a few things needed to install so you need to do `rake start` again."
@@ -112,6 +116,7 @@ class MageInstaller
               q.responses[:ask_on_error] = :question
             end
             #todo still basicly add a global lite or match?
+            #needs to ask questions oh the servers first being to use defaults?
             if new_mode=="l"||new_mode=="lite" #change to the regex version?
                 puts "working on the lite mode"
                 FileUtils.cp_r('Vagrantfile-lite', 'Vagrantfile')

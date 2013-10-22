@@ -17,6 +17,10 @@ class Pre_start
                 end
             end
         end
+        
+        #set_background("")
+        #self.get_packages($version)
+        #would push these download to the background
         file="_depo/magento-#{version}.tar.gz"
         if !File.exist?(file)
             download("http://www.magentocommerce.com/downloads/assets/#{version}/magento-#{version}.tar.gz",file)
@@ -36,5 +40,16 @@ class Pre_start
         else
             puts "mage sample data package exists"
         end
+        
+        
+        
+
     end
+    
+    def get_packages(version)
+        
+    end
+    
+    
+    
 end

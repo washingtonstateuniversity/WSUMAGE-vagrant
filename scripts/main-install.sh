@@ -65,9 +65,8 @@ apt_package_check_list=(
 	# Req'd for Webgrind
 	graphviz
 
-	# dos2unix
-	# Allows conversion of DOS style line endings to something we'll have less
-	# trouble with in Linux.
+	# Allows conversion of DOS style line endings to 
+	# something we'll have less trouble with in Linux.
 	dos2unix
 
 	# nodejs for use by grunt
@@ -76,27 +75,7 @@ apt_package_check_list=(
 
 )
 
-echo "Check for apt packages to install..."
-
-# Loop through each of our packages that should be installed on the system. If
-# not yet installed, it should be added to the array of packages to install.
-for pkg in "${apt_package_check_list[@]}"
-do
-	package_version=`dpkg -s $pkg 2>&1 | grep 'Version:' | cut -d " " -f 2`
-	if [[ $package_version != "" ]]
-	then
-		space_count=`expr 20 - "${#pkg}"` #11
-		pack_space_count=`expr 30 - "${#package_version}"`
-		real_space=`expr ${space_count} + ${pack_space_count} + ${#package_version}`
-		printf " * $pkg %${real_space}.${#package_version}s ${package_version}\n"
-	else
-		echo " *" $pkg [not installed]
-		apt_package_install_list+=($pkg)
-	fi
-done
-
-
-    
+checkpagkages $apt_package_check_list $apt_package_install_list
 
 
 
@@ -152,57 +131,18 @@ ln -sf /srv/config/apt-source-append.list /etc/apt/sources.list.d/vvv-sources.li
 		apt-get install --assume-yes ${apt_package_install_list[@]}
 
 		# Clean up apt caches
-		apt-get clean
+		#apt-get clean #keeping the caches will speed up things
 	fi
-
-
-
-#duoble check it
-
-echo "Check for apt packages to install..."
-
-# Loop through each of our packages that should be installed on the system. If
-# not yet installed, it should be added to the array of packages to install.
-for pkg in "${apt_package_check_list[@]}"
-do
-	package_version=`dpkg -s $pkg 2>&1 | grep 'Version:' | cut -d " " -f 2`
-	if [[ $package_version != "" ]]
+    #recheck
+    apt_package_install_list=()
+    checkpagkages $apt_package_check_list $apt_package_install_list
+	if [ ${#apt_package_install_list[@]} = 0 ];
 	then
-		space_count=`expr 20 - "${#pkg}"` #11
-		pack_space_count=`expr 30 - "${#package_version}"`
-		real_space=`expr ${space_count} + ${pack_space_count} + ${#package_version}`
-		printf " * $pkg %${real_space}.${#package_version}s ${package_version}\n"
-	else
-		echo " *" $pkg [not installed]
-		apt_package_install_list+=($pkg)
-	fi
-done
-
-exit
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        echo "everything installed with out issue"
+    else
+        echo "There seem to be packages that are not installing"
+        exit
+    fi
 
 
     cd /srv/www/

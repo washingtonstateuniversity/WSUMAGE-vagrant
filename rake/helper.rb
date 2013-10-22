@@ -199,9 +199,16 @@ module MAGEINSTALLER_Helper
         end
     end
 
-
-    
-
+#come back to this
+#look to http://stackoverflow.com/a/5949381/746758 maybe
+    def set_background(command=nil)
+        if command==nil
+            return false
+        end
+        pid = Process.spawn(command, :out => 'dev/null', :err => 'dev/null')
+        Process.detach pid #tell the OS we're not interested in the exit status at this time
+        # close write ends so we could read them
+    end
 
     
     def test_email()

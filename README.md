@@ -185,3 +185,6 @@ If you want to contribute an enhancement or a fix: (will be better defined later
 2. Make your changes with tests.
 3. Commit the changes to your fork.
 4. Send a pull request.
+
+***
+Orginal Author: jeremyBass [![endorse](https://api.coderwall.com/jeremybass/endorsecount.png)](https://coderwall.com/jeremybass)
