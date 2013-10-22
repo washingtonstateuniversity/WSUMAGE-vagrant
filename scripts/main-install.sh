@@ -156,6 +156,55 @@ ln -sf /srv/config/apt-source-append.list /etc/apt/sources.list.d/vvv-sources.li
 	fi
 
 
+
+#duoble check it
+
+echo "Check for apt packages to install..."
+
+# Loop through each of our packages that should be installed on the system. If
+# not yet installed, it should be added to the array of packages to install.
+for pkg in "${apt_package_check_list[@]}"
+do
+	package_version=`dpkg -s $pkg 2>&1 | grep 'Version:' | cut -d " " -f 2`
+	if [[ $package_version != "" ]]
+	then
+		space_count=`expr 20 - "${#pkg}"` #11
+		pack_space_count=`expr 30 - "${#package_version}"`
+		real_space=`expr ${space_count} + ${pack_space_count} + ${#package_version}`
+		printf " * $pkg %${real_space}.${#package_version}s ${package_version}\n"
+	else
+		echo " *" $pkg [not installed]
+		apt_package_install_list+=($pkg)
+	fi
+done
+
+exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     cd /srv/www/
     . scripts/system/ack-grep-install.sh
 

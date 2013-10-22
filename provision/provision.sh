@@ -8,6 +8,7 @@
 
 ## since we are generating from Mac or Windows this is needed 
 apt-get install dos2unix
+apt-get install pv
 
 cd /srv/www/scripts/
 find . -type f -exec dos2unix {} \; 
@@ -16,16 +17,13 @@ find . -type f -exec dos2unix {} \;
 cd /srv/www/scripts/
 . install-functions.sh
 
+#so we would put this as a loop over and detect if kept this way
+cd /srv/www/scripts/
+. magento/functions.sh
+
+
 if [[ has_network ]]
 then
-
-
-    #so we would put this as a loop over and detect if kept this way
-    cd /srv/www/scripts/
-    . magento/functions.sh
-
-
-    apt-get install pv
 
     cd /srv/www/scripts/
     . main-install.sh

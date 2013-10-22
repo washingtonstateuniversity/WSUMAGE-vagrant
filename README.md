@@ -169,3 +169,19 @@ So moving forward, the ruby wrapper is built out to be able to have use for Word
 like many of the other vagrant projects, but should it be totally abstracted enough for that?  Maybe 
 if there is interest it would be and at which point then there would be a wrapper project on its own 
 and this would be reduced do to only the Magento parts of the environment.
+
+
+## Contributing
+
+If you find what looks like a bug:
+
+1. Search the [mailing list] COMING SOON
+2. Check the [GitHub issue tracker](https://github.com/washingtonstateuniversity/WSUMAGE-vagrant/issues) to see if anyone else has reported issue.
+3. If you don't see anything, create an issue with information on how to reproduce it.
+
+If you want to contribute an enhancement or a fix: (will be better defined later)
+
+1. Fork the project on GitHub.
+2. Make your changes with tests.
+3. Commit the changes to your fork.
+4. Send a pull request.

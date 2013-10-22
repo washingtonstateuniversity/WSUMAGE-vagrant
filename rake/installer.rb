@@ -181,11 +181,9 @@ class MageInstaller
             
             system( "vagrant up" )
         end
-    
+        self.open()
         get_post_task()
         stopwatch.end
-    
-        self.open()
     end
     
 #end
