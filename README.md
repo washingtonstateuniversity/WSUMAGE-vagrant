@@ -203,4 +203,4 @@ If you want to contribute an enhancement or a fix: (will be better defined later
 4. Send a pull request.
 
 ***
-Original Author: jeremyBass [![endorse](https://api.coderwall.com/jeremybass/endorsecount.png)](https://coderwall.com/jeremybass)
+Original Author: jeremyBass 
