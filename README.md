@@ -27,19 +27,23 @@ Now if this is the first time you have ever run then the `rake start` task will 
 that is needed and check to make sure everything is ok.  It'll prompt you as it goes, but after a 
 few minutes the first time around, you will have the admin area for Magento up and ready to log in.
 It really is as simple as these 4 steps to get up and running.  On a fresh system, seeing the Magento
-admin page took about 5mins.  After that, it takes as little as 60 seconds (depending on your system's resources)
+admin page took about 5-10 minutes depending on the power of the machine your ran it on and it's internet
+connections.  There will be a tune it up section in the wiki area later on.
 
 If you have use Vagrant, then you'll know that most of the time you need to mess with config files,
 install plugins, and have to do some of your own clean up if you want to start from scratch.  
 What this project is designed to do it wrap Vagrant in a `rake` task for Ruby.  By doing this we can 
 perform tests that the host system is ready to `vagrant up` and can ask questions verse requiring 
-the developer to mess around with the configs.  This means you can bring up and down a box much faster.
+the developer to mess around with the configs.  This means you can totally bring up and down a box much 
+faster by automating as much as possible.
 
+***
+##The Ruby wrapper
 ###Rake Tasks
 Although you could just use the Vagrant commands, the whole point of this project is that there 
 are questions about the environment you want to set up.  In order to take advantage of this, here are a list of the rake tasks:
 
-Primary Tasks
+**Primary Tasks**
 
 1. `rake start` :: basically `vagrant up` but with prompts (this runs a few other tasks to ensure that the system is ready to `vagrant up`)
 1. `rake end` :: this task is `vagrant destroy` with options to clean up the database if it needs it.
@@ -47,7 +51,7 @@ Primary Tasks
 1. `rake fresh` :: takes the system back to basic (will prompt to uninstall gems and vagrant plugins)
 1. `rake restart` :: this task will time the running of `rake end` and then `rake up` which should provide a very fast full down and up
 
-Tasks to match Vagrant
+**Tasks to match Vagrant**
 
 1. `rake up` :: vagrant up ***(only adds timer and events)***
 1. `rake destroy` :: vagrant destroy ***(only adds timer and events)***
@@ -57,7 +61,7 @@ Tasks to match Vagrant
 1. `rake pull` :: match the local to the production
 1. `rake push` :: push up to production ***(would need to authenticate)***
 
-Utility tasks
+**Utility tasks**
 
 1. `rake clean_db` ::  This is to clear the shared database folder
 1. `rake clean_www` :: This is to clear the shared web folder
@@ -77,12 +81,27 @@ The events that are set up for you are
 1. Post
     
 So for example if you wanting to do something before everything else when `rake start` is ran, then you would need 
-to add your event file named, `Pre_start.rb`  There is a sample file to look at as well in the `/rake` folder (`EXAMPLE_Pre_start.rb`).
+to add your event file named, `/Pre_start.rb`  There is a sample file to look at as well in the `/rake` folder (`EXAMPLE_Pre_start.rb`).
 From there you area now able to do more custom actions like copying some files in place or something.
 
 
+***
+## Customizable settings
+### Overall Sturcture
 
-##Custom parts
+1. **Option One development lite:**
+    This option is designed for a lighter environment to aid in quick development.  Some
+    of the core parts of the production servers are rolled up into a single  server.  The upside
+    to this is that if you have a system that is not so robust then you shouldn't see lags.  Also
+    For most module development you are not depending on any other module, so matching production
+    in it's structure is not needed.  9 out of 10 projects will be fine starting with this.
+
+1. **Option Two production match:**
+    This is to match the production environment as closely as possible, and lot all modules as well.
+    Given that by default the xDebug is turned on, this can run slower.  When a module is vetted but 
+    a peer review, this environment will be used.  As of yet there is no unit tests, but when there are
+    they will be loaded in this development area. ***note this need to be written out more, short if 3 servers, admin/frontend/database***
+
 ### Credentials and Such
 All database usernames and passwords for Magento installations included by default are 
 `devsqluser` and `devsqluser`.  You may also use the prompts to as everything is setting up 
@@ -91,22 +110,6 @@ to change this but changing the setting file.
 All Magento admin usernames and passwords for the installations included by default 
 are `admin` and `admin2013`.  Magento requires a number in the admin password, so remember 
 if you change this in the settings file.
-
-## Overall Sturcture
-***note this need to be written, short if 3 servers, admin/frontend/database***
-###Option One development lite:
-This option is designed for a lighter environment to aid in quick development.  Some
-of the core parts of the production servers are rolled up into a single  server.  The upside
-to this is that if you have a system that is not so robust then you shouldn't see lags.  Also
-For most module development you are not depending on any other module, so matching production
-in it's structure is not needed.  9 out of 10 projects will be fine starting with this.
-
-###Option Two production match:
-This is to match the production environment as closely as possible, and lot all modules as well.
-Given that by default the xDebug is turned on, this can run slower.  When a module is vetted but 
-a peer review, this environment will be used.  As of yet there is no unit tests, but when there are
-they will be loaded in this development area.
-
 
 #### Magento Stable
 * URL: `http://local.mage.dev`
@@ -119,6 +122,8 @@ they will be loaded in this development area.
 
 ### What's loaded on the systems?
 There are 3 servers that run when mirroring the production servers, or just one if you want a development base.
+**note:** This set up is currently a Shell provisioner only.  Later when branching, there will be a 
+switch to CentOS and to a new provisioner option.  Currently options are Chef and Salt as considered
 
 1. [Ubuntu](http://ubuntu.com) 12.04 LTS (Precise Pangolin)
 1. [nginx](http://nginx.org) 1.4.2
@@ -135,34 +140,43 @@ There are 3 servers that run when mirroring the production servers, or just one 
 1. [phpMemcachedAdmin](https://code.google.com/p/phpmemcacheadmin/) 1.2.2 BETA
 1. [adminer](http://www.adminer.org/) ** will not be found on production ever! **
 1. [Magento 1.8.0](http://www.magentocommerce.com/download)
-    Plugings Loaded:
-    
-    1. [WSUMAGE-admin-base](https://github.com/washingtonstateuniversity/WSUMAGE-admin-base.git)
-    1. [WSUMAGE-theme-base](https://github.com/washingtonstateuniversity/WSUMAGE-theme-base.git)
-    1. [eventTickets](https://github.com/jeremyBass/eventTickets.git)
-    1. [Storeutilities](https://github.com/jeremyBass/Storeutilities.git)
-    1. [WSUMAGE-structured-data](https://github.com/washingtonstateuniversity/WSUMAGE-structured-data.git)
-    1. [Storeuser](https://github.com/jeremyBass/Storeuser.git)
-    1. [sitemaps](https://github.com/jeremyBass/sitemaps.git)
-    1. [webmastertools](https://github.com/jeremyBass/webmastertools.git)
-    1. [ldap](https://github.com/jeremyBass/ldap.git)
-    1. [pickupShipping](https://github.com/jeremyBass/pickupShipping.git)
-    1. [AdminQuicklancher](https://github.com/jeremyBass/AdminQuicklancher.git)
-    1. [dropshippers](https://github.com/jeremyBass/dropshippers.git)
-    1. [Aoe_FilePicker](https://github.com/jeremyBass/Aoe_FilePicker.git)
-    1. [mailing_services](https://github.com/jeremyBass/mailing_services.git)
-    1. [WSUMAGE-iri-gateway](https://github.com/washingtonstateuniversity/WSUMAGE-iri-gateway.git)
-    1. [custom_pdf_invoice](https://github.com/jeremyBass/custom_pdf_invoice.git)
-    1. [Aoe_Profiler](https://github.com/fbrnc/Aoe_Profiler.git)
-    1. [Aoe_ManageStores](https://github.com/fbrnc/Aoe_ManageStores.git)
-    1. [Aoe_LayoutConditions](#https://github.com/fbrnc/Aoe_LayoutConditions.git)
-    1. [Aoe_AsyncCache](https://github.com/fbrnc/Aoe_AsyncCache.git)
-    1. [Aoe_ApiLog](https://github.com/fbrnc/Aoe_ApiLog.git)
-    1. [Aoe_ClassPathCache](https://github.com/AOEmedia/Aoe_ClassPathCache.git)
-    1. [Enhanced Admin Grids](https://github.com/mage-eag/mage-enhanced-admin-grids.git)
 
-### Feedback?
-keep it to your self.. no tell it like it is but atm there is no area to yell at except on here.
+*** 
+#Magento Setup
+Plugings Loaded:
+    
+1. [WSUMAGE-admin-base](https://github.com/washingtonstateuniversity/WSUMAGE-admin-base.git)
+1. [WSUMAGE-theme-base](https://github.com/washingtonstateuniversity/WSUMAGE-theme-base.git)
+1. [eventTickets](https://github.com/jeremyBass/eventTickets.git)
+1. [Storeutilities](https://github.com/jeremyBass/Storeutilities.git)
+1. [WSUMAGE-structured-data](https://github.com/washingtonstateuniversity/WSUMAGE-structured-data.git)
+1. [Storeuser](https://github.com/jeremyBass/Storeuser.git)
+1. [sitemaps](https://github.com/jeremyBass/sitemaps.git)
+1. [webmastertools](https://github.com/jeremyBass/webmastertools.git)
+1. [ldap](https://github.com/jeremyBass/ldap.git)
+1. [pickupShipping](https://github.com/jeremyBass/pickupShipping.git)
+1. [AdminQuicklancher](https://github.com/jeremyBass/AdminQuicklancher.git)
+1. [dropshippers](https://github.com/jeremyBass/dropshippers.git)
+1. [Aoe_FilePicker](https://github.com/jeremyBass/Aoe_FilePicker.git)
+1. [mailing_services](https://github.com/jeremyBass/mailing_services.git)
+1. [WSUMAGE-iri-gateway](https://github.com/washingtonstateuniversity/WSUMAGE-iri-gateway.git)
+1. [custom_pdf_invoice](https://github.com/jeremyBass/custom_pdf_invoice.git)
+1. [Aoe_Profiler](https://github.com/fbrnc/Aoe_Profiler.git)
+1. [Aoe_ManageStores](https://github.com/fbrnc/Aoe_ManageStores.git)
+1. [Aoe_LayoutConditions](#https://github.com/fbrnc/Aoe_LayoutConditions.git)
+1. [Aoe_AsyncCache](https://github.com/fbrnc/Aoe_AsyncCache.git)
+1. [Aoe_ApiLog](https://github.com/fbrnc/Aoe_ApiLog.git)
+1. [Aoe_ClassPathCache](https://github.com/AOEmedia/Aoe_ClassPathCache.git)
+1. [Enhanced Admin Grids](https://github.com/mage-eag/mage-enhanced-admin-grids.git)
+
+####Magento Settings
+For the development environment is a set base setting that you will receive when you first get your store 
+set up on the production area.  When you use the match, an authentication process will be done the first time
+then you will be able to make calls to production thru the API.   This will allow you to sink up you store 
+to your development area to test out a bug you are seeing or design something that is very specific to the 
+settings and content that is on the server.
+
+***
 
 ### Rightfully questioning this project extensiveness 
 So moving forward, the ruby wrapper is built out to be able to have use for Wordpress (or any other setup) 
@@ -170,6 +184,8 @@ like many of the other vagrant projects, but should it be totally abstracted eno
 if there is interest it would be and at which point then there would be a wrapper project on its own 
 and this would be reduced do to only the Magento parts of the environment.
 
+### Feedback?
+keep it to your self.. no tell it like it is but atm there is no area to yell at except on here.
 
 ## Contributing
 
@@ -187,4 +203,4 @@ If you want to contribute an enhancement or a fix: (will be better defined later
 4. Send a pull request.
 
 ***
-Orginal Author: jeremyBass [![endorse](https://api.coderwall.com/jeremybass/endorsecount.png)](https://coderwall.com/jeremybass)
+Original Author: jeremyBass [![endorse](https://api.coderwall.com/jeremybass/endorsecount.png)](https://coderwall.com/jeremybass)
