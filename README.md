@@ -7,7 +7,7 @@ only a few steps before then can login to the admin area and begin development w
 1. install the base apps
     
     > 1. GITHUB ([win](http://windows.github.com/)|[mac](http://mac.github.com/)) 
-    > 1. [Vagrant](https://www.virtualbox.org/)
+    > 1. [Vagrant](http://www.vagrantup.com/)
     > 1. [VirtualBox](https://www.virtualbox.org/)
     > 1. [Ruby](http://rubyinstaller.org/)(only needed if using windows)
     > Note: if your on a mac you must have ruby 1.9 or above.  Look to [this article to update your ruby](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)

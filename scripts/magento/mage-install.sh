@@ -175,8 +175,7 @@ echo "Installing Magento..."
     echo "Starting to import base WSU modules from github"
     declare -A gitRepos
     #[repo]=gitUser
-    gitRepos=(
-        [WSUMAGE-admin-base]=washingtonstateuniversity
+    gitRepos=([WSUMAGE-admin-base]=washingtonstateuniversity
         [WSUMAGE-theme-base]=washingtonstateuniversity
         [eventTickets]=jeremyBass
         [WSUMAGE-store-utilities]=washingtonstateuniversity
@@ -199,8 +198,7 @@ echo "Installing Magento..."
         [Aoe_ApiLog]=jeremyBass             #https://github.com/fbrnc/Aoe_ApiLog.git
         #[Inchoo_Logger]=ajzele             #https://github.com/ajzele/Inchoo_Logger.git
         [Aoe_ClassPathCache]=AOEmedia       #https://github.com/AOEmedia/Aoe_ClassPathCache.git
-        [mage-enhanced-admin-grids]=mage-eag
-    )
+        [mage-enhanced-admin-grids]=mage-eag)
     cd /srv/www/magento/
     install_tarrepo_list $gitRepos 0 reset_mage
     unset gitRepos         #unset and re-declare to clear associative arrays
