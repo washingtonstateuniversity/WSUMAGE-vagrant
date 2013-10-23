@@ -78,12 +78,12 @@ install_tarrepo(){
     unzip -q $repozip -d /srv/www/magento/
     
     #unzip $repozip -d /srv/www/magento/
-    cd $package/
+    cd /srv/www/magento/$package/
     rm -rf LICENSE.txt STATUS.txt README.md RELEASE_NOTES.txt modman
     cd ../
-    cp -af $package/* .
-    rm -rf $package/
-    rm -rf var/cache/*
+    cp -af /srv/www/magento/$package/* .
+    rm -rf /srv/www/magento/$package/
+    rm -rf /srv/www/magento/var/cache/*
     php "/srv/www/magento/index.php"
 }
 #declare -A list = ( [repo]=gitUser )
@@ -91,10 +91,16 @@ install_tarrepo_list(){
     gitRepos=$1
     for r in "${!gitRepos[@]}" #loop with key as the var
     do
-        giturl="https://github.com/${gitRepos[$r]}/$r/archive/master.zip"
-        echo "Adding $r From $giturl"
-        install_tarrepo $giturl $r
-        echo
+        #dbl check that the item is not null or 0
+        if [ -z "$r" ]
+        then
+            echo "empty"
+        else
+            giturl="https://github.com/${gitRepos[$r]}/$r/archive/master.zip"
+            echo "Adding $r From $giturl"
+            install_tarrepo $giturl $r
+            echo
+        fi
     done
     return 1
 }
