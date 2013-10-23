@@ -15,7 +15,7 @@ cd /srv/www/
 #tickParse "$DATA"
 
 DATA=`cat scripts/installer_settings.json`
-
+#the value we want to work with/may or may not be there
 bs_MAGEversion=`jsonval $DATA "bs_MAGEversion"`
 bs_dbhost=`jsonval $DATA "bs_dbhost"`
 bs_dbname=`jsonval $DATA "bs_dbname"`
@@ -184,7 +184,7 @@ echo "Installing Magento..."
         [Storeuser]=jeremyBass
         [sitemaps]=jeremyBass
         [webmastertools]=jeremyBass
-        [ldap]=jeremyBass
+        [WSUMAGE-ldap]=washingtonstateuniversity
         [pickupShipping]=jeremyBass
         [AdminQuicklancher]=jeremyBass
         [dropshippers]=jeremyBass
@@ -197,7 +197,7 @@ echo "Installing Magento..."
         [Aoe_LayoutConditions]=jeremyBass   #https://github.com/fbrnc/Aoe_LayoutConditions.git
         [Aoe_AsyncCache]=jeremyBass         #https://github.com/fbrnc/Aoe_AsyncCache.git
         [Aoe_ApiLog]=jeremyBass             #https://github.com/fbrnc/Aoe_ApiLog.git
-        #[Inchoo_Logger]=ajzele              #https://github.com/ajzele/Inchoo_Logger.git
+        #[Inchoo_Logger]=ajzele             #https://github.com/ajzele/Inchoo_Logger.git
         [Aoe_ClassPathCache]=AOEmedia       #https://github.com/AOEmedia/Aoe_ClassPathCache.git
         [mage-enhanced-admin-grids]=mage-eag
     )
