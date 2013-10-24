@@ -84,6 +84,18 @@ So for example if you wanting to do something before everything else when `rake 
 to add your event file named, `/Pre_start.rb`  There is a sample file to look at as well in the `/rake` folder (`EXAMPLE_Pre_start.rb`).
 From there you area now able to do more custom actions like copying some files in place or something.
 
+###Gems that are autoloaded
+1. [json](http://rubygems.org/gems/json)
+1. [highline](http://rubygems.org/gems/highline)
+1. [launchy](http://rubygems.org/gems/launchy)
+
+***
+##Vagrant
+Just to note you can by pass the rake taskes and just use Vagrant on it's own, but you will have to magage your files on your own, and make sure that you edit your configs too.  There is a lot to learn under the hood.
+
+###Vagrant plugins that are autoloaded
+1. [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
+
 
 ***
 ## Customizable settings
@@ -111,11 +123,11 @@ All Magento admin usernames and passwords for the installations included by defa
 are `admin` and `admin2013`.  Magento requires a number in the admin password, so remember 
 if you change this in the settings file.
 
-#### Magento Stable
+#### Magento Stable ***(defaults)***
 * URL: `http://local.mage.dev`
 * DB Name: `mage`
 
-#### MySQL Root
+#### MySQL Root ***(defaults)***
 * User: `root`
 * Pass: `blank`
 
@@ -138,8 +150,9 @@ switch to CentOS and to a new provisioner option.  Currently options are Chef an
 1. [ngrep](http://ngrep.sourceforge.net/usage.html)
 1. [dos2unix](http://dos2unix.sourceforge.net/)
 1. [phpMemcachedAdmin](https://code.google.com/p/phpmemcacheadmin/) 1.2.2 BETA
-1. [adminer](http://www.adminer.org/) ** will not be found on production ever! **
+1. [adminer](http://www.adminer.org/) **will not be found on production ever!**
 1. [Magento 1.8.0](http://www.magentocommerce.com/download)
+**Note this is the highlights, for a full list look [here](#)**
 
 *** 
 #Magento Setup
@@ -153,7 +166,7 @@ Plugings Loaded:
 1. [Storeuser](https://github.com/jeremyBass/Storeuser.git)
 1. [sitemaps](https://github.com/jeremyBass/sitemaps.git)
 1. [webmastertools](https://github.com/jeremyBass/webmastertools.git)
-1. [ldap](https://github.com/jeremyBass/ldap.git)
+1. [WSUMAGE-ldap](https://github.com/washingtonstateuniversity/WSUMAGE-ldap.git)
 1. [pickupShipping](https://github.com/jeremyBass/pickupShipping.git)
 1. [AdminQuicklancher](https://github.com/jeremyBass/AdminQuicklancher.git)
 1. [dropshippers](https://github.com/jeremyBass/dropshippers.git)
@@ -161,7 +174,7 @@ Plugings Loaded:
 1. [mailing_services](https://github.com/jeremyBass/mailing_services.git)
 1. [WSUMAGE-iri-gateway](https://github.com/washingtonstateuniversity/WSUMAGE-iri-gateway.git)
 1. [custom_pdf_invoice](https://github.com/jeremyBass/custom_pdf_invoice.git)
-1. [Aoe_Profiler](https://github.com/fbrnc/Aoe_Profiler.git)
+1. [Aoe_Profiler](https://github.com/jeremyBass/Aoe_Profiler.git)
 1. [Aoe_ManageStores](https://github.com/fbrnc/Aoe_ManageStores.git)
 1. [Aoe_LayoutConditions](#https://github.com/fbrnc/Aoe_LayoutConditions.git)
 1. [Aoe_AsyncCache](https://github.com/fbrnc/Aoe_AsyncCache.git)
