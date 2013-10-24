@@ -23,6 +23,8 @@ only a few steps before then can login to the admin area and begin development w
         
         > rake start
 
+Some this to note is that you wil be asked questions.  If you need help, look to the [task options wiki page](https://github.com/washingtonstateuniversity/WSUMAGE-vagrant/wiki/Taks-Options)
+
 Now if this is the first time you have ever run then the `rake start` task will install anything 
 that is needed and check to make sure everything is ok.  It'll prompt you as it goes, but after a 
 few minutes the first time around, you will have the admin area for Magento up and ready to log in.
