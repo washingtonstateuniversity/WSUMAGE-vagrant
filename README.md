@@ -99,7 +99,7 @@ Just to note you can by pass the rake taskes and just use Vagrant on it's own, b
 
 ***
 ## Customizable settings
-### Overall Sturcture
+### Overall Structure
 
 1. **Option One development lite:**
     This option is designed for a lighter environment to aid in quick development.  Some
