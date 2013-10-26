@@ -4,7 +4,8 @@
 
 ##note not happy with the start init loop, work on that
 load 'rake/installer.rb'
-mi = MageInstaller.new
+include MageInstaller
+
 mode = "lite"
 
 =begin
@@ -36,23 +37,23 @@ mode = "lite"
 
 desc "prepare  the system"
 task :init do
-    mi.init()
+    init()
 end
 
 desc "test  the system"
 task :test do
-    mi.test()
+    test()
 end
 
 
 desc "Set up the VM with questions"
 task :start do
-    mi.start()
+    start()
 end
 
 desc "Destroy the vagrant with call back functions run"
 task :end do
-    mi.end()
+    end_it()
 end
 
 
@@ -62,23 +63,22 @@ end
 
 desc "here to provide consistency  with Vagrant, that and adds a timer and pre/post events"
 task :up do
-    mi.up()
+    up()
 end
 
 desc "here to provide consistency  with Vagrant, that and adds a timer and pre/post events"
 task :destroy do
-    mi.destroy()
-
+    destroy()
 end
 
 desc "here to provide consistency  with Vagrant, that and adds a timer and pre/post events"
 task :halt do
-    mi.halt()
+    halt()
 end
 
 desc "here to provide consistency  with Vagrant, that and adds a timer and pre/post events"
 task :reload do
-    mi.reload()
+    reload()
 end
 
 
@@ -87,7 +87,7 @@ end
 
 #note just for testing/ like a bonus
 task :open do
-    mi.open()
+    open()
 end
 
 
@@ -95,26 +95,26 @@ end
 
 #these should maybe be extracted out?
 task :hardclean do
-    mi.hardclean()
+    hardclean()
 end
 
 task :fresh do
-    mi.hardclean()
+    hardclean()
 end
 task :restart do
-    mi.restart()
+    restart()
 end
 
 
 desc "clean the database"
 task :clean_db do
-    mi.clean_db()
+    clean_db()
 end
 
 #maybe abstract this of other apps
 desc "clean the web folder"
 task :clean_www do
-     mi.clean_www()
+     clean_www()
 end
 
 
@@ -133,7 +133,7 @@ end
 
 desc "Create a setting file"#maybe abstract this 
 task :create_install_settings do
-    mi.new.create_settings_file()
+    create_settings_file()
 end
 
 

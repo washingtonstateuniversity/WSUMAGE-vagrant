@@ -43,6 +43,43 @@ end
 
 module MAGEINSTALLER_Helper
     require 'fileutils'
+
+#come back to this
+#look to http://stackoverflow.com/a/5949381/746758 maybe
+    def set_background(command=nil)
+        if command==nil
+            return false
+        end
+        pid = Process.spawn(command, :out => 'dev/null', :err => 'dev/null')
+        Process.detach pid #tell the OS we're not interested in the exit status at this time
+        # close write ends so we could read them
+    end
+    
+    
+
+    def load_gems(utility=nil)
+        #foreach here
+    end    
+    def load_gem(gem=nil)
+        output = `gem list`
+        sudo=""  
+        is_windows = (ENV['OS'] == 'Windows_NT')
+        if !is_windows
+            sudo="sudo"    
+        end
+        if !output.include? gem
+            puts "installing #{gem} gem"
+            output = `#{sudo} gem install #{gem}`
+            puts output
+            @fresh=true
+        else
+            if @fresh
+                puts "#{gem} gem loaded"
+            end
+        end
+    end
+
+
     
     #kinda hard coded
     def add_setting(target,opts=nil)
@@ -51,23 +88,16 @@ module MAGEINSTALLER_Helper
         end
     end
 
-    #sudo task events
-    def get_pre_task()
+    def event(event)
         task=Rake.application.current_task;
-        event = "Pre_#{task}"
-        self.load_event(event);
-    end
-    def get_post_task()
-        task=Rake.application.current_task;
-        event = "Post_#{task}"
-        self.load_event(event);
-    end
-    def load_event(event)
-        puts event
-        file = "#{Dir.pwd}/rake/events/#{event}.rb"
+        method=caller[0][/`.*'/][1..-2]
+        taskevent = "#{event}_#{method}"
+        
+        puts taskevent
+        file = "#{Dir.pwd}/rake/events/#{taskevent}.rb"
         if File.exist?(file)
             load "#{file}"  
-            Object::const_get(event).new
+            Object::const_get(taskevent).new
         end
     end
     
@@ -199,16 +229,7 @@ module MAGEINSTALLER_Helper
         end
     end
 
-#come back to this
-#look to http://stackoverflow.com/a/5949381/746758 maybe
-    def set_background(command=nil)
-        if command==nil
-            return false
-        end
-        pid = Process.spawn(command, :out => 'dev/null', :err => 'dev/null')
-        Process.detach pid #tell the OS we're not interested in the exit status at this time
-        # close write ends so we could read them
-    end
+
 
     
     def test_email()

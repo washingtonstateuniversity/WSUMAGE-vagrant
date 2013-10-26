@@ -4,11 +4,9 @@ class Post_start
     include MAGEINSTALLER_Helper
     def initialize(params=nil)
         load_settings
-        uinput = agree("Would you like to package this box? <%= color('[y/n]', :bold) %>")
-        if uinput
-            system("vagrant package --output _BOXES/precise32_alt.box --base precise32")
-            system("vagrant box add precise32_alt _BOXES/precise32_alt.box")
-            
+        if agree("Would you like to package this box? <%= color('[y/n]', :bold) %>")
+            system("vagrant package --base weblite --output _BOXES/weblite_alt.box")
+            system("vagrant box add weblite_alt _BOXES/weblite_alt.box")
         end
     end
 end

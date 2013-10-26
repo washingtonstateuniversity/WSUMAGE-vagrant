@@ -10,6 +10,7 @@ Vagrant.configure("2") do |config|
 
     config.vm.define "db" do |db_config|
         db_config.vm.provider :virtualbox do |v|
+            v.name = "dbmatch"
             v.customize ["modifyvm", :id, "--memory", 512]
         end
         db_config.ssh.forward_agent = true
@@ -20,8 +21,13 @@ Vagrant.configure("2") do |config|
               "db", "db.mage.dev"
             ]
         end
-        db_config.vm.box = "precise32"
-        db_config.vm.box_url = "_BOXES/precise32.box"   ##"http://files.vagrantup.com/precise32.box"
+        if File.exist?("_BOXES/dbmatch_alt.box" )
+            web_config.vm.box = "dbmatch_alt"
+            web_config.vm.box_url = "_BOXES/dbmatch_alt.box" 
+        else
+            db_config.vm.box = "precise32"
+            db_config.vm.box_url = "_BOXES/precise32.box"   ##"http://files.vagrantup.com/precise32.box"
+        end
         #if defined? VagrantPlugins::Cachier
         #    db_config.cache.auto_detect = true
         #    db_config.cache.enable :apt
@@ -38,6 +44,7 @@ Vagrant.configure("2") do |config|
 
     config.vm.define "web", primary: true do |web_config|
         web_config.vm.provider :virtualbox do |v|
+            v.name = "webmatch"
             v.customize ["modifyvm", :id, "--memory", 1024]
         end
         web_config.ssh.forward_agent = true
@@ -49,9 +56,13 @@ Vagrant.configure("2") do |config|
               "local.mage.dev"
             ]
         end
-        
-        web_config.vm.box = "precise32"
-        web_config.vm.box_url = "_BOXES/precise32.box"   ##"http://files.vagrantup.com/precise32.box"
+        if File.exist?("_BOXES/webmatch_alt.box" )
+            web_config.vm.box = "webmatch_alt"
+            web_config.vm.box_url = "_BOXES/webmatch_alt.box" 
+        else
+            web_config.vm.box = "precise32"
+            web_config.vm.box_url = "_BOXES/precise32.box"   ##"http://files.vagrantup.com/precise32.box"
+        end
         #if defined? VagrantPlugins::Cachier
         #    web_config.cache.auto_detect = true
         #    web_config.cache.enable :apt

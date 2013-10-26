@@ -2,11 +2,11 @@
 #refactoring we will be able to have this handle a few types like WP to more 
 #complicated ones.
 
-#is there room to improve adn abstract this, yes!  throw ideas out adn let us see what sticks
-
+# is there room to improve andabstract this, yes!  
+# throw ideas out and let us see what sticks
 
 require 'rubygems'
-class MageInstaller
+module MageInstaller
     
     load 'rake/helper.rb'
     include MAGEINSTALLER_Helper
@@ -14,61 +14,38 @@ class MageInstaller
     fresh=false
     
     def initialize(params=nil)
-        if Gem::Version.new(RUBY_VERSION) > Gem::Version.new('1.8')
-            require 'fileutils'
-            self.load_gem("json")
-            self.load_gem("highline")
-            self.load_gem("launchy")
-            output = `vagrant plugin list`
-            if !output.include? "vagrant-hostsupdater"
-                puts "installing vagrant-hostsupdater plugin"
-                puts `vagrant plugin install vagrant-hostsupdater`
-            else
-                if @fresh
+        if !File.exist?("#{Dir.pwd}/READY") 
+            if Gem::Version.new(RUBY_VERSION) > Gem::Version.new('1.8')
+                puts "initializing the system"          
+                load_gem("json")
+                load_gem("highline")
+                load_gem("launchy")
+                output = `vagrant plugin list`
+                if !output.include? "vagrant-hostsupdater"
+                    puts "installing vagrant-hostsupdater plugin"
+                    puts `vagrant plugin install vagrant-hostsupdater`
+                else
                     puts "vagrant-hostsupdater plugin loaded"
                 end
-            end
-            if !output.include? "vagrant-cachier"
-                puts "installing vagrant-cachier plugin"
-                puts `vagrant plugin install vagrant-cachier`
-            else
-                if @fresh
+                if !output.include? "vagrant-cachier"
+                    puts "installing vagrant-cachier plugin"
+                    puts `vagrant plugin install vagrant-cachier`
+                else
                     puts "vagrant-cachier plugin loaded"
                 end
-            end
-            if @fresh
+
                 puts "there were a few things needed to install so you need to do `rake start` again."
+                File.open("#{Dir.pwd}/READY", "w+") { |file| file.write("") }
                 abort("type rake start")
-                return
-            else
-                require 'highline/import'
+            else         
+                abort("ruby version to low, must update see http://rvm.io/ if on Mac")
             end
-        else         
-            abort("ruby version to low, must update see http://rvm.io/ if on Mac")
+        else
+            require 'highline/import'
         end
     end
 
-    def load_gems(utility=nil)
-        #foreach here
-    end    
-    def load_gem(gem=nil)
-        output = `gem list`
-        sudo=""  
-        is_windows = (ENV['OS'] == 'Windows_NT')
-        if !is_windows
-            sudo="sudo"    
-        end
-        if !output.include? gem
-            puts "installing #{gem} gem"
-            output = `#{sudo} gem install #{gem}`
-            puts output
-            @fresh=true
-        else
-            if @fresh
-                puts "#{gem} gem loaded"
-            end
-        end
-    end
+
 
 ##################    
 #tasks
@@ -76,6 +53,8 @@ class MageInstaller
 
 #test
     def test()
+        require 'fileutils'
+
         puts "testing the system now"
         fresh=false
         puts "insuring default folders"
@@ -100,108 +79,26 @@ class MageInstaller
 #start
     def start()
         stopwatch = Stopwatch.new
-
         self.test()
-         
-        load_settings()
-        get_pre_task()
+        event("Pre")
+
+        say("[<%= color('Starting the Vagrant', :bold,:green) %>]")
+        system( "vagrant up" )
         
-        uinput = agree("Use last run's set up? <%= color('[y/n]', :bold) %>")
-        if uinput
-            system( "vagrant up" )
-        else
-            new_mode = ask("Use development <%= color('lite', :bold) %> OR production <%= color('match', :bold) %>?  <%= color('[l/m]', :bold) %>  ") do |q|
-              q.validate                 = /\Al(?:ite)?|m(?:atch)?\Z/i
-              q.responses[:not_valid]    = 'Please enter "l" or "m" (lite|match).'
-              q.responses[:ask_on_error] = :question
-            end
-            #todo still basicly add a global lite or match?
-            #needs to ask questions oh the servers first being to use defaults?
-            if new_mode=="l"||new_mode=="lite" #change to the regex version?
-                puts "working on the lite mode"
-                FileUtils.cp_r('Vagrantfile-lite', 'Vagrantfile')
-                mode = "lite"
-            else
-                FileUtils.cp_r('Vagrantfile-match', 'Vagrantfile')
-                mode = "match"
-            end
-            
-    #www root folder
-            if Dir['www/*'].empty?
-                uinput = agree("Should WWW folder be cleared? <%= color('[y/n]', :bold) %>")
-                if uinput
-                    #Rake::Task["clean_www"].reenable
-                    #Rake::Task["clean_www"].invoke
-                    self.clean_www()
-                end
-            end
-    #database
-            if Dir['database/data/*'].empty?
-                uinput = agree("Should all the databases be cleared? <%= color('[y/n]', :bold) %>")
-                if uinput
-                    #Rake::Task["clean_db"].reenable
-                    #Rake::Task["clean_db"].invoke
-                    self.clean_db()
-                end
-            end
-    #installer settings
-            target  = "scripts/installer_settings.json"
-            file = File.join(Dir.pwd, target)
-            if File.exist?(file)
-                uinput = agree("Should we clear the past install settings file?  <%= color('[y/n]', :bold) %>")
-                if uinput
-                    FileUtils.rm_rf(file)
-                    say("<%= color('removed file #{file}', :bold, :red, :on_black) %>")
-                    begin_settings_file()
-                        add_setting(file,"\"bs_mode\":\"#{mode}\",")         
-                        #Rake::Task["create_install_settings"].reenable
-                        #Rake::Task["create_install_settings"].invoke
-                        self.create_settings_file()
-                    end_settings_file()
-                  else
-                    puts "using the past installer settings"
-                end
-            else
-                begin_settings_file()
-                    add_setting(file,"\"bs_mode\":\"#{mode}\",")    
-                    #Rake::Task["create_install_settings"].reenable
-                    #Rake::Task["create_install_settings"].invoke
-                    self.create_settings_file()
-                end_settings_file()
-            end
-            
-            load_settings()
-            if @bs_install_sample
-                file="_depo/magento-sample-data-1.6.1.0.tar.gz"
-                if File.exist?(file)
-                    if !File.exist?("#{Dir.pwd}/www/magento/sample_installed.txt") 
-                        puts "extracting mage package contents"
-                        untar_gz(file,"www/magento")
-                        File.open("#{Dir.pwd}/www/magento/sample_installed.txt", "w+") { |file| file.write("") }
-                    end
-                end
-            end
-            
-            say("[<%= color('Starting the Vagrant', :bold,:green) %>]")
-            
-            system( "vagrant up" )
-        end
-        self.open()
-        get_post_task()
-        stopwatch.end
+        event("Post")
+        self.open() 
+        stopwatch.end("Started in:")
     end
     
 #end
-    def end()
+    def end_it()
         stopwatch = Stopwatch.new
-        get_pre_task()
+        event("Pre")
         system( "vagrant destroy -f" )
-        uinput = agree("Should all the databases be cleared?   <%= color('[y/n]', :bold) %>")
-        if uinput
-            Rake::Task["clean_db"].reenable
-            Rake::Task["clean_db"].invoke
+        if agree("Should all the databases be cleared?   <%= color('[y/n]', :bold) %>")
+            self.clean_db()
         end
-        get_post_task()
+        event("Post")
         stopwatch.end("finished shutdown in:")
     end
 
@@ -229,7 +126,7 @@ class MageInstaller
 #hardclean
     def hardclean()
         stopwatch = Stopwatch.new
-        get_pre_task()
+        event("Pre")
         output=`vagrant destroy -f`
         puts output
         Rake::Task["clean_www"].reenable
@@ -243,20 +140,22 @@ class MageInstaller
         puts "The depo has been cleaned"
         
         
-        get_post_task()
+        event("Post")
         stopwatch.end("finished hard clean up in:")
     end
 
+
+#this should be removed so that we can do better with this
 #open
     def open()
         
         #note we would want to check for the browser bing open already
         #so we don't annoy people
         
-        get_pre_task()
+        event("Pre")
         require 'launchy'
         Launchy.open("http://local.mage.dev/admin") #note this should be from setting file
-        get_post_task()
+        event("Post")
     end
 
 
@@ -265,48 +164,49 @@ class MageInstaller
         stopwatch = Stopwatch.new
         self.test()
         load_settings()
-        get_pre_task()
+        event("Pre")
         system( "vagrant up" )
-        get_post_task()
-        stopwatch.end("box brought up in:")
+        event("Post")
         self.open()
+        stopwatch.end("box brought up in:")
+        
     end
 
 #reload
     def reload()
         stopwatch = Stopwatch.new
-        get_pre_task()
+        event("Pre")
         system( "vagrant reload" )
-        get_post_task()
-        stopwatch.end("reloaded in:")
+        event("Post")
         self.open()
+        stopwatch.end("reloaded in:")
     end
 
 #destroy
     def destroy()
         stopwatch = Stopwatch.new
-        get_pre_task()
+        event("Pre")
         system( "vagrant destroy" )
-        get_post_task()
-        stopwatch.end
+        event("Post")
+        stopwatch.end("destroy in:")
     end
 
 #halt
     def halt()
         stopwatch = Stopwatch.new
-        get_pre_task()
+        event("Pre")
         system( "vagrant halt" )
-        get_post_task()
-        stopwatch.end
+        event("Post")
+        stopwatch.end("halted in:")
     end
 
 #restart
     def restart()
         stopwatch = Stopwatch.new
-        get_pre_task()
-        self.end()
+        event("Pre")
+        self.end_it()
         self.up()
-        get_post_task()
+        event("Post")
         stopwatch.end("restarted in:")
     end
 
@@ -321,23 +221,22 @@ class MageInstaller
         file="scripts/installer_settings.json"
         add_setting(file,"\"bs_MAGEversion\":\"1.8.0.0\",")
 #use defaults?
-        uinput = agree("use default settings? <%= color('[y/n]', :bold) %>? ")
-        if uinput
+        if agree("use default settings? <%= color('[y/n]', :bold) %>? ")
             self.set_settings_defaults()
         else
-    #url
+        #url
             input = ask("Site Url:")
             add_setting(file,"\"bs_url\":\"#{input}\",")   
-    #host
+        #host
             input = ask("database host:")
             add_setting(file,"\"bs_dbhost\":\"#{input}\",")
-    #dbname
+        #dbname
             input = ask("database name:")
             add_setting(file,"\"bs_dbname\":\"#{input}\",")
-    #dbuser
+        #dbuser
             input = ask("database user:")
             add_setting(file,"\"bs_dbuser\":\"#{input}\",")
-    #dbpass
+        #dbpass
             input = ask("database password:")
             add_setting(file,"\"bs_dbuser\":\"#{input}\",")
         end
@@ -345,16 +244,16 @@ class MageInstaller
 #install sample data
         #only if we are in lite mode.  Match would have the products?  or maybe to much?
         puts "SAMPLE DATA *** would you like to install this?[y/n]"
-        uinput = agree("Install <%= color('`SAMPLE DATA`', :bold) %>? [y/n]")
-        if uinput
+
+        if agree("Install <%= color('`SAMPLE DATA`', :bold) %>? [y/n]")
             add_setting(file,"\"bs_install_sample\":\"true\",")
         else
             add_setting(file,"\"bs_install_sample\":\"false\",")
         end
     
 #use ldap
-        uinput = agree("turn on <%= color('LDAP', :bold) %>? [y/n] <%= color('NOTE: must be within network', :bold, :yellow, :on_black) %>")
-        if uinput
+        
+        if agree("turn on <%= color('LDAP', :bold) %>? [y/n] <%= color('NOTE: must be within network', :bold, :yellow, :on_black) %>")
             add_setting(file,"\"bs_use_ldap\":\"true\",")
         else
             add_setting(file,"\"bs_use_ldap\":\"false\",")
@@ -388,8 +287,7 @@ class MageInstaller
         require 'digest/md5'
         file="scripts/installer_settings.json"
 #add your nid for LDAP based tests
-        uinput = agree("Add your own personal user?[y/n]  <%= color('*** the default user is still installed ***', :bold, :yellow, :on_black) %>")
-        if uinput
+        if agree("Add your own personal user?[y/n]  <%= color('*** the default user is still installed ***', :bold, :yellow, :on_black) %>")
             uinput = ask("<%= color('*** This must be your NID if using LDAP ***', :bold, :yellow, :on_black) %>\nUsername:") do |q| 
                         q.validate = /.+/ 
                         q.responses[:not_valid]    = 'Must not be blank'
