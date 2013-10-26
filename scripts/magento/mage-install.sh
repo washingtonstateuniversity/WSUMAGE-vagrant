@@ -63,8 +63,8 @@ fi
 if [[ $bs_install_sample == "true" ]]
 then
     echo -n "Sample Data package present, now unzipping..."
-    cp -af magento-sample-data-1.6.1.0/media/* media/
-    cp -af magento-sample-data-1.6.1.0/magento_sample_data_for_1.6.1.0.sql data.sql
+    cp -af /srv/www/magento/magento-sample-data-1.6.1.0/media/* /srv/www/magento/media/
+    cp -af /srv/www/magento/magento-sample-data-1.6.1.0/magento_sample_data_for_1.6.1.0.sql /srv/www/magento/data.sql
     cd /srv/www/magento/ #move to the root web folder
     chmod o+w var var/.htaccess app/etc
     chmod -R o+w media
@@ -73,7 +73,6 @@ then
     echo
     echo "Importing sample products..."
     mysql -h $bs_dbhost -u $bs_dbuser -p$bs_dbpass $bs_dbname < data.sql
-    
 fi
 
 
@@ -157,12 +156,12 @@ echo "Installing Magento..."
     ./mage sync
     ./mage download community Flagbit_ChangeAttributeSet
     ./mage download community BL_CustomGrid
-    ./mage download community Ewall_Autocrosssell
-    ./mage download community FireGento_Pdf
-    ./mage download community Custom_PDF_Invoice_Layout
+    #./mage download community Ewall_Autocrosssell
+    #./mage download community FireGento_Pdf
+    #./mage download community Custom_PDF_Invoice_Layout
     #./mage download community ASchroder_SMTPPro
     ./mage download community Semantium_MSemanticBasic
-    
+    ./mage install community Semantium_MSemanticBasic
     #./mage install community Ewall_Autocrosssell
     #./mage install community FireGento_Pdf
     
@@ -175,30 +174,32 @@ echo "Installing Magento..."
     echo "Starting to import base WSU modules from github"
     declare -A gitRepos
     #[repo]=gitUser
-    gitRepos=([WSUMAGE-admin-base]=washingtonstateuniversity
+    gitRepos=(
+        [WSUMAGE-admin-base]=washingtonstateuniversity
         [WSUMAGE-theme-base]=washingtonstateuniversity
-        [eventTickets]=jeremyBass
+        #[eventTickets]=jeremyBass
         [WSUMAGE-store-utilities]=washingtonstateuniversity
         [WSUMAGE-structured-data]=washingtonstateuniversity
         [Storeuser]=jeremyBass
         [sitemaps]=jeremyBass
         [webmastertools]=jeremyBass
         [WSUMAGE-ldap]=washingtonstateuniversity
-        [pickupShipping]=jeremyBass
+        #[pickupShipping]=jeremyBass
         [AdminQuicklancher]=jeremyBass
-        [dropshippers]=jeremyBass
+        #[dropshippers]=jeremyBass
         [Aoe_FilePicker]=jeremyBass
         [mailing_services]=jeremyBass
         [WSUMAGE-iri-gateway]=washingtonstateuniversity
         #[custom_pdf_invoice]=jeremyBass
-        [Aoe_Profiler]=jeremyBass           #https://github.com/fbrnc/Aoe_Profiler.git
-        [Aoe_ManageStores]=jeremyBass       #https://github.com/fbrnc/Aoe_ManageStores.git
-        [Aoe_LayoutConditions]=jeremyBass   #https://github.com/fbrnc/Aoe_LayoutConditions.git
-        [Aoe_AsyncCache]=jeremyBass         #https://github.com/fbrnc/Aoe_AsyncCache.git
-        [Aoe_ApiLog]=jeremyBass             #https://github.com/fbrnc/Aoe_ApiLog.git
-        #[Inchoo_Logger]=ajzele             #https://github.com/ajzele/Inchoo_Logger.git
-        [Aoe_ClassPathCache]=AOEmedia       #https://github.com/AOEmedia/Aoe_ClassPathCache.git
-        [mage-enhanced-admin-grids]=mage-eag)
+        [Aoe_Profiler]=jeremyBass               #https://github.com/fbrnc/Aoe_Profiler.git
+        [Aoe_ManageStores]=jeremyBass           #https://github.com/fbrnc/Aoe_ManageStores.git
+        #[Aoe_LayoutConditions]=jeremyBass      #https://github.com/fbrnc/Aoe_LayoutConditions.git
+        [Aoe_AsyncCache]=jeremyBass             #https://github.com/fbrnc/Aoe_AsyncCache.git
+        #[Aoe_ApiLog]=jeremyBass                #https://github.com/fbrnc/Aoe_ApiLog.git
+        #[Inchoo_Logger]=ajzele                 #https://github.com/ajzele/Inchoo_Logger.git
+        [Aoe_ClassPathCache]=AOEmedia           #https://github.com/AOEmedia/Aoe_ClassPathCache.git
+        [mage-enhanced-admin-grids]=jeremyBass  #https://github.com/mage-eag/mage-enhanced-admin-grids.git
+    )
     cd /srv/www/magento/
     install_tarrepo_list $gitRepos 0 reset_mage
     unset gitRepos         #unset and re-declare to clear associative arrays

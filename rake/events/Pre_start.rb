@@ -34,16 +34,23 @@ class Pre_start
                 File.open("#{Dir.pwd}/www/magento/installed.txt", "w+") { |file| file.write("") }
             end
         end
+        
+        install_sample = @bs_install_sample
         file="_depo/magento-sample-data-1.6.1.0.tar.gz"
         if !File.exist?(file)
             download("http://www.magentocommerce.com/downloads/assets/1.6.1.0/magento-sample-data-1.6.1.0.tar.gz",file)
         else
             puts "mage sample data package exists"
         end
-        
-        
-        
-
+        if install_sample
+            if File.exist?(file)
+                if !File.exist?("#{Dir.pwd}/www/magento/sample_installed.txt") 
+                    puts "extracting mage package contents"
+                    untar_gz(file,"www/magento")
+                    File.open("#{Dir.pwd}/www/magento/sample_installed.txt", "w+") { |file| file.write("") }
+                end
+            end
+        end
     end
     
     def get_packages(version)
