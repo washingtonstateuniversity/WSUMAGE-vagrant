@@ -72,8 +72,8 @@ else
     if [[ $bs_install_sample == "true" ]]
     then
         echo -n "Sample Data package present, now unzipping..."
-        cp -af /srv/www/magento/magento-sample-data-master/media/* /srv/www/magento/media/
-        cp -af /srv/www/magento/magento-sample-data-master/* /srv/www/magento/
+        cp -af /srv/www/magento/WSUMAGE-sampledata-master/media/* /srv/www/magento/media/
+        cp -af /srv/www/magento/WSUMAGE-sampledata-master/* /srv/www/magento/
         cd /srv/www/magento/ #move to the root web folder
         chmod o+w var var/.htaccess app/etc
         chmod -R o+w media

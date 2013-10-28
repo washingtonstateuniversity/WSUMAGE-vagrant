@@ -255,19 +255,7 @@ module MageInstaller
         #only if we are in lite mode.  Match would have the products?  or maybe to much?
         if agree("Install <%= color('`SAMPLE DATA`', :bold) %>? [y/n]")
             add_setting(file,"\"bs_install_sample\":\"true\",")
-            file="_depo/magento-sample-data.zip"
-            if !File.exist?(file)
-                download("https://github.com/jeremyBass/WSUMAGE-sampledata/archive/master.zip",file)
-            else
-                puts "mage sample data package exists"
-            end
-            if File.exist?(file)
-                if !File.exist?("#{Dir.pwd}/www/magento/sample_installed.txt") 
-                    puts "extracting mage package contents"
-                    untar_gz(file,"www/magento")
-                    File.open("#{Dir.pwd}/www/magento/sample_installed.txt", "w+") { |file| file.write("") }
-                end
-            end
+
         else
             add_setting(file,"\"bs_install_sample\":\"false\",")
         end

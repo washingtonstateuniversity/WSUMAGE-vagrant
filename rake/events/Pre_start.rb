@@ -34,17 +34,10 @@ class Pre_start
         end
         
 
-        
-
-        
-        
-        
-
-        if agree("Use last run's set up? <%= color('[y/n]', :bold) %>")
             if @bs_install_sample
-                file="_depo/magento-sample-data.zip"
+                file="_depo/WSUMAGE-sampledata-master.tar.gz"
                 if !File.exist?(file)
-                    download("https://github.com/jeremyBass/WSUMAGE-sampledata/archive/master.zip",file)
+                    download("https://github.com/jeremyBass/WSUMAGE-sampledata/archive/master.tar.gz",file)
                 else
                     puts "mage sample data package exists"
                 end
@@ -55,7 +48,28 @@ class Pre_start
                         File.open("#{Dir.pwd}/www/magento/sample_installed.txt", "w+") { |file| file.write("") }
                     end
                 end
-            end
+            end        
+
+        
+        
+        
+
+        if agree("Use last run's set up? <%= color('[y/n]', :bold) %>")
+            if @bs_install_sample
+                file="_depo/WSUMAGE-sampledata-master.tar.gz"
+                if !File.exist?(file)
+                    download("https://github.com/jeremyBass/WSUMAGE-sampledata/archive/master.tar.gz",file)
+                else
+                    puts "mage sample data package exists"
+                end
+                if File.exist?(file)
+                    if !File.exist?("#{Dir.pwd}/www/magento/sample_installed.txt") 
+                        puts "extracting mage package contents"
+                        untar_gz(file,"www/magento")
+                        File.open("#{Dir.pwd}/www/magento/sample_installed.txt", "w+") { |file| file.write("") }
+                    end
+                end
+            end 
         else
             new_mode = ask("Use development <%= color('lite', :bold) %> OR production <%= color('match', :bold) %>?  <%= color('[l/m]', :bold) %>  ") do |q|
               q.validate                 = /\Al(?:ite)?|m(?:atch)?\Z/i
