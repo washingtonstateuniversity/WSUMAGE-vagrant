@@ -35,10 +35,9 @@ echo "a value at ${bs_MAGEversion}"
 
 
 
-if [ -f /srv/database/mageinstalled.sql ]
+if [ -f /srv/www/magento/mageinstalled.sql ]
 then
-
-    mysql -u root -pblank $bs_dbname < /srv/database/mageinstalled.sql | echo -e "\nLoading past based install..."
+    mysql -u root -pblank $bs_dbname < /srv/www/magento/mageinstalled.sql | echo -e "\nLoading past based install..."
 
 else
 
@@ -73,8 +72,8 @@ else
     if [[ $bs_install_sample == "true" ]]
     then
         echo -n "Sample Data package present, now unzipping..."
-        cp -af /srv/www/magento/magento-sample-data-1.6.1.0/media/* /srv/www/magento/media/
-        cp -af /srv/www/magento/magento-sample-data-1.6.1.0/magento_sample_data_for_1.6.1.0.sql /srv/www/magento/data.sql
+        cp -af /srv/www/magento/magento-sample-data-master/media/* /srv/www/magento/media/
+        cp -af /srv/www/magento/magento-sample-data-master/* /srv/www/magento/
         cd /srv/www/magento/ #move to the root web folder
         chmod o+w var var/.htaccess app/etc
         chmod -R o+w media
@@ -82,7 +81,7 @@ else
         echo "Now installing Magento with sample data..."
         echo
         echo "Importing sample products..."
-        mysql -h $bs_dbhost -u $bs_dbuser -p$bs_dbpass $bs_dbname < data.sql
+        mysql -h $bs_dbhost -u $bs_dbuser -p$bs_dbpass $bs_dbname < sample-data.sql
     fi
     
     
@@ -110,11 +109,11 @@ else
     
     echo
     echo "Initializing PEAR registry..."
-        ./mage mage-setup .
+        #./mage mage-setup .
     
     echo
     echo "Downloading packages..."
-        ./mage install magento-core Mage_All_Latest
+        #./mage install magento-core Mage_All_Latest
     
     
     echo
@@ -150,103 +149,17 @@ else
         --admin_email "$bs_adminemail" \
         --admin_username "$bs_adminuser" \
         --admin_password "$bs_adminpass"
-    
-    
-        if [ -f /srv/database/init-mage.sql ]
-        then
-            mysql -u root -pblank < /srv/database/init-mage.sql | echo -e "\nInitial custom mage MySQL scripting..."
-        else
-            echo -e "\nNo custom MySQL scripting found in database/init-mage.sql, skipping..."
-        fi
+
         
         cd /srv/www/magento/
         echo "Starting to import base WSU modules from connect"
-        ./mage config-set preferred_state alpha
-        ./mage clear-cache
-        ./mage sync
-        #./mage download community Flagbit_ChangeAttributeSet
-        #./mage download community BL_CustomGrid
-        #./mage download community Ewall_Autocrosssell
-        #./mage download community FireGento_Pdf
-        #./mage download community Custom_PDF_Invoice_Layout
-        #./mage download community ASchroder_SMTPPro
-        #./mage download community Semantium_MSemanticBasic
-        #./mage install community Semantium_MSemanticBasic
-        #./mage install community Ewall_Autocrosssell
-        #./mage install community FireGento_Pdf
-        
-        #./mage install community Flagbit_ChangeAttributeSet
-        #./mage install community BL_CustomGrid
-        
-        echo "prime the cach"
-        reset_mage
-    
-        echo "Starting to import base WSU modules from github"
-        declare -A gitRepos
-        #[repo]=gitUser
-        gitRepos=(
-            #[WSUMAGE-admin-base]=washingtonstateuniversity
-            #[WSUMAGE-theme-base]=washingtonstateuniversity
-            #[eventTickets]=jeremyBass
-            #[WSUMAGE-store-utilities]=washingtonstateuniversity
-            #[WSUMAGE-structured-data]=washingtonstateuniversity
-            #[Storeuser]=jeremyBass
-            #[sitemaps]=jeremyBass
-            #[webmastertools]=jeremyBass
-            #[WSUMAGE-ldap]=washingtonstateuniversity
-            #[pickupShipping]=jeremyBass
-            #[AdminQuicklancher]=jeremyBass
-            #[dropshippers]=jeremyBass
-            #[Aoe_FilePicker]=jeremyBass
-            #[mailing_services]=jeremyBass
-            #[WSUMAGE-iri-gateway]=washingtonstateuniversity
-            #[custom_pdf_invoice]=jeremyBass
-            #[Aoe_Profiler]=jeremyBass              #https://github.com/fbrnc/Aoe_Profiler.git
-            #[Aoe_ManageStores]=jeremyBass          #https://github.com/fbrnc/Aoe_ManageStores.git
-            #[Aoe_LayoutConditions]=jeremyBass      #https://github.com/fbrnc/Aoe_LayoutConditions.git
-            #[Aoe_AsyncCache]=jeremyBass            #https://github.com/fbrnc/Aoe_AsyncCache.git
-            #[Aoe_ApiLog]=jeremyBass                #https://github.com/fbrnc/Aoe_ApiLog.git
-            #[Inchoo_Logger]=ajzele                 #https://github.com/ajzele/Inchoo_Logger.git
-            #[Aoe_ClassPathCache]=AOEmedia          #https://github.com/AOEmedia/Aoe_ClassPathCache.git
-            #[mage-enhanced-admin-grids]=jeremyBass #https://github.com/mage-eag/mage-enhanced-admin-grids.git
-        )
-        cd /srv/www/magento/
-        install_tarrepo_list $gitRepos 0 reset_mage
-        unset gitRepos         #unset and re-declare to clear associative arrays
-        declare -A gitRepos
-    
-        cd /srv/www/magento/
-    
-        echo "importing WSU favicon"
-        wget -q http://images.wsu.edu/favicon.ico -O favicon.ico
-    
-    
-        if [ -f /srv/database/init-mage-default-config.sql ]
-        then
-            mysql -u root -pblank < /srv/database/init-mage-default-config.sql | echo -e "\nInitial custom mage MySQL scripting..."
-        else
-            echo -e "\nNo custom MySQL scripting found in database/init-mage-default-config.sql, skipping..."
-        fi
-    
-        echo "Removing unwanted bloat by uninstalling modules like paypal"
-        cd /srv/www/magento/
-        #rm -rf app/code/core/Mage/Paypal/* app/code/core/Mage/Paypal/*
-        #rm -rf app/design/adminhtml/default/default/template/paypal/*
-        echo "come back to this.. must remove any and all etra modules for the lightest base possible"
-    
-        cp /srv/www/scripts/magento/settings.config settings.config #remove this I think.
-    
-    
-        ##pass the shell variables to php via a query string to trun to an object in the post script
-        ##maybe we should just load the installer settings json file from within the php?
-        query=
-        for var in ${!bs_*}; do
-            if [ -n "$query" ];
-            then query="$query&"
-            fi
-            query="$query${var#bs_}=${!var}"
-        done
-        php /srv/www/scripts/magento/install-post.php -- "$query"
+       # ./mage config-set preferred_state alpha
+       # ./mage clear-cache
+       # ./mage sync
+
+        #. scripts/magento/mage-plugins-install.sh
+        #. scripts/magento/mage-install-post.sh
+
     
         
         echo
@@ -257,8 +170,8 @@ else
         reset_mage
         mysql -u root -pblank $bs_dbname -e "DELETE FROM $bs_dbname.adminnotification_inbox;" | echo -e "\n >> Removed admin notifications ..."
     
-    
-        mysqldump -u$bs_dbuser -p$bs_dbpass $bs_dbname > /srv/database/mageinstalled.sql
+        #make the file that repersents all that just happend so that we may skip it next time
+        mysqldump -u$bs_dbuser -p$bs_dbpass $bs_dbname > /srv/www/magento/mageinstalled.sql
     
     
     

@@ -129,14 +129,12 @@ module MageInstaller
         event("Pre")
         output=`vagrant destroy -f`
         puts output
-        Rake::Task["clean_www"].reenable
-        Rake::Task["clean_www"].invoke   
-    
-        Rake::Task["clean_db"].reenable
-        Rake::Task["clean_db"].invoke
+
+        self.clean_www()
+        self.clean_db()
         
         puts "cleaning the depo folder"
-        FileUtils.rm_rf(Dir.glob('depo/*'))
+        FileUtils.rm_rf(Dir.glob("#{Dir.pwd}/depo/*"))
         puts "The depo has been cleaned"
         
         
@@ -216,6 +214,9 @@ module MageInstaller
 #setting file
     def create_settings_file()
 
+        
+        #we would call to each package adn if they exist
+        #then we would run it's content, for example:
         require 'digest/md5'
     
         file="scripts/installer_settings.json"
@@ -240,13 +241,33 @@ module MageInstaller
             input = ask("database password:")
             add_setting(file,"\"bs_dbuser\":\"#{input}\",")
         end
+
+        #default user must be there
+        add_setting(file,"\"bs_adminuser\":\"admin\",")
+        add_setting(file,"\"bs_adminpass\":\"admin2013\",")
+        add_setting(file,"\"bs_adminfname\":\"MC\",")
+        add_setting(file,"\"bs_adminlname\":\"Lovin\",")
+        add_setting(file,"\"bs_adminemail\":\"test.user@wsu.edu\",")      
+
+
         
 #install sample data
         #only if we are in lite mode.  Match would have the products?  or maybe to much?
-        puts "SAMPLE DATA *** would you like to install this?[y/n]"
-
         if agree("Install <%= color('`SAMPLE DATA`', :bold) %>? [y/n]")
             add_setting(file,"\"bs_install_sample\":\"true\",")
+            file="_depo/magento-sample-data.zip"
+            if !File.exist?(file)
+                download("https://github.com/jeremyBass/WSUMAGE-sampledata/archive/master.zip",file)
+            else
+                puts "mage sample data package exists"
+            end
+            if File.exist?(file)
+                if !File.exist?("#{Dir.pwd}/www/magento/sample_installed.txt") 
+                    puts "extracting mage package contents"
+                    untar_gz(file,"www/magento")
+                    File.open("#{Dir.pwd}/www/magento/sample_installed.txt", "w+") { |file| file.write("") }
+                end
+            end
         else
             add_setting(file,"\"bs_install_sample\":\"false\",")
         end
@@ -262,12 +283,7 @@ module MageInstaller
     
         self.set_custom_user_settings()
 
-        #default user must be there
-        add_setting(file,"\"bs_adminuser\":\"admin\",")
-        add_setting(file,"\"bs_adminpass\":\"admin2013\",")
-        add_setting(file,"\"bs_adminfname\":\"MC\",")
-        add_setting(file,"\"bs_adminlname\":\"Lovin\",")
-        add_setting(file,"\"bs_adminemail\":\"test.user@wsu.edu\",")      
+
     end
 
 

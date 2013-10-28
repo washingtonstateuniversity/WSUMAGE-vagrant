@@ -19,9 +19,6 @@ class Pre_start
             end
         end
         
-        #set_background("")
-        #self.get_packages($version)
-        #would push these download to the background
         file="_depo/magento-#{version}.tar.gz"
         if !File.exist?(file)
             download("http://www.magentocommerce.com/downloads/assets/#{version}/magento-#{version}.tar.gz",file)
@@ -36,22 +33,7 @@ class Pre_start
             end
         end
         
-        #install_sample = 
-        if @bs_install_sample
-            file="_depo/magento-sample-data-1.6.1.0.tar.gz"
-            if !File.exist?(file)
-                download("http://www.magentocommerce.com/downloads/assets/1.6.1.0/magento-sample-data-1.6.1.0.tar.gz",file)
-            else
-                puts "mage sample data package exists"
-            end
-            if File.exist?(file)
-                if !File.exist?("#{Dir.pwd}/www/magento/sample_installed.txt") 
-                    puts "extracting mage package contents"
-                    untar_gz(file,"www/magento")
-                    File.open("#{Dir.pwd}/www/magento/sample_installed.txt", "w+") { |file| file.write("") }
-                end
-            end
-        end
+
         
 
         
@@ -59,7 +41,21 @@ class Pre_start
         
 
         if agree("Use last run's set up? <%= color('[y/n]', :bold) %>")
-            
+            if @bs_install_sample
+                file="_depo/magento-sample-data.zip"
+                if !File.exist?(file)
+                    download("https://github.com/jeremyBass/WSUMAGE-sampledata/archive/master.zip",file)
+                else
+                    puts "mage sample data package exists"
+                end
+                if File.exist?(file)
+                    if !File.exist?("#{Dir.pwd}/www/magento/sample_installed.txt") 
+                        puts "extracting mage package contents"
+                        untar_gz(file,"www/magento")
+                        File.open("#{Dir.pwd}/www/magento/sample_installed.txt", "w+") { |file| file.write("") }
+                    end
+                end
+            end
         else
             new_mode = ask("Use development <%= color('lite', :bold) %> OR production <%= color('match', :bold) %>?  <%= color('[l/m]', :bold) %>  ") do |q|
               q.validate                 = /\Al(?:ite)?|m(?:atch)?\Z/i
@@ -109,22 +105,13 @@ class Pre_start
                     create_settings_file()
                 end_settings_file()
             end
-            if @bs_install_sample
-                file="_depo/magento-sample-data-1.6.1.0.tar.gz"
-                if File.exist?(file)
-                    if !File.exist?("#{Dir.pwd}/www/magento/sample_installed.txt") 
-                        puts "extracting mage package contents"
-                        untar_gz(file,"www/magento")
-                        File.open("#{Dir.pwd}/www/magento/sample_installed.txt", "w+") { |file| file.write("") }
-                    end
-                end
-            end
+
         end
         
     end
     
-    def get_packages(version)
-        
+    def get_magepackage(version)
+
     end
     
     

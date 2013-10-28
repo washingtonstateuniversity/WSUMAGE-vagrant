@@ -161,20 +161,3 @@ try {
 }
 
 
-
-    $modules = Mage::getConfig()->getNode('modules')->children();
-    $modulesArray = (array)$modules;
-    echo "Test modules";
-    if(isset($modulesArray['Aoe_AsyncCache'])) {
-        echo "AsyncCache exists.";
-        $tableName = $resource->getTableName('asynccache');
-         
-        /**
-         * if prefix was 'mage_' then the below statement
-         * would print out mage_catalog_product_entity
-         */
-        echo "known as ".$tableName;
-    } else {
-        echo "AsyncCachedoesn't exist.";
-    }   
-

@@ -41,18 +41,51 @@ module JSON
   end
 end
 
+
+## so what we will want to do is build a package.
+## magento will be a package with installer settings,
+## folders to ensure, and actions that need to be do.
+## the goal is that we build the package list, then we loop
+## over it as we go.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module MAGEINSTALLER_Helper
     require 'fileutils'
 
+
 #come back to this
 #look to http://stackoverflow.com/a/5949381/746758 maybe
+     #or http://stackoverflow.com/a/2504528/746758
     def set_background(command=nil)
         if command==nil
             return false
         end
-        pid = Process.spawn(command, :out => 'dev/null', :err => 'dev/null')
-        Process.detach pid #tell the OS we're not interested in the exit status at this time
-        # close write ends so we could read them
+        job = fork do
+          exec command
+        end
+        Process.detach(job)
     end
     
     
