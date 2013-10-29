@@ -71,17 +71,28 @@ else
     #sample
     if [[ $bs_install_sample == "true" ]]
     then
-        echo -n "Sample Data package present, now unzipping..."
-        cp -af /srv/www/magento/WSUMAGE-sampledata-master/media/* /srv/www/magento/media/
-        cp -af /srv/www/magento/WSUMAGE-sampledata-master/* /srv/www/magento/
-        cd /srv/www/magento/ #move to the root web folder
-        chmod o+w var var/.htaccess app/etc
-        chmod -R o+w media
-        
-        echo "Now installing Magento with sample data..."
-        echo
-        echo "Importing sample products..."
-        mysql -h $bs_dbhost -u $bs_dbuser -p$bs_dbpass $bs_dbname < sample-data.sql
+  
+        from="https://github.com/jeremyBass/WSUMAGE-sampledata/archive/master.zip" 
+        to="/srv/www/_depo/WSUMAGE-sampledata-master.zip"
+        if [ ! -f $to ]
+        then
+            wget -O $to $from
+        fi
+        if [ -f $to ]
+        then
+            unzip -q $to -d /srv/www/magento/ 
+
+            echo -n "Sample Data package present, now unzipping..."
+            cp -af /srv/www/magento/WSUMAGE-sampledata-master/* /srv/www/magento/
+            cd /srv/www/magento/ #move to the root web folder
+            chmod o+w var var/.htaccess app/etc
+            chmod -R o+w media
+            
+            echo "Now installing Magento with sample data..."
+            echo
+            echo "Importing sample products..."
+            mysql -h $bs_dbhost -u $bs_dbuser -p$bs_dbpass $bs_dbname < sample-data.sql
+        fi
     fi
     
     
