@@ -6,12 +6,13 @@ echo "importing WSU favicon"
 wget -q http://images.wsu.edu/favicon.ico -O favicon.ico
 
 
-if [ -f /srv/scripts/magento/init-mage-default-config.sql ]
-then
-    #mysql -u root -pblank < /srv/scripts/magento/init-mage-default-config.sql | echo -e "\nInitial custom mage MySQL scripting..."
-else
-    echo -e "\nNo custom MySQL scripting found in database/init-mage-default-config.sql, skipping..."
-fi
+#if [ -f /srv/scripts/magento/init-mage-default-config.sql ]
+#then
+#    #mysql -u root -pblank < /srv/scripts/magento/init-mage-default-config.sql | echo -e "\nInitial custom mage MySQL scripting..."
+#    
+#else
+#    echo -e "\nNo custom MySQL scripting found in database/init-mage-default-config.sql, skipping..."
+#fi
 
 echo "Removing unwanted bloat by uninstalling modules like paypal"
 cd /srv/www/magento/
