@@ -32,4 +32,4 @@ for var in ${!bs_*}; do
     fi
     query="$query${var#bs_}=${!var}"
 done
-#php /srv/www/scripts/magento/install-post.php -- "$query"
+php /srv/www/scripts/magento/install-post.php -- "$query"

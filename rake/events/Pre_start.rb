@@ -60,13 +60,13 @@ class Pre_start
                 mode = "match"
             end
         #www root folder
-            if Dir['www/*'].empty?
+            if Dir.glob('www/{*,.*}').empty?
                 if agree("Should WWW folder be cleared? <%= color('[y/n]', :bold) %>")
                     clean_www()
                 end
             end
         #database
-            if Dir['database/data/*'].empty?
+            if Dir.glob('database/data/{*,.*}').empty?
                 if agree("Should all the databases be cleared? <%= color('[y/n]', :bold) %>")
                     clean_db()
                 end

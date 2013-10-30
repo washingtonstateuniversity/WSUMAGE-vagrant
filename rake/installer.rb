@@ -33,8 +33,10 @@ module MageInstaller
                 else
                     puts "vagrant-cachier plugin loaded"
                 end
-
-                puts "there were a few things needed to install so you need to do `rake start` again."
+                puts "*************************************************************\n"
+                puts "`rake start` again ******************************************\n"
+                puts " there were a few things needed to install so you need to do."
+                puts "*************************************************************\n"
                 File.open("#{Dir.pwd}/READY", "w+") { |file| file.write("") }
                 abort("type rake start")
             else         

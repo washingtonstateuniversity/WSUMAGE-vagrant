@@ -10,7 +10,8 @@ module Rake
       old_execute(args)
     end
   end #class Task
-end #module Rake 
+end #module Rake
+
 class Stopwatch
     def initialize(params=nil)
         @start = Time.now
