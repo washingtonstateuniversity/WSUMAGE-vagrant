@@ -8,7 +8,7 @@ class Pre_start
         load_settings
         version = @bs_MAGEversion
         if version==nil
-            if agree("There was no config, would you like to use the 1.8.0 version of Magento <%= color('[y/n]', :bold) %>")
+            if agree("There was no config, would you like to use the 1.8.0.0 version of Magento <%= color('[y/n]', :bold) %>")
                 version="1.8.0.0"
               else
                 version = ask("version to use:")  do |q| 
@@ -25,17 +25,25 @@ class Pre_start
         else
             puts "mage package exists"
         end
+        
         if File.exist?(file)
             if !File.exist?("#{Dir.pwd}/www/magento/installed.txt") 
                 puts "extracting mage package contents"
                 untar_gz(file,"www")
+                #note this is just untill i have the json working in fullness
                 File.open("#{Dir.pwd}/www/magento/installed.txt", "w+") { |file| file.write("") }
             end
         end
 
-        if agree("Use last run's set up? <%= color('[y/n]', :bold) %>")
+        rerun=false
+        file="#{Dir.pwd}/Vagrantfile"
+        if File.exist?(file)
+            if agree("Use last run's set up? <%= color('[y/n]', :bold) %>")
+                rerun=true
+            end
+        end
 
-        else
+        if !rerun
             new_mode = ask("Use development <%= color('lite', :bold) %> OR production <%= color('match', :bold) %>?  <%= color('[l/m]', :bold) %>  ") do |q|
               q.validate                 = /\Al(?:ite)?|m(?:atch)?\Z/i
               q.responses[:not_valid]    = 'Please enter "l" or "m" (lite|match).'
@@ -51,7 +59,6 @@ class Pre_start
                 FileUtils.cp_r('Vagrantfile-match', 'Vagrantfile')
                 mode = "match"
             end
-            
         #www root folder
             if Dir['www/*'].empty?
                 if agree("Should WWW folder be cleared? <%= color('[y/n]', :bold) %>")
@@ -84,9 +91,7 @@ class Pre_start
                     create_settings_file()
                 end_settings_file()
             end
-
         end
-        
     end
     
     def get_magepackage(version)

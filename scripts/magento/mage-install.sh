@@ -9,13 +9,10 @@ reset_mage(){
 
 cd /srv/www/
 
-
-#. scripts/system/ticktick.sh
-#DATA=`cat scripts/installer_settings.json`
-#tickParse "$DATA"
-
 DATA=`cat scripts/installer_settings.json`
 #the value we want to work with/may or may not be there
+#ie: this needs to be automated by adding the values
+# to the env by name in the parse process
 bs_MAGEversion=`jsonval $DATA "bs_MAGEversion"`
 bs_dbhost=`jsonval $DATA "bs_dbhost"`
 bs_dbname=`jsonval $DATA "bs_dbname"`
@@ -72,7 +69,7 @@ else
     if [[ $bs_install_sample == "true" ]]
     then
   
-        from="https://github.com/jeremyBass/WSUMAGE-sampledata/archive/master.zip" 
+        from="https://github.com/washingtonstateuniversity/WSUMAGE-sampledata/archive/master.zip" 
         to="/srv/www/_depo/WSUMAGE-sampledata-master.zip"
         if [ ! -f $to ]
         then
@@ -92,14 +89,14 @@ else
             echo
             echo "Importing sample products..."
             mysql -h $bs_dbhost -u $bs_dbuser -p$bs_dbpass $bs_dbname < sample-data.sql
+            
+            rm -rf /srv/www/magento/WSUMAGE-sampledata-master/ 
+            rm -rf /srv/www/magento/sample-data.sql
+            rm -rf /srv/www/magento/sample-data-files/
+            
         fi
     fi
-    
-    
-    
-    
-    
-    
+
     echo
     echo "Installing Adminer..."
     if [ ! -f /srv/www/magento/adminer.php ]
@@ -120,11 +117,11 @@ else
     
     echo
     echo "Initializing PEAR registry..."
-        #./mage mage-setup .
+        ./mage mage-setup .
     
     echo
     echo "Downloading packages..."
-        #./mage install magento-core Mage_All_Latest
+        ./mage install magento-core Mage_All_Latest
     
     
     echo
@@ -164,12 +161,12 @@ else
         
         cd /srv/www/magento/
         echo "Starting to import base WSU modules from connect"
-       # ./mage config-set preferred_state alpha
-       # ./mage clear-cache
-       # ./mage sync
+        ./mage config-set preferred_state alpha
+        ./mage clear-cache
+        ./mage sync
 
-        #. scripts/magento/mage-plugins-install.sh
-        #. scripts/magento/mage-install-post.sh
+        . /srv/www/scripts/magento/mage-plugins-install.sh
+        . /srv/www/scripts/magento/mage-install-post.sh
 
     
         
@@ -183,9 +180,7 @@ else
     
         #make the file that repersents all that just happend so that we may skip it next time
         mysqldump -u$bs_dbuser -p$bs_dbpass $bs_dbname > /srv/www/magento/mageinstalled.sql
-    
-    
-    
+
         # Enable developer mode
         #if [ $MAG_DEVELOPER_MODE == 1 ]; then
         #    sed -i -e '/Mage::run/i\
