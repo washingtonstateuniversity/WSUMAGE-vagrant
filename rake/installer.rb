@@ -106,16 +106,17 @@ module MageInstaller
 
 #clean_db
     def clean_db()
-        puts "cleaning the database"
+        say("<%= color('starting database removal', :bold, :yellow, :on_black) %>")
+        #note maybe nuking can be done a simpler way to preserve the db install it's self?
         FileUtils.rm_rf(Dir.glob('database/data/*'))
-        puts "database is clean"
+        say("<%= color('mysql is fully cleared', :bold, :red, :on_black) %>")
     end
 
 #clean_www
     def clean_www()
-        puts "cleaning the WWW folder"
+        say("<%= color('cleaning the WWW folder', :bold, :yellow, :on_black) %>")
         FileUtils.rm_rf(Dir.glob('www/*'))
-        puts "The WWW has been cleaned"
+        say("<%= color('all files in the www web root has been cleared', :bold, :red, :on_black) %>")
     end
 
 #fresh
@@ -135,11 +136,10 @@ module MageInstaller
         self.clean_www()
         self.clean_db()
         
-        puts "cleaning the depo folder"
-        FileUtils.rm_rf(Dir.glob("#{Dir.pwd}/depo/*"))
-        puts "The depo has been cleaned"
-        
-        
+        say("<%= color('cleaning the file DEPO folder', :bold, :yellow, :on_black) %>")
+        FileUtils.rm_rf(Dir.glob("#{Dir.pwd}/_depo/*"))
+        say("<%= color('all files in the _depo web root has been cleared', :bold, :red, :on_black) %>")
+
         event("Post")
         stopwatch.end("finished hard clean up in:")
     end

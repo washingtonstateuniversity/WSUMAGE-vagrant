@@ -57,10 +57,11 @@ apt_package_check_list=(
 	ngrep
 	curl
 	make
-	#vim no, nano.. ha
+	vim
 	colordiff
     
-
+    # to secure the server
+    fail2ban 
 
 	# Req'd for Webgrind
 	graphviz
@@ -189,6 +190,9 @@ ln -sf /srv/config/php5-fpm-config/php-custom.ini /etc/php5/fpm/conf.d/php-custo
 # Configuration for Xdebug
 ln -sf /srv/config/php5-fpm-config/xdebug.ini /etc/php5/fpm/conf.d/xdebug.ini | echo " * /srv/config/php5-fpm-config/xdebug.ini -> /etc/php5/fpm/conf.d/xdebug.ini"
 
+# Configuration for fail2ban
+cp /srv/config/fail2ban-config/* /etc/fail2ban/ | echo " * /srv/config/fail2ban-config/* -> /etc/fail2ban/"
+
 # Configuration for APC
 ln -sf /srv/config/php5-fpm-config/apc.ini /etc/php5/fpm/conf.d/apc.ini | echo " * /srv/config/php5-fpm-config/apc.ini -> /etc/php5/fpm/conf.d/apc.ini"
 
@@ -239,3 +243,4 @@ service nginx restart
 
 service php5-fpm restart
 service memcached restart
+service fail2ban restart
