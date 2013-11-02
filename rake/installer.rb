@@ -135,10 +135,11 @@ module MageInstaller
 
         self.clean_www()
         self.clean_db()
-        
-        say("<%= color('cleaning the file DEPO folder', :bold, :yellow, :on_black) %>")
-        FileUtils.rm_rf(Dir.glob("#{Dir.pwd}/_depo/*"))
-        say("<%= color('all files in the _depo web root has been cleared', :bold, :red, :on_black) %>")
+        if agree("Should the Package Depo be cleared as well?   <%= color('[y/n]', :bold) %>")
+            say("<%= color('cleaning the file DEPO folder', :bold, :yellow, :on_black) %>")
+            FileUtils.rm_rf(Dir.glob("#{Dir.pwd}/_depo/*"))
+            say("<%= color('all files in the _depo web root has been cleared', :bold, :red, :on_black) %>")
+        end
 
         event("Post")
         stopwatch.end("finished hard clean up in:")

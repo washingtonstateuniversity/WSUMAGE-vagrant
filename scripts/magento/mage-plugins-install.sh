@@ -21,12 +21,19 @@ reset_mage
 
 echo "Starting to import base WSU modules from github"
 declare -A gitRepos
+gitRepos=(
+    [WSUMAGE-store-utilities]=washingtonstateuniversity
+)
+install_tarrepo_list $gitRepos 0 reset_mage
+unset gitRepos         #unset and re-declare to clear associative arrays
+declare -A gitRepos
+
+
 #[repo]=gitUser
 gitRepos=(
     [WSUMAGE-admin-base]=washingtonstateuniversity
     [WSUMAGE-theme-base]=washingtonstateuniversity
-    [eventTickets]=jeremyBass
-    [WSUMAGE-store-utilities]=washingtonstateuniversity
+    [eventTickets]=jeremyBass 
     [WSUMAGE-structured-data]=washingtonstateuniversity
     [Storeuser]=jeremyBass
     [sitemaps]=jeremyBass

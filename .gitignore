@@ -15,7 +15,7 @@
 
 #skipping the vagrant as it's generated
 /Vagrantfile
-
+/READY
 # This is a file intended for hooking in a custom Vagrant configuration on up
 /Customfile
 
