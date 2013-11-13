@@ -231,6 +231,11 @@ sudo postconf -e "inet_interfaces = all"
 sudo postconf -e "inet_protocols = all" ## make ip6 ready
 sudo  /etc/init.d/postfix restart
 
+#setup ruby RVM
+#curl -L https://get.rvm.io | bash -s stable --ruby
+#sudo apt-get install -y libopenssl-ruby
+#sudo gem install bundler
+
 
 
 # RESTART SERVICES
