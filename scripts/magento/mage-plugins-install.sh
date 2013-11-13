@@ -1,12 +1,6 @@
 #!/bin/bash
 
-<<<<<<< HEAD
-cd /srv/www/
 
-#./mage download community Semantium_MSemanticBasic
-#./mage install community Semantium_MSemanticBasic
-./mage install community BL_CustomGrid
-=======
 cd /srv/www/magento/
 
 
@@ -16,7 +10,7 @@ cd /srv/www/magento/
 ./mage download community FailedLoginTracker
 #./mage install community Semantium_MSemanticBasic
 #./mage install community BL_CustomGrid
->>>>>>> 95d79ef43db90b092e14a470cb8684e755580a31
+
 
 echo "prime the cach"
 reset_mage
@@ -38,16 +32,9 @@ gitRepos=(
     [WSUMAGE-admin-base]=washingtonstateuniversity
     [WSUMAGE-theme-base]=washingtonstateuniversity
     [WSUMAGE-auditing]=washingtonstateuniversity
-    [mailing_services]=jeremyBass
-    [eventTickets]=jeremyBass
-=======
-    [WSUMAGE-auditing]=washingtonstateuniversity    
-    [WSUMAGE-newtworksecurities]=washingtonstateuniversity
-    [WSUMAGE-admin-base]=washingtonstateuniversity
-    [WSUMAGE-theme-base]=washingtonstateuniversity
->>>>>>> 95d79ef43db90b092e14a470cb8684e755580a31
     [WSUMAGE-structured-data]=washingtonstateuniversity
     [WSUMAGE-iri-gateway]=washingtonstateuniversity
+    [mailing_services]=jeremyBass
     [eventTickets]=jeremyBass 
     [Storeuser]=jeremyBass
     [sitemaps]=jeremyBass
@@ -56,19 +43,10 @@ gitRepos=(
     [AdminQuicklancher]=jeremyBass
     #[dropshippers]=jeremyBass
     [Aoe_FilePicker]=jeremyBass
-<<<<<<< HEAD
-    [WSUMAGE-iri-gateway]=washingtonstateuniversity
-=======
-    [mailing_services]=jeremyBass
->>>>>>> 95d79ef43db90b092e14a470cb8684e755580a31
     [WSUMAGE-pdf-service]=jeremyBass
     [Aoe_Profiler]=jeremyBass              #https://github.com/fbrnc/Aoe_Profiler.git
     [Aoe_ManageStores]=jeremyBass          #https://github.com/fbrnc/Aoe_ManageStores.git
     [Aoe_AsyncCache]=jeremyBass            #https://github.com/fbrnc/Aoe_AsyncCache.git
-<<<<<<< HEAD
-    #[Aoe_ApiLog]=jeremyBass                #https://github.com/fbrnc/Aoe_ApiLog.git
-=======
->>>>>>> 95d79ef43db90b092e14a470cb8684e755580a31
     [Aoe_ClassPathCache]=AOEmedia          #https://github.com/AOEmedia/Aoe_ClassPathCache.git
     [Aoe_Scheduler]=fbrnc          #https://github.com/fbrnc/Aoe_Scheduler.git
     [Aoe_ModelCache]=AOEmedia          #https://github.com/AOEmedia/Aoe_ModelCache

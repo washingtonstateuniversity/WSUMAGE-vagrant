@@ -68,35 +68,22 @@ if (file_exists($maintenanceFile)) {
 
 require_once $mageFilename;
 
-<<<<<<< HEAD
-#Varien_Profiler::enable();
 
-if (isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {}
-
-=======
 Varien_Profiler::enable();
 
 if (isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {
     Mage::setIsDeveloperMode(true);
 }
->>>>>>> 95d79ef43db90b092e14a470cb8684e755580a31
+
 Mage::setIsDeveloperMode(true);
 ini_set('display_errors', 1);
 
 umask(0);
 
 /* Store or website code */
-<<<<<<< HEAD
 $mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) && $_SERVER['MAGE_RUN_CODE']!="general"  ? $_SERVER['MAGE_RUN_CODE'] : '';
 
 /* Run store or run website */
 $mageRunType = isset($_SERVER['MAGE_RUN_TYPE'])? $_SERVER['MAGE_RUN_TYPE'] : 'store';
-
-=======
-$mageRunCode = isset($_SERVER['MAGE_RUN_CODE']) ? $_SERVER['MAGE_RUN_CODE'] : '';
-
-/* Run store or run website */
-$mageRunType = isset($_SERVER['MAGE_RUN_TYPE']) ? $_SERVER['MAGE_RUN_TYPE'] : 'store';
->>>>>>> 95d79ef43db90b092e14a470cb8684e755580a31
 
 Mage::run($mageRunCode, $mageRunType);
