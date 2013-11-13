@@ -155,7 +155,7 @@ module MageInstaller
         
         event("Pre")
         require 'launchy'
-        Launchy.open("http://local.mage.dev/admin") #note this should be from setting file
+        Launchy.open("http://store.mage.dev/admin") #note this should be from setting file
         event("Post")
     end
 
@@ -282,7 +282,7 @@ module MageInstaller
         require 'digest/md5'
         file="scripts/installer_settings.json"
         add_setting(file,"\"bs_MAGEversion\":\"1.8.0.0\",")
-        add_setting(file,"\"bs_url\":\"local.mage.dev\",")
+        add_setting(file,"\"bs_url\":\"store.mage.dev\",")
         add_setting(file,"\"bs_dbhost\":\"localhost\",") # if in lite mode then 
         add_setting(file,"\"bs_dbname\":\"mage\",")
         add_setting(file,"\"bs_dbuser\":\"devsqluser\",")

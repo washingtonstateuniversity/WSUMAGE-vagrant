@@ -6,7 +6,7 @@ reset_mage(){
     php "/srv/www/magento/index.php"
 }
 
-
+cp -fr /srv/www/scripts/magento/maps/nginx-mapping.conf /srv/www/magento/maps/nginx-mapping.conf
 cd /srv/www/
 
 DATA=`cat scripts/installer_settings.json`
@@ -180,6 +180,10 @@ else
     
         #make the file that repersents all that just happend so that we may skip it next time
         mysqldump -u$bs_dbuser -p$bs_dbpass $bs_dbname > /srv/www/magento/mageinstalled.sql
+
+        cp -fr /srv/www/scripts/magento/index.php /srv/www/magento/index.php
+
+
 
         # Enable developer mode
         #if [ $MAG_DEVELOPER_MODE == 1 ]; then
