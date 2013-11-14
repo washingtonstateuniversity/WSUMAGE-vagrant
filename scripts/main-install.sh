@@ -181,6 +181,9 @@ echo -e "\nSetup configuration file links..."
 ln -sf /srv/config/nginx-config/nginx.conf /etc/nginx/nginx.conf | echo " * /srv/config/nginx-config/nginx.conf -> /etc/nginx/nginx.conf"
 ln -sf /srv/config/nginx-config/nginx-mage-common.conf /etc/nginx/nginx-mage-common.conf | echo " * /srv/config/nginx-config/nginx-wp-common.conf -> /etc/nginx/nginx-wp-common.conf"
 
+cp /srv/scripts/magento/maps/nginx-mapping.conf /srv/www/magento/maps/nginx-mapping.conf | echo " moved the default mapping folder for the multi store"
+
+
 # Configuration for php5-fpm
 ln -sf /srv/config/php5-fpm-config/www.conf /etc/php5/fpm/pool.d/www.conf | echo " * /srv/config/php5-fpm-config/www.conf -> /etc/php5/fpm/pool.d/www.conf"
 
@@ -235,7 +238,6 @@ sudo  /etc/init.d/postfix restart
 #curl -L https://get.rvm.io | bash -s stable --ruby
 #sudo apt-get install -y libopenssl-ruby
 #sudo gem install bundler
-
 
 
 # RESTART SERVICES

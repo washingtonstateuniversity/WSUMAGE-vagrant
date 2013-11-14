@@ -27,7 +27,6 @@ declare -A gitRepos
 
 #[repo]=gitUser
 gitRepos=(
-<<<<<<< HEAD
     [WSUMAGE-networksecurities]=washingtonstateuniversity
     [WSUMAGE-admin-base]=washingtonstateuniversity
     [WSUMAGE-theme-base]=washingtonstateuniversity

@@ -61,6 +61,8 @@ module MageInstaller
         fresh=false
         puts "insuring default folders"
         create_dir("/www/")
+        create_dir("/www/magento/")
+        create_dir("/www/magento/maps/")
         create_dir("/_depo/")
         create_dir("/_BOXES/")
         create_dir("/database/data/")

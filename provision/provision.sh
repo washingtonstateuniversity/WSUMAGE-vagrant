@@ -40,6 +40,21 @@ then
     cd /srv/www/scripts/
     . magento/mage-install.sh      
 
+
+# RESTART SERVICES
+#
+# Make sure the services we expect to be running are running.
+echo -e "\n one last Restart for good measure..."
+service nginx restart
+# Disable PHP Xdebug module by default
+#php5dismod xdebug
+
+service php5-fpm restart
+service memcached restart
+service fail2ban restart
+
+
+
 else
 	echo -e "\nNo network available, skipping network installations"
 fi
