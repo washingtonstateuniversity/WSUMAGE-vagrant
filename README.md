@@ -96,8 +96,8 @@ From there you area now able to do more custom actions like copying some files i
 Just to note you can by pass the rake taskes and just use Vagrant on it's own, but you will have to magage your files on your own, and make sure that you edit your configs too.  There is a lot to learn under the hood.
 
 ###Vagrant plugins that are autoloaded
-1. [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater)
-
+1. [vagrant-hostsupdater](https://github.com/cogitatio/vagrant-hostsupdater) - This is to auto append any domains you create to your host file so you don't have to do it by hand.
+1. [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest) - This is to help in cases where the VirtualBox and Vagrant are not in line and the GuestAdditions versions on your host and guest do not match.  ***This just patches it, and it is highly advisable to update (Vagrant/VirtualBox) as soon as possible since this plugin adds a minute or two to the process of bring up the box.***
 
 ***
 ## Customizable settings
@@ -190,6 +190,16 @@ set up on the production area.  When you use the match, an authentication proces
 then you will be able to make calls to production thru the API.   This will allow you to sink up you store 
 to your development area to test out a bug you are seeing or design something that is very specific to the 
 settings and content that is on the server.
+
+*** 
+#`rake start` times
+This will give you an accurate time of loading the server.  Thie first run as it primes the system, installs any missing items and getting Magento installed for the first time can take a bit, 10-20 mins depending on bandwidth, but the next time you bring up the box times can run as low as 3-4mins for a fresh `rake start`/`vagrant up`.  There are ways to help insure that Vagrant runs as fast as possible, so here are a few we can share:
+
+1. Run everything of an SSD (solid state drive) for the fastest IO since sharing folders from your system can be slow
+1. Install NSF if possible
+1. Don't clean the install everytime, just clean the database
+1. package the first run and the next time you `rake start`/`vagrant up` will use that new box state which will quicken the loading.
+
 
 ***
 

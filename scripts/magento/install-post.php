@@ -61,7 +61,7 @@ foreach($settingsarray as $item){
 $cDat->saveConfig('admin/url/custom', 'http://store.admin.mage.dev/', 'default', 0);
 
 
-function moveStoreProducts($site,$rootcat){
+function moveStoreProducts($website,$store,$rootcat){
 		$children = Mage::getModel('catalog/category')->getCategories($rootcat);
 		foreach ($children as $category) {
 			//echo $category->getName();
@@ -73,8 +73,8 @@ function moveStoreProducts($site,$rootcat){
 				var_dump($_product->getWebsiteIds());
 				echo 'old webids<br/>storeid:<br/>'.$_product->getStoreId().'<br/>';
 				
-				$_product->setWebsiteIds(array($site)); //assigning website ID
-				$_product->setStoreId($site);
+				$_product->setWebsiteIds(array($website)); //assigning website ID
+				$_product->setStoreId($store);
 				$_product->save();
 				var_dump($_product->getWebsiteIds());
 				echo 'new webids<br/>storeid:<br/>'.$_product->getStoreId().'<br/>';
@@ -147,7 +147,7 @@ function make_store($categoryName,$site,$store,$view,$url="",$movingcat){
             ->save();
 			
 		$storeid = $store->getId();
-		moveStoreProducts($storeid,$rcatId);
+		moveStoreProducts($webid,$storeid,$rcatId);
 		
     }
     return $rcatId;

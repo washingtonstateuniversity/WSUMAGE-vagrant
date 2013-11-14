@@ -33,6 +33,13 @@ module MageInstaller
                 else
                     puts "vagrant-cachier plugin loaded"
                 end
+                 if !output.include? "vagrant-vbguest"
+                    puts "installing vagrant-vbguest plugin"
+                    puts `vagrant plugin install vagrant-vbguest`
+                else
+                    puts "vagrant-cachier plugin loaded"
+                end               
+            
                 puts "*************************************************************\n"
                 puts "`rake start` again ******************************************\n"
                 puts " there were a few things needed to install so you need to do."
@@ -72,8 +79,13 @@ module MageInstaller
         #this is where we would build the Vagrant file to suite if abstracted to account for 
         #more then this project would allow for new boxes is approprate too.  
         file="#{Dir.pwd}/_BOXES/precise32.box"
-        if !File.exist?(file)
-            download('http://hc-vagrant-files.s3.amazonaws.com/precise32.box',file)
+        if !File.exist?(file) && agree("Should we bring the box local?   <%= color('[y/n]', :bold) %>")
+            download('http://images.wsu.edu/vmboxes/precise32.box',file)
+            if !File.exist?(file) #fall back
+                download('http://hc-vagrant-files.s3.amazonaws.com/precise32.box',file)
+            else
+                puts "base box esited"
+            end
         else
             puts "base box esited"
         end
