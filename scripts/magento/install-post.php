@@ -61,33 +61,31 @@ foreach($settingsarray as $item){
 $cDat->saveConfig('admin/url/custom', 'http://store.admin.mage.dev/', 'default', 0);
 
 
-function moveStoreProducts($website,$store,$rootcat){
-		$children = Mage::getModel('catalog/category')->getCategories($rootcat);
-		foreach ($children as $category) {
-			//echo $category->getName();
-			$category = Mage::getModel('catalog/category')->load($category->getId());
-			$collection = $category->getProductCollection();
-			foreach ($collection as $product){
-				$productId = $product->getId();
-				$_product=$product->load($productId);
-				var_dump($_product->getWebsiteIds());
-				echo 'old webids<br/>storeid:<br/>'.$_product->getStoreId().'<br/>';
-				
-				$_product->setWebsiteIds(array($website)); //assigning website ID
-				$_product->setStoreId($store);
-				$_product->save();
-				var_dump($_product->getWebsiteIds());
-				echo 'new webids<br/>storeid:<br/>'.$_product->getStoreId().'<br/>';
-				//copy the details of the products to new store
-				//$newProduct = Mage::getModel('catalog/product')
-				//->setStoreId(0) //0=default store id, copy default values. give the id of the store whose values you want to copy to new store
-				//->load($productId)
-				//new store id
-				//->save();
-			}
-			$childrenCats = Mage::getModel('catalog/category')->getCategories($category->getId());
-			if( count($childrenCats)>0){ moveStoreProducts($site,$category->getId()); }
-		}
+function moveStoreProducts($website,$store,$rootcat,$children=null){
+    if($children==null)$children = Mage::getModel('catalog/category')->getCategories($rootcat);
+    foreach ($children as $category) {
+        //echo $category->getName();
+        $cat_id=$category->getId();
+        $category = Mage::getModel('catalog/category')->load($cat_id);
+        $collection = $category->getProductCollection();
+        foreach ($collection as $product){
+            $oldproductId = $product->getId();
+            $_product=$product->load($productId);
+            $sku = $_product->getSku();
+            //echo "--------------------------------\n for ".$sku.' old webids:'.implode(',',$_product->getWebsiteIds()).' && storeid:'.$oldproductId." \n";
+            try{
+                $_product->setWebsiteIds(array($website)); //assigning website ID
+                $_product->setStoreId($store);
+                $_product->save();
+            }catch (Exception $e) {
+               echo  'failed on sku:: ',$sku,"\n",$e->getMessage(),"\n";
+            }
+            //$newproductId = $_product->getId();
+            //echo 'new webids:'.implode(',',$_product->getWebsiteIds()).' && storeid:'.$newproductId."\n";
+        }
+        $childrenCats = Mage::getModel('catalog/category')->getCategories($cat_id);
+        if( count($childrenCats)>0){ moveStoreProducts($website,$site,$cat_id,$childrenCats); }
+    }
 }
 
 function make_store($categoryName,$site,$store,$view,$url="",$movingcat){
@@ -163,13 +161,13 @@ $installed_stores['studentstore'] = make_store("Student store root",
               );
 $installed_stores['generalstore'] = make_store("General store root",
                 array('code'=>'generalstore','name'=>'General store'),
-                array('name'=>'Test Store'),
+                array('name'=>'General Store'),
                 array('code'=>'generalstore','name'=>'base default veiw'),
 				'general.store.mage.dev',
 				18
               );
 $installed_stores['eventstore'] = make_store("Event store root",
-                array('code'=>'eventstore','name'=>'Test store'),
+                array('code'=>'eventstore','name'=>'Event store'),
                 array('name'=>'Events Store'),
                 array('code'=>'eventstore','name'=>'base default veiw'),
 				'events.store.mage.dev',
@@ -177,8 +175,7 @@ $installed_stores['eventstore'] = make_store("Event store root",
               );
 
 /*
-    $categoryIds = array(21,22,23);//category ids whose products you want to assign
-
+  $categoryIds = array(21,22,23);//category ids whose products you want to assign
 */
 
 

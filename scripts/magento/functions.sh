@@ -58,14 +58,6 @@ install_repolist(){
 }
 
 
-jsonval() {
-    temp=`echo $1 | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $2`
-    echo ${temp##*|}
-}
- 
-
-
-
 install_tarrepo(){
     repozip=/srv/www/_depo/$2.zip
     if [ ! -f $repozip ]
@@ -75,16 +67,29 @@ install_tarrepo(){
     else
         echo "$2 existed and installing "
     fi
+    
+    pluginfile=/srv/www/magento/EXTINSTALLER.config
+    if [ ! -f $pluginfile ]
+    then
+        touch $pluginfile
+    fi
+    
     package="$2-master"
-    
-    unzip -q $repozip -d /srv/www/magento/
-    
-    #unzip $repozip -d /srv/www/magento/
-    cd /srv/www/magento/$package/
-    rm -rf LICENSE.txt STATUS.txt README.md RELEASE_NOTES.txt modman
-    cd ../
-    cp -af /srv/www/magento/$package/* .
-    rm -rf /srv/www/magento/$package/
+    if grep -Fxq "$package" $pluginfile
+    then
+         echo "package already installed it seems"    
+    else
+        unzip -q $repozip -d /srv/www/magento/
+        
+        #unzip $repozip -d /srv/www/magento/
+        cd /srv/www/magento/$package/
+        rm -rf LICENSE.txt STATUS.txt README.md RELEASE_NOTES.txt modman
+        cd ../
+        cp -af /srv/www/magento/$package/* .
+        rm -rf /srv/www/magento/$package/
+        echo "unziped package"
+        echo -n "$package," >> "$pluginfile"   
+    fi
     rm -rf /srv/www/magento/var/cache/*
     php "/srv/www/magento/index.php"
 }

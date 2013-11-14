@@ -123,6 +123,9 @@ module MageInstaller
         say("<%= color('starting database removal', :bold, :yellow, :on_black) %>")
         #note maybe nuking can be done a simpler way to preserve the db install it's self?
         FileUtils.rm_rf(Dir.glob('database/data/*'))
+        
+        FileUtils.rm_rf(Dir.glob('www/*/mageinstalled.sql'))
+        
         say("<%= color('mysql is fully cleared', :bold, :red, :on_black) %>")
     end
 

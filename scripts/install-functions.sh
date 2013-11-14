@@ -12,6 +12,10 @@ prevous_location(){
     return $last_location
 }
 
+jsonval() {
+    temp=`echo $1 | sed 's/\\\\\//\//g' | sed 's/[{}]//g' | awk -v k="text" '{n=split($0,a,","); for (i=1; i<=n; i++) print a[i]}' | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $2`
+    echo ${temp##*|}
+}
 
 #check to see if there is network connection
 has_network(){
