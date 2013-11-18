@@ -136,17 +136,40 @@ function make_store($categoryName,$site,$store,$view,$url="",$movingcat){
 		$cDat->saveConfig('web/secure/base_url', "https://".$url.'/', 'websites', $webid);
     //#addStore
         /** @var $store Mage_Core_Model_Store */
+		$sotercode=$view['code'];
         $store = Mage::getModel('core/store');
-        $store->setCode($view['code'])
+        $store->setCode($sotercode)
             ->setWebsiteId($storeGroup->getWebsiteId())
             ->setGroupId($storeGroup->getId())
             ->setName($view['name'])
             ->setIsActive(1)
             ->save();
-			
+		
 		$storeid = $store->getId();
 		moveStoreProducts($webid,$storeid,$rcatId);
+		$cmsPageData = array(
+			'title' => 'Test CMS Page Title',
+			'root_template' => 'two_columns_right',
+			'meta_keywords' => 'meta,keywords',
+			'meta_description' => 'meta description',
+			'identifier' => 'home',
+			'content_heading' => '',
+			'is_active' => 1,
+			'stores' => array($storeid),//available for all store views
+			'content' => '<div class="col-left side-col">
+<p class="home-callout"><a href="{{store direct_url="apparel/shoes/womens/anashria-womens-premier-leather-sandal.html"}}"><img src="{{media url="wsu_stores/'.$sotercode.'/ph_callout_left_top.jpg"}}" alt="" border="0" /></a></p>
+<p class="home-callout"><img src="{{media url="wsu_stores/'.$sotercode.'/ph_callout_left_rebel.jpg"}}" alt="" border="0" /></p>
+{{block type="tag/popular" template="tag/popular.phtml"}}</div>
+<div class="home-spot">
+<p class="home-callout"><img src="{{media url="wsu_stores/'.$sotercode.'/home_main_callout.jpg"}}" alt="" width="535" border="0" /></p>
+<p class="home-callout"><img src="{{media url="wsu_stores/'.$sotercode.'/free_shipping_callout.jpg"}}" alt="" width="535" border="0" /></p>
+<div class="box best-selling">
+<h1>Sites in the center</h1>
+{{block type="catalog/product" product_id="27" template="custom_block/site_list.phtml"}}</div>
+</div>'
+		);
 		
+		Mage::getModel('cms/page')->setData($cmsPageData)->save();
     }
     return $rcatId;
 }
