@@ -1,3 +1,6 @@
+
+#NOTE MASTER IS BETA
+
 # WSU Magento Development platform 
 ## Overview
 The goal of this project is to make a very simple way for someone to do development against the 
@@ -162,23 +165,23 @@ Plugings Loaded:
     
 1. [WSUMAGE-admin-base](https://github.com/washingtonstateuniversity/WSUMAGE-admin-base.git)
 1. [WSUMAGE-theme-base](https://github.com/washingtonstateuniversity/WSUMAGE-theme-base.git)
-1. [eventTickets](https://github.com/jeremyBass/eventTickets.git)
-1. [Storeutilities](https://github.com/jeremyBass/Storeutilities.git)
+1. [WSUMAGE-auditing](https://github.com/washingtonstateuniversity/WSUMAGE-auditing.git)
+1. [WSUMAGE-store-utilities](https://github.com/washingtonstateuniversity/WSUMAGE-store-utilities .git)
 1. [WSUMAGE-structured-data](https://github.com/washingtonstateuniversity/WSUMAGE-structured-data.git)
+1. [WSUMAGE-iri-gateway](https://github.com/washingtonstateuniversity/WSUMAGE-iri-gateway.git)
+1. [WSUMAGE-networksecurities ](https://github.com/washingtonstateuniversity/WSUMAGE-networksecurities.git)
+1. [WSUMAGE-central-cc-processing](https://github.com/washingtonstateuniversity/WSUMAGE-central-cc-processing.git)
 1. [Storeuser](https://github.com/jeremyBass/Storeuser.git)
 1. [sitemaps](https://github.com/jeremyBass/sitemaps.git)
+1. [eventTickets](https://github.com/jeremyBass/eventTickets.git)
 1. [webmastertools](https://github.com/jeremyBass/webmastertools.git)
-1. [WSUMAGE-ldap](https://github.com/washingtonstateuniversity/WSUMAGE-ldap.git)
 1. [pickupShipping](https://github.com/jeremyBass/pickupShipping.git)
 1. [AdminQuicklancher](https://github.com/jeremyBass/AdminQuicklancher.git)
 1. [dropshippers](https://github.com/jeremyBass/dropshippers.git)
 1. [Aoe_FilePicker](https://github.com/jeremyBass/Aoe_FilePicker.git)
 1. [mailing_services](https://github.com/jeremyBass/mailing_services.git)
-1. [WSUMAGE-iri-gateway](https://github.com/washingtonstateuniversity/WSUMAGE-iri-gateway.git)
-1. [custom_pdf_invoice](https://github.com/jeremyBass/custom_pdf_invoice.git)
 1. [Aoe_Profiler](https://github.com/jeremyBass/Aoe_Profiler.git)
 1. [Aoe_ManageStores](https://github.com/fbrnc/Aoe_ManageStores.git)
-1. [Aoe_LayoutConditions](#https://github.com/fbrnc/Aoe_LayoutConditions.git)
 1. [Aoe_AsyncCache](https://github.com/fbrnc/Aoe_AsyncCache.git)
 1. [Aoe_ApiLog](https://github.com/fbrnc/Aoe_ApiLog.git)
 1. [Aoe_ClassPathCache](https://github.com/AOEmedia/Aoe_ClassPathCache.git)
