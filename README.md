@@ -1,4 +1,3 @@
-
 #NOTE MASTER IS BETA
 
 # WSU Magento Development platform 
@@ -120,6 +119,12 @@ Just to note you can by pass the rake taskes and just use Vagrant on it's own, b
     they will be loaded in this development area. ***note this need to be written out more, short if 3 servers, admin/frontend/database***
 
 ### Credentials and Such
+
+
+#### MySQL Root ***(defaults)***
+* User: `root`
+* Pass: `blank`
+
 All database usernames and passwords for Magento installations included by default are 
 `devsqluser` and `devsqluser`.  You may also use the prompts to as everything is setting up 
 to change this but changing the setting file.
@@ -129,12 +134,17 @@ are `admin` and `admin2013`.  Magento requires a number in the admin password, s
 if you change this in the settings file.
 
 #### Magento Stable ***(defaults)***
-* URL: `http://local.mage.dev`
 * DB Name: `mage`
+* DB user: `devsqluser`
+* DB pass: `devsqluser`
 
-#### MySQL Root ***(defaults)***
-* User: `root`
-* Pass: `blank`
+#####URLS
+* `http://store.mage.dev`
+* `http://events.mage.dev`
+* `http://general.mage.dev`
+* `http://student.mage.dev`
+
+**Note: this is auto appended and removed from your system's `HOST` file**
 
 
 ### What's loaded on the systems?
