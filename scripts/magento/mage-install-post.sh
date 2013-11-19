@@ -16,6 +16,12 @@ wget -q http://images.wsu.edu/favicon.ico -O favicon.ico
 
 echo "Removing unwanted bloat by uninstalling modules like paypal"
 cd /srv/www/magento/
+rm -rf app/code/core/Mage/PaypalUk/*
+rm -rf app/code/core/Mage/Authorizenet/* app/etc/modules/Mage_Authorizenet.xml
+rm -rf app/code/core/community/Phoenix/* app/etc/modules/Phoenix_Moneybookers.xml
+
+
+
 #rm -rf app/code/core/Mage/Paypal/* app/code/core/Mage/Paypal/*
 #rm -rf app/design/adminhtml/default/default/template/paypal/*
 echo "come back to this.. must remove any and all etra modules for the lightest base possible"

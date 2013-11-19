@@ -4,10 +4,7 @@
 cd /srv/www/magento/
 
 
-./mage download community Aschroder_SetStartOrderNumber
-./mage download community ASchroder_SMTPPro
-./mage download community FailedLoginTracker
-./mage download community Soczed_Less
+#./mage download community Aschroder_SetStartOrderNumber
 #./mage install community BL_CustomGrid
 
 
