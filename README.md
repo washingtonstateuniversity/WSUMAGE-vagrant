@@ -1,3 +1,5 @@
+#NOTE MASTER IS BETA
+
 # WSU Magento Development platform 
 ## Overview
 The goal of this project is to make a very simple way for someone to do development against the 
@@ -117,6 +119,12 @@ Just to note you can by pass the rake taskes and just use Vagrant on it's own, b
     they will be loaded in this development area. ***note this need to be written out more, short if 3 servers, admin/frontend/database***
 
 ### Credentials and Such
+
+
+#### MySQL Root ***(defaults)***
+* User: `root`
+* Pass: `blank`
+
 All database usernames and passwords for Magento installations included by default are 
 `devsqluser` and `devsqluser`.  You may also use the prompts to as everything is setting up 
 to change this but changing the setting file.
@@ -126,12 +134,17 @@ are `admin` and `admin2013`.  Magento requires a number in the admin password, s
 if you change this in the settings file.
 
 #### Magento Stable ***(defaults)***
-* URL: `http://local.mage.dev`
 * DB Name: `mage`
+* DB user: `devsqluser`
+* DB pass: `devsqluser`
 
-#### MySQL Root ***(defaults)***
-* User: `root`
-* Pass: `blank`
+#####URLS
+* `http://store.mage.dev`
+* `http://events.mage.dev`
+* `http://general.mage.dev`
+* `http://student.mage.dev`
+
+**Note: this is auto appended and removed from your system's `HOST` file**
 
 
 ### What's loaded on the systems?
@@ -162,23 +175,23 @@ Plugings Loaded:
     
 1. [WSUMAGE-admin-base](https://github.com/washingtonstateuniversity/WSUMAGE-admin-base.git)
 1. [WSUMAGE-theme-base](https://github.com/washingtonstateuniversity/WSUMAGE-theme-base.git)
-1. [eventTickets](https://github.com/jeremyBass/eventTickets.git)
-1. [Storeutilities](https://github.com/jeremyBass/Storeutilities.git)
+1. [WSUMAGE-auditing](https://github.com/washingtonstateuniversity/WSUMAGE-auditing.git)
+1. [WSUMAGE-store-utilities](https://github.com/washingtonstateuniversity/WSUMAGE-store-utilities .git)
 1. [WSUMAGE-structured-data](https://github.com/washingtonstateuniversity/WSUMAGE-structured-data.git)
+1. [WSUMAGE-iri-gateway](https://github.com/washingtonstateuniversity/WSUMAGE-iri-gateway.git)
+1. [WSUMAGE-networksecurities ](https://github.com/washingtonstateuniversity/WSUMAGE-networksecurities.git)
+1. [WSUMAGE-central-cc-processing](https://github.com/washingtonstateuniversity/WSUMAGE-central-cc-processing.git)
 1. [Storeuser](https://github.com/jeremyBass/Storeuser.git)
 1. [sitemaps](https://github.com/jeremyBass/sitemaps.git)
+1. [eventTickets](https://github.com/jeremyBass/eventTickets.git)
 1. [webmastertools](https://github.com/jeremyBass/webmastertools.git)
-1. [WSUMAGE-ldap](https://github.com/washingtonstateuniversity/WSUMAGE-ldap.git)
 1. [pickupShipping](https://github.com/jeremyBass/pickupShipping.git)
 1. [AdminQuicklancher](https://github.com/jeremyBass/AdminQuicklancher.git)
 1. [dropshippers](https://github.com/jeremyBass/dropshippers.git)
 1. [Aoe_FilePicker](https://github.com/jeremyBass/Aoe_FilePicker.git)
 1. [mailing_services](https://github.com/jeremyBass/mailing_services.git)
-1. [WSUMAGE-iri-gateway](https://github.com/washingtonstateuniversity/WSUMAGE-iri-gateway.git)
-1. [custom_pdf_invoice](https://github.com/jeremyBass/custom_pdf_invoice.git)
 1. [Aoe_Profiler](https://github.com/jeremyBass/Aoe_Profiler.git)
 1. [Aoe_ManageStores](https://github.com/fbrnc/Aoe_ManageStores.git)
-1. [Aoe_LayoutConditions](#https://github.com/fbrnc/Aoe_LayoutConditions.git)
 1. [Aoe_AsyncCache](https://github.com/fbrnc/Aoe_AsyncCache.git)
 1. [Aoe_ApiLog](https://github.com/fbrnc/Aoe_ApiLog.git)
 1. [Aoe_ClassPathCache](https://github.com/AOEmedia/Aoe_ClassPathCache.git)
