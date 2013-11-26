@@ -29,6 +29,7 @@ gitRepos=(
     [WSUMAGE-auditing]=washingtonstateuniversity
     [WSUMAGE-structured-data]=washingtonstateuniversity
     [WSUMAGE-iri-gateway]=washingtonstateuniversity
+    [WSUMAGE-mediacontroll]=jeremyBass
     [mailing_services]=jeremyBass
     [eventTickets]=jeremyBass 
     [Storeuser]=jeremyBass

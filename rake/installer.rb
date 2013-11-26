@@ -110,9 +110,11 @@ module MageInstaller
     def end_it()
         stopwatch = Stopwatch.new
         event("Pre")
-        system( "vagrant destroy -f" )
         if agree("Should all the databases be cleared?   <%= color('[y/n]', :bold) %>")
             self.clean_db()
+            system( "vagrant destroy -f" )  # what we will do is try to keep things as long as we
+        else                                # can so that we do have to re-provsion anything
+            system( "vagrant halt -f" )     # If the DB is gone then we will have to do more then halt
         end
         event("Post")
         stopwatch.end("finished shutdown in:")
@@ -142,6 +144,21 @@ module MageInstaller
         puts "needs to uninstall gems and what not"
     end
 
+#restart
+# we want to make sure that the package is as persistent as possible
+# so we are going to keep this box around even if the DB is destroyed
+    def restart()
+        stopwatch = Stopwatch.new
+        event("Pre")
+        if agree("Should all the databases be cleared?   <%= color('[y/n]', :bold) %>")
+            self.clean_db()
+            system( "vagrant reload --provision" )                              
+        else
+            system( "vagrant reload" )
+        end
+        event("Post")
+        stopwatch.end("restarted in:")
+    end
 
 #hardclean
     def hardclean()
@@ -167,7 +184,7 @@ module MageInstaller
 #open
     def open()
         
-        #note we would want to check for the browser bing open already
+        #note we would want to check for the browser being open already
         #so we don't annoy people
         
         event("Pre")
@@ -187,14 +204,13 @@ module MageInstaller
         event("Post")
         self.open()
         stopwatch.end("box brought up in:")
-        
     end
 
 #reload
     def reload()
         stopwatch = Stopwatch.new
         event("Pre")
-        system( "vagrant reload" )
+        system( "vagrant reload " )
         event("Post")
         self.open()
         stopwatch.end("reloaded in:")
@@ -218,15 +234,7 @@ module MageInstaller
         stopwatch.end("halted in:")
     end
 
-#restart
-    def restart()
-        stopwatch = Stopwatch.new
-        event("Pre")
-        self.end_it()
-        self.up()
-        event("Post")
-        stopwatch.end("restarted in:")
-    end
+
 
 
 
