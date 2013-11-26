@@ -8,6 +8,29 @@
 # individual packages to it as required.
 apt_package_install_list=()
 
+    #checking to see if the database is there already
+    DIR="/srv/database/data"
+    if [ "$(ls -A $DIR)" ]; then
+       echo "Database Existed"
+    else
+    #we are reinstalling since the data folder has been wiped
+        service mysql-client stop
+        service mysql-server stop
+        service php5-fpm stop
+        apt-get -y purge mysql-server
+        apt-get -y purge mysql-client
+        apt-get -y purge mysql-common
+        apt-get -y purge php5-mysql
+        apt-get -y purge mysql-server mysql-client mysql-common mysql-client-5.5 mysql-server-5.5
+        rm -rf /var/lib/mysql
+        rm -rf /etc/mysql*
+      
+        apt-get -y autoremove
+        apt-get -y autoclean
+    fi
+
+
+
 # Start with a bash array containing all packages we want to install in the
 # virtual machine. We'll then loop through each of these and check individual
 # status before adding them to the apt_package_install_list array.
@@ -146,17 +169,21 @@ ln -sf /srv/config/apt-source-append.list /etc/apt/sources.list.d/vvv-sources.li
     fi
 
 
+
+
+
+
     cd /srv/www/
     . scripts/system/ack-grep-install.sh
 
     cd /srv/www/
-    #. scripts/system/composer-install.sh
+    . scripts/system/composer-install.sh
 
     cd /srv/www/
-    #. scripts/system/phpunit-install.sh
+    . scripts/system/phpunit-install.sh
 
     cd /srv/www/
-    #. scripts/system/grunt-install.sh
+    . scripts/system/grunt-install.sh
 
 
 # Configuration for nginx

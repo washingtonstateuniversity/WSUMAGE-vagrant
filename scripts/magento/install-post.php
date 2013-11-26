@@ -157,12 +157,12 @@ function make_store($categoryName,$site,$store,$view,$url="",$movingcat){
 			'is_active' => 1,
 			'stores' => array($storeid),//available for all store views
 			'content' => '<div class="col-left side-col">
-<p class="home-callout"><a href="{{store direct_url="apparel/shoes/womens/anashria-womens-premier-leather-sandal.html"}}"><img src="{{media url="wsu_stores/'.$sotercode.'/ph_callout_left_top.jpg"}}" alt="" border="0" /></a></p>
-<p class="home-callout"><img src="{{media url="wsu_stores/'.$sotercode.'/ph_callout_left_rebel.jpg"}}" alt="" border="0" /></p>
+<p class="home-callout"><a href="{{store direct_url="apparel/shoes/womens/anashria-womens-premier-leather-sandal.html"}}"><img src="{{storemedia url="/ph_callout_left_top.jpg"}}" alt="" border="0" /></a></p>
+<p class="home-callout"><img src="{{storemedia url="/ph_callout_left_rebel.jpg"}}" alt="" border="0" /></p>
 {{block type="tag/popular" template="tag/popular.phtml"}}</div>
 <div class="home-spot">
-<p class="home-callout"><img src="{{media url="wsu_stores/'.$sotercode.'/home_main_callout.jpg"}}" alt="" width="535" border="0" /></p>
-<p class="home-callout"><img src="{{media url="wsu_stores/'.$sotercode.'/free_shipping_callout.jpg"}}" alt="" width="535" border="0" /></p>
+<p class="home-callout"><img src="{{storemedia url="/home_main_callout.jpg"}}" alt="" width="535" border="0" /></p>
+<p class="home-callout"><img src="{{storemedia url="/free_shipping_callout.jpg"}}" alt="" width="535" border="0" /></p>
 <div class="box best-selling">
 <h1>Sites in the center</h1>
 {{block type="catalog/product" product_id="27" template="custom_block/site_list.phtml"}}</div>

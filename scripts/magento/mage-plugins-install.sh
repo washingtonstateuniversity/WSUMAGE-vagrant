@@ -3,7 +3,7 @@
 
 cd /srv/www/magento/
 
-
+./mage download community Clever_CMS
 #./mage download community Aschroder_SetStartOrderNumber
 #./mage install community BL_CustomGrid
 
