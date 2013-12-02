@@ -1,4 +1,9 @@
 <?php
+
+//note this is all just free wheel atm and needs to be refactored big time.
+//just saying
+
+
 //just as a guide, no real purpose
 echo getcwd() . " (working from)\n";
 $argv = $_SERVER['argv'];
@@ -92,7 +97,7 @@ function moveStoreProducts($website,$store,$rootcat,$children=null){
     }
 }
 
-function make_store($categoryName,$site,$store,$view,$url="",$movingcat){
+function make_store($categoryName,$site,$store,$view,$url="",$movingcat=-1){
     //#adding a root cat for the new store we will create
     // Create category object
     $category = Mage::getModel('catalog/category');
@@ -113,13 +118,14 @@ function make_store($categoryName,$site,$store,$view,$url="",$movingcat){
         echo $e->getMessage();
     }
     if($rcatId>0){
-		$category = Mage::getModel( 'catalog/category' )->load($movingcat);
-		Mage::unregister('category');
-		Mage::unregister('current_category');
-		Mage::register('category', $category);
-		Mage::register('current_category', $category);
-		$category->move($rcatId);
-
+		if($movingcat>0){
+			$category = Mage::getModel( 'catalog/category' )->load($movingcat);
+			Mage::unregister('category');
+			Mage::unregister('current_category');
+			Mage::register('category', $category);
+			Mage::register('current_category', $category);
+			$category->move($rcatId);
+		}
 
     //#addWebsite
         /** @var $website Mage_Core_Model_Website */
@@ -198,9 +204,100 @@ $installed_stores['eventstore'] = make_store("Event store root",
                 array('name'=>'Events Store'),
                 array('code'=>'eventstore','name'=>'base default veiw'),
 				'events.store.mage.dev',
+				-1
+              );
+$installed_stores['techstore'] = make_store("Tech store root",
+                array('code'=>'techstore','name'=>'Tech store'),
+                array('name'=>'Tech Store'),
+                array('code'=>'techstore','name'=>'base default veiw'),
+				'tech.store.mage.dev',
 				13
               );
 
+function createCat($storeCodeId,$rootcatID,$cats=array()){
+	foreach($cats as $url=>$catInfo){
+		$category = Mage::getModel('catalog/category');
+		$category->setStoreId($storeCodeId);
+		
+			$cat['name'] =$catInfo['name'];
+			$cat['path'] = "1/".$rootcatID;
+			$cat['description'] = $catInfo['description'];
+			$cat['is_active'] = $catInfo['is_active'];
+			$cat['is_anchor'] = $catInfo['is_anchor'];
+			$cat['page_layout'] = $catInfo['is_anchor'];
+			$cat['url_key'] = $url;
+			$cat['image'] = $catInfo['image'];
+		
+		$category->addData($cat);
+		$category->save();
+		$catsId=$category->getId();
+		echo " -> added cat ".$catsId."<br/>";
+		if(isset($catInfo['children'])&& !empty($catInfo['children'])){
+			echo " MAKING CHILDREN FOR -> added cat ".$catsId."<br/>";
+			createCat($storeCodeId,$rootcatID.'/'.$catsId,$catInfo['children']);
+		}
+	}
+}
+$storeCodeId = Mage::getModel( "core/store" )->load( "eventstore" )->getId();
+$rootcatID = $installed_stores['eventstore'];
+echo "creating cat for store ".$storeCodeId;
+createCat($storeCodeId,$rootcatID,array(
+	"events"=>array(
+		'name'=>"Sports",
+		'description'=>"Events that are great",
+		'is_active'=>1,
+		'is_anchor'=>0, //for layered navigation
+		'page_layout'=>'two_columns_left',
+		'image'=>"custom-category.jpg",
+		'children'=>array(
+			"football"=>array(
+				'name'=>"Football",
+				'description'=>"Football",
+				'is_active'=>1,
+				'is_anchor'=>0, //for layered navigation
+				'page_layout'=>'two_columns_left',
+				'image'=>"custom-category.jpg",
+			),
+			"basketball"=>array(
+				'name'=>"Basketball",
+				'description'=>"Basketball",
+				'is_active'=>1,
+				'is_anchor'=>0, //for layered navigation
+				'page_layout'=>'two_columns_left',
+				'image'=>"custom-category.jpg",
+			)
+		)
+	),
+	"classes"=>array(
+		'name'=>"Classes",
+		'description'=>"Classes",
+		'is_active'=>1,
+		'is_anchor'=>0, //for layered navigation
+		'page_layout'=>'two_columns_left',
+		'image'=>"custom-category.jpg",
+		'children'=>array(
+			"math"=>array(
+				'name'=>"Math",
+				'description'=>"Mathing it up",
+				'is_active'=>1,
+				'is_anchor'=>0, //for layered navigation
+				'page_layout'=>'two_columns_left',
+				'image'=>"custom-category.jpg",
+			),
+			"winemaking"=>array(
+				'name'=>"Wine Making",
+				'description'=>"Making wine",
+				'is_active'=>1,
+				'is_anchor'=>0, //for layered navigation
+				'page_layout'=>'two_columns_left',
+				'image'=>"custom-category.jpg",
+			)
+		)
+	)
+));
+
+$eventsCatId=Mage::getModel('catalog/category')->setStoreId($storeCodeId)->loadByAttribute('url_key', 'football')->getId(); 
+echo "added cat ".$eventsCatId."<br/>";
 
 include_once('sample-events.php');
 
