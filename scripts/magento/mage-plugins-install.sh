@@ -2,8 +2,8 @@
 
 
 cd /srv/www/magento/
-
-./mage download community Clever_CMS
+./mage download community Motech_DefaultAttributeSet
+#./mage download community Clever_CMS
 #./mage download community Aschroder_SetStartOrderNumber
 #./mage install community BL_CustomGrid
 
@@ -40,6 +40,7 @@ gitRepos=(
     #[dropshippers]=jeremyBass
     [Aoe_FilePicker]=jeremyBass
     [WSUMAGE-pdf-service]=jeremyBass
+    [AvS_FastSimpleImport]=jeremyBass      #https://github.com/avstudnitz/AvS_FastSimpleImport
     [Aoe_Profiler]=jeremyBass              #https://github.com/fbrnc/Aoe_Profiler.git
     [Aoe_ManageStores]=jeremyBass          #https://github.com/fbrnc/Aoe_ManageStores.git
     [Aoe_AsyncCache]=jeremyBass            #https://github.com/fbrnc/Aoe_AsyncCache.git

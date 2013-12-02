@@ -33,6 +33,10 @@ $writeConnection = $resource->getConnection('core_write');
 // switch off error reporting
 error_reporting ( E_ALL & ~ E_NOTICE );
 
+function logInfo($String){
+        echo $String."<br/>";
+}
+
 function csv_to_array($filename='', $delimiter=','){
      if(!file_exists($filename) || !is_readable($filename))
          return FALSE;
@@ -197,12 +201,8 @@ $installed_stores['eventstore'] = make_store("Event store root",
 				13
               );
 
-/*
-  $categoryIds = array(21,22,23);//category ids whose products you want to assign
-*/
 
-
-
+include_once('sample-events.php');
 
 // let us refresh the cache
 try {
