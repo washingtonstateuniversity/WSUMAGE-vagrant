@@ -293,7 +293,11 @@ die();            */
             return $id;
         }
 
-        $setInfo = createAttributeSet("Events","9",array('Gift Options','Recurring Profile'),array('enable_googlecheckout','weight'));
+        $setInfo = createAttributeSet("Events","9",
+                                      array('Gift Options','Recurring Profile'),
+                                      array('enable_googlecheckout','weight','manufacturer',
+                                            'color','msrp_enabled','msrp_display_actual_price_type','msrp')
+                                     );
 
         createAttribute("Event start","eventstartdate", array(
                 'is_global'                     => '0',
@@ -312,7 +316,7 @@ die();            */
                 'is_html_allowed_on_front'      => '1',
                 'is_visible_on_front'           => '0',
                 'used_in_product_listing'       => '0',
-                'used_for_sort_by'              => '0',
+                'used_for_sort_by'              => '1',
                 'is_configurable'               => '0',
                 'is_filterable'                 => '0',
                 'is_filterable_in_search'       => '0',
@@ -337,7 +341,7 @@ die();            */
                 'is_html_allowed_on_front'      => '1',
                 'is_visible_on_front'           => '0',
                 'used_in_product_listing'       => '0',
-                'used_for_sort_by'              => '0',
+                'used_for_sort_by'              => '1',
                 'is_configurable'               => '0',
                 'is_filterable'                 => '0',
                 'is_filterable_in_search'       => '0',

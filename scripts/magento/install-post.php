@@ -256,7 +256,7 @@ createCat($storeCodeId,$rootcatID,array(
 				'is_active'=>1,
 				'is_anchor'=>0, //for layered navigation
 				'page_layout'=>'two_columns_left',
-				'image'=>"custom-category.jpg",
+				'image'=>"football.jpg",
 			),
 			"basketball"=>array(
 				'name'=>"Basketball",
@@ -264,7 +264,7 @@ createCat($storeCodeId,$rootcatID,array(
 				'is_active'=>1,
 				'is_anchor'=>0, //for layered navigation
 				'page_layout'=>'two_columns_left',
-				'image'=>"custom-category.jpg",
+				'image'=>"basketball.jpg",
 			)
 		)
 	),
@@ -281,16 +281,14 @@ createCat($storeCodeId,$rootcatID,array(
 				'description'=>"Mathing it up",
 				'is_active'=>1,
 				'is_anchor'=>0, //for layered navigation
-				'page_layout'=>'two_columns_left',
-				'image'=>"custom-category.jpg",
+				'page_layout'=>'two_columns_left'
 			),
 			"winemaking"=>array(
 				'name'=>"Wine Making",
 				'description'=>"Making wine",
 				'is_active'=>1,
 				'is_anchor'=>0, //for layered navigation
-				'page_layout'=>'two_columns_left',
-				'image'=>"custom-category.jpg",
+				'page_layout'=>'two_columns_left'
 			)
 		)
 	)
