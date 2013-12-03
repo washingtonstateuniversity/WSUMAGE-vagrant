@@ -292,14 +292,38 @@ die();            */
      
             return $id;
         }
-
-        $setInfo = createAttributeSet("Events","9",
+		$runID="";
+        $setInfo = createAttributeSet("Events".$runid,"9",
                                       array('Gift Options','Recurring Profile'),
                                       array('enable_googlecheckout','weight','manufacturer',
                                             'color','msrp_enabled','msrp_display_actual_price_type','msrp')
                                      );
+        createAttribute("Event start","eventstartdate".$runid, array(
+                'is_global'                     => '0',
+                'frontend_input'                => 'date',
+                'default_value_text'            => '',
+                'default_value_yesno'           => '0',
+                'default_value_date'            => '',
+                'default_value_textarea'        => '',
+                'is_unique'                     => '0',
+                'is_required'                   => '0',
+                'frontend_class'                => '',
+                'is_searchable'                 => '1',
+                'is_visible_in_advanced_search' => '1',
+                'is_comparable'                 => '0',
+                'is_used_for_promo_rules'       => '0',
+                'is_html_allowed_on_front'      => '1',
+                'is_visible_on_front'           => '0',
+                'used_in_product_listing'       => '1',
+                'used_for_sort_by'              => '1',
+                'is_configurable'               => '0',
+                'is_filterable'                 => '0',
+                'is_filterable_in_search'       => '0',
+                'backend_type'                  => 'datetime',
+                'default_value'                 => ''
+            ),array("event"), $setInfo);
 
-        createAttribute("Event start","eventstartdate", array(
+        createAttribute("Event end","eventenddate".$runid, array(
                 'is_global'                     => '0',
                 'frontend_input'                => 'date',
                 'default_value_text'            => '',
@@ -323,10 +347,10 @@ die();            */
                 'backend_type'                  => 'datetime',
                 'default_value'                 => ''
             ),array("event"), $setInfo);
-
-        createAttribute("Event end","eventenddate", array(
+			
+        createAttribute("Opponent","opponent".$runid, array(
                 'is_global'                     => '0',
-                'frontend_input'                => 'date',
+                'frontend_input'                => 'text',
                 'default_value_text'            => '',
                 'default_value_yesno'           => '0',
                 'default_value_date'            => '',
@@ -345,16 +369,42 @@ die();            */
                 'is_configurable'               => '0',
                 'is_filterable'                 => '0',
                 'is_filterable_in_search'       => '0',
-                'backend_type'                  => 'datetime',
+                'backend_type'                  => 'text',
                 'default_value'                 => ''
             ),array("event"), $setInfo);
+        createAttribute("Away Game","awaygame".$runid, array(
+                'is_global'                     => '0',
+                'frontend_input'                => 'boolean',
+                'default_value_text'            => '',
+                'default_value_yesno'           => '0',
+                'default_value_date'            => '',
+                'default_value_textarea'        => '',
+                'is_unique'                     => '0',
+                'is_required'                   => '0',
+                'frontend_class'                => '',
+                'is_searchable'                 => '1',
+                'is_visible_in_advanced_search' => '1',
+                'is_comparable'                 => '0',
+                'is_used_for_promo_rules'       => '0',
+                'is_html_allowed_on_front'      => '1',
+                'is_visible_on_front'           => '0',
+                'used_in_product_listing'       => '1',
+                'used_for_sort_by'              => '1',
+                'is_configurable'               => '0',
+                'is_filterable'                 => '0',
+                'is_filterable_in_search'       => '0',
+                'backend_type'                  => 'int',
+                'default_value'                 => ''
+            ),array("event"), $setInfo);			
+			
+			
 	$media_gallery_id = Mage::getSingleton('catalog/product')->getResource()->getAttribute('media_gallery') ->getAttributeId();
     $data = array(
         array(
             'sku' => 'event_'.getUniqueCode(20),
             '_type' => Wsu_eventTickets_Model_Product_Type::TYPE_CP_PRODUCT,//'simple',
             'product_type' => 'main product',
-            '_attribute_set' => 'Events',
+            '_attribute_set' => 'Events'.$runid,
             //'attribute_set_id' => 74,
             '_product_websites' => 'eventstore',
             'name' => "Event ".getUniqueCode(2),
@@ -366,6 +416,8 @@ die();            */
             'short_description' => 'Default',
 			'eventstartdate'.$runid =>'12/13/2013',
 			'eventenddate'.$runid =>'12/13/2013',
+			'opponent'.$runid=>'OSU',
+			'awaygame'.$runid=>1,
             'meta_title' => 'Default',
             'meta_description' => 'Default',
             'meta_keywords' => 'Default',
@@ -392,7 +444,7 @@ die();            */
             'sku' => 'event_'.getUniqueCode(20),
             '_type' => Wsu_eventTickets_Model_Product_Type::TYPE_CP_PRODUCT,//'simple',
             'product_type' => 'main product',
-            '_attribute_set' => 'Events',
+            '_attribute_set' => 'Events'.$runid,
             //'attribute_set_id' => 74,
             '_product_websites' => 'eventstore',
             'name' => "Event ".getUniqueCode(2),
@@ -404,6 +456,8 @@ die();            */
             'short_description' => 'Default',
 			'eventstartdate'.$runid =>'12/21/2013',
 			'eventenddate'.$runid =>'12/21/2013',
+			'opponent'.$runid=>'OSU',
+			'awaygame'.$runid=>1,
             'meta_title' => 'Default',
             'meta_description' => 'Default',
             'meta_keywords' => 'Default',
@@ -431,7 +485,7 @@ die();            */
             'sku' => 'event_'.getUniqueCode(20),
             '_type' => Wsu_eventTickets_Model_Product_Type::TYPE_CP_PRODUCT,//'simple',
             'product_type' => 'main product',
-            '_attribute_set' => 'Events',
+            '_attribute_set' => 'Events'.$runid,
             //'attribute_set_id' => 74,
             '_product_websites' => 'eventstore',
             'name' => "Event ".getUniqueCode(2),
@@ -443,6 +497,8 @@ die();            */
             'short_description' => 'Default',
 			'eventstartdate'.$runid =>'12/30/2013',
 			'eventenddate'.$runid =>'12/30/2013',
+			'opponent'.$runid=>'IDHO',
+			'awaygame'.$runid=>0,
             'meta_title' => 'Default',
             'meta_description' => 'Default',
             'meta_keywords' => 'Default',
@@ -470,7 +526,7 @@ die();            */
             'sku' => 'event_'.getUniqueCode(20),
             '_type' => Wsu_eventTickets_Model_Product_Type::TYPE_CP_PRODUCT,//'simple',
             'product_type' => 'main product',
-            '_attribute_set' => 'Events',
+            '_attribute_set' => 'Events'.$runid,
             //'attribute_set_id' => 74,
             '_product_websites' => 'eventstore',
             'name' => "Event ".getUniqueCode(2),
@@ -480,8 +536,10 @@ die();            */
             '_category' => $eventsCatId,
             'description' => 'Default',
             'short_description' => 'Default',
-			'eventstartdate'.$runid =>'11/13/2013',
-			'eventenddate'.$runid =>'11/13/2013',
+			'eventstartdate'.$runid =>'1/21/2014',
+			'eventenddate'.$runid =>'1/21/2014',
+			'opponent'.$runid=>'UTAH',
+			'awaygame'.$runid=>1,
             'meta_title' => 'Default',
             'meta_description' => 'Default',
             'meta_keywords' => 'Default',
