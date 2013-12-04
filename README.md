@@ -1,10 +1,18 @@
 #NOTE MASTER IS BETA
+***NOTICE: it seems that not every version of [VirtualBox](https://www.virtualbox.org/) and [Vagrant](http://www.vagrantup.com/) play nicely together or with the OS.  If you can't get them running try to down grade your VirtualBox first.  A list of known working combinations will be added to the wiki***
+
+
 
 # WSU Magento Development platform 
-## Overview
+### Overview
 The goal of this project is to make a very simple way for someone to do development against the 
 production version of the Magento solution.  This setup is done in a way that should let the user follow 
 only a few steps before then can login to the admin area and begin development work. 
+
+### Why a Ruby task warper?
+There is no way to prompt the user and we need to be able to ask questions like `would you like to clean the database? [y/n]`.  This wrapper lets us achieve this need.
+
+##Install
 
 1. install the base apps
     
@@ -12,14 +20,14 @@ only a few steps before then can login to the admin area and begin development w
     > 1. [Vagrant](http://www.vagrantup.com/) (for [help installing see wiki](https://github.com/washingtonstateuniversity/WSUMAGE-vagrant/wiki/Installing-Vagrant))
     > 1. [VirtualBox](https://www.virtualbox.org/) (for [help installing see wiki](https://github.com/washingtonstateuniversity/WSUMAGE-vagrant/wiki/Installing-Vagrant))
     > 1. [Ruby](http://rubyinstaller.org/)(only needed if using windows see the [wiki for help](https://github.com/washingtonstateuniversity/WSUMAGE-vagrant/wiki/Installing-ruby))
-    > Note: if your on a mac you must have ruby 1.9 or above.  Look to [this article to update your ruby](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
+    > ***Note: if your on a mac you must have ruby 1.9 or above.  Look to [this article to update your ruby](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)***
 1. run in powershell/command line 
         
-        > git clone git://github.com/washingtonstateuniversity/WSUMAGE-vagrant.git vvvbox
+        > git clone git://github.com/washingtonstateuniversity/WSUMAGE-vagrant.git magedev
 
 1. move to the new directory 
         
-        > cd vvvbox
+        > cd magedev
 
 1. run in powershell/command line/terminal 
         
@@ -140,15 +148,16 @@ if you change this in the settings file.
 
 #####URLS
 * `http://store.mage.dev`
-* `http://events.mage.dev`
-* `http://general.mage.dev`
-* `http://student.mage.dev`
+* `http://events.store.mage.dev`
+* `http://general.store.mage.dev`
+* `http://student.store.mage.dev`
+* `http://tech.store.mage.dev`
 
 **Note: this is auto appended and removed from your system's `HOST` file**
 
 
 ### What's loaded on the systems?
-There are 3 servers that run when mirroring the production servers, or just one if you want a development base.
+There are 3 master servers that run when mirroring the production servers, or just one if you want a development base.
 **note:** This set up is currently a Shell provisioner only.  Later when branching, there will be a 
 switch to CentOS and to a new provisioner option.  Currently options are Chef and Salt as considered
 
@@ -203,6 +212,11 @@ set up on the production area.  When you use the match, an authentication proces
 then you will be able to make calls to production thru the API.   This will allow you to sink up you store 
 to your development area to test out a bug you are seeing or design something that is very specific to the 
 settings and content that is on the server.
+
+## Sample Data
+There is an updated version of the old Magento sample data that is loaded.  Currently part of it is housed under this project but will be moved over.  The [WSUMAGE-sampledata](https://github.com/washingtonstateuniversity/WSUMAGE-sampledata) project right now is a set of simple SQL script, but in the interest of easy it will be turned into an extension.
+
+
 
 *** 
 #`rake start` times
