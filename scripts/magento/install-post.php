@@ -158,8 +158,8 @@ function make_store($categoryName,$site,$store,$view,$url="",$movingcat=-1){
 		$storeid = $store->getId();
 		moveStoreProducts($webid,$storeid,$rcatId);
 		$cmsPageData = array(
-			'title' => 'Test CMS Page Title',
-			'root_template' => 'two_columns_right',
+			'title' => $site['name'],
+			'root_template' => 'one_column',
 			'meta_keywords' => 'meta,keywords',
 			'meta_description' => 'meta description',
 			'identifier' => 'home',
@@ -167,16 +167,15 @@ function make_store($categoryName,$site,$store,$view,$url="",$movingcat=-1){
 			'is_active' => 1,
 			'stores' => array($storeid),//available for all store views
 			'content' => '<div class="col-left side-col">
-<p class="home-callout"><a href="{{store direct_url="apparel/shoes/womens/anashria-womens-premier-leather-sandal.html"}}"><img src="{{storemedia url="/ph_callout_left_top.jpg"}}" alt="" border="0" /></a></p>
+<p class="home-callout"><a href="{{store direct_url="#"}"> <img src="{{storemedia url="/ph_callout_left_top.jpg"}}" alt="" border="0" /> </a></p>
 <p class="home-callout"><img src="{{storemedia url="/ph_callout_left_rebel.jpg"}}" alt="" border="0" /></p>
 {{block type="tag/popular" template="tag/popular.phtml"}}</div>
 <div class="home-spot">
 <p class="home-callout"><img src="{{storemedia url="/home_main_callout.jpg"}}" alt="" width="535" border="0" /></p>
 <p class="home-callout"><img src="{{storemedia url="/free_shipping_callout.jpg"}}" alt="" width="535" border="0" /></p>
-<div class="box best-selling">
+</div>
 <h1>Sites in the center</h1>
-{{block type="catalog/product" product_id="27" template="custom_block/site_list.phtml"}}</div>
-</div>'
+<p>{{block type="catalog/product" stores_per="5" products_per="2" panles_per="3" template="custom_block/site_list.phtml"}}</p>'
 		);
 		
 		Mage::getModel('cms/page')->setData($cmsPageData)->save();
