@@ -8,26 +8,26 @@
 # individual packages to it as required.
 apt_package_install_list=()
 
-    #checking to see if the database is there already
-    DIR="/srv/database/data"
-    if [ "$(ls -A $DIR)" ]; then
-       echo "Database Existed"
-    else
-    #we are reinstalling since the data folder has been wiped
-        service mysql-client stop
-        service mysql-server stop
-        service php5-fpm stop
-        apt-get -y purge mysql-server
-        apt-get -y purge mysql-client
-        apt-get -y purge mysql-common
-        apt-get -y purge php5-mysql
-        apt-get -y purge mysql-server mysql-client mysql-common mysql-client-5.5 mysql-server-5.5
-        rm -rf /var/lib/mysql
-        rm -rf /etc/mysql*
-      
-        apt-get -y autoremove
-        apt-get -y autoclean
-    fi
+#checking to see if the database is there already
+DIR="/srv/database/data"
+if [ "$(ls -A $DIR)" ]; then
+   echo "Database Existed"
+else
+#we are reinstalling since the data folder has been wiped
+    service mysql-client stop
+    service mysql-server stop
+    service php5-fpm stop
+    apt-get -y purge mysql-server
+    apt-get -y purge mysql-client
+    apt-get -y purge mysql-common
+    apt-get -y purge php5-mysql
+    apt-get -y purge mysql-server mysql-client mysql-common mysql-client-5.5 mysql-server-5.5
+    rm -rf /var/lib/mysql
+    rm -rf /etc/mysql*
+  
+    apt-get -y autoremove
+    apt-get -y autoclean
+fi
 
 
 
@@ -249,13 +249,21 @@ ln -nsf /srv/config/homebin /home/vagrant/bin | echo " * /srv/config/homebin -> 
 vvv_ip=`ifconfig eth1 | ack "inet addr" | cut -d ":" -f 2 | cut -d " " -f 1`
 
 
+DIR="/srv/database/backup/base"
+if [ "$(ls -A $DIR)" ]; then
+   echo " << base Database backup Existed"
+else
+    cp /srv/database/data $DIR  | echo " >> Made base Database backup"
+fi
+
+
 #setup the mail
-debconf-set-selections <<< "postfix postfix/mailname string local.mage.dev"
+debconf-set-selections <<< "postfix postfix/mailname string store.mage.dev"
 debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
 sudo apt-get install -y postfix
 #sudo apt-get install -y courier-pop
 #sudo apt-get install -y courier-imap
-sudo postconf -e "mydestination = mail.local.mage.dev, localhost.localdomain, localhost, local.mage.dev"
+sudo postconf -e "mydestination = mail.store.mage.dev, localhost.localdomain, localhost, mage.dev, store.mage.dev"
 #sudo postconf -e "mynetworks = 127.0.0.0/8, 192.168.50.4/24"
 sudo postconf -e "inet_interfaces = all"
 sudo postconf -e "inet_protocols = all" ## make ip6 ready
