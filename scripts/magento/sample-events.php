@@ -21,6 +21,7 @@ Mage::helper('storeutilities/utilities')->make_store("Event store root",
 
 $storeCodeId = Mage::getModel( "core/store" )->load( "eventstore" )->getId();
 $rootcatID = Mage::app()->getStore($storeCodeId)->getRootCategoryId();
+
 echo "creating cat for store ".$storeCodeId;
 Mage::helper('storeutilities/utilities')->createCat($storeCodeId,$rootcatID,array(
 	"events"=>array(
@@ -87,12 +88,12 @@ $eventsCatId = (isset($eventsCatId) && $eventsCatId>0) ? $eventsCatId : 8;
 
 $imgAttrIds = array(79,80,81);
 $imageGalId = 82;	
-
+$defaultAttrSetId = Mage::getModel('catalog/product')->getDefaultAttributeSetId();
 
 $runid="";//getUniqueCode(20);//
 $setInfo = Mage::helper('storeutilities/utilities')
 					->createAttributeSet("Events".$runid,
-										  "9",
+										  $defaultAttrSetId,
 										  array('Gift Options','Recurring Profile'),
 										  array('enable_googlecheckout','weight','manufacturer','color','msrp_enabled','msrp_display_actual_price_type','msrp')
 					 );
@@ -198,20 +199,19 @@ Mage::helper('storeutilities/utilities')->createAttribute("Away Game","awaygame"
 	),array("event"), $setInfo);			
 	
 
+
 $media_gallery_id = Mage::getSingleton('catalog/product')->getResource()->getAttribute('media_gallery') ->getAttributeId();
 $data = array(
 	array(
-		'sku' => 'event_'.getUniqueCode(20),
+		'sku' => 'event_'.getUniqueCode(10),
 		'_type' => Wsu_eventTickets_Model_Product_Type::TYPE_CP_PRODUCT,//'simple',
 		'product_type' => 'main product',
 		'_attribute_set' => 'Events'.$runid,
 		//'attribute_set_id' => 74,
 		'_product_websites' => $websiteCodes,
-		'website' => $websiteCodes,
+		//'website' => $websiteCodes,
 		'name' => "Event ".getUniqueCode(2),
 		'price' => 14.99,
-		//'special_price' => 0.90,
-		//'cost' => 0.50,
 		'_category' => $eventsCatId,
 		'description' => 'Default',
 		'short_description' => 'Default',
@@ -222,7 +222,6 @@ $data = array(
 		'meta_title' => 'Default',
 		'meta_description' => 'Default',
 		'meta_keywords' => 'Default',
-		//'weight' => 0,
 		'status' => 1,
 		'visibility' => 4,
 		'tax_class_id' => 2,
@@ -230,7 +229,7 @@ $data = array(
 		'is_in_stock' => 1,
 		'enable_googlecheckout' => '0',
 		'gift_message_available' => '0',
-		'url_key' => strtolower(getUniqueCode(20)),
+		'url_key' => strtolower(getUniqueCode(10)),
 		'media_gallery' => $media_gallery_id,
 		"_media_attribute_id" => $media_gallery_id,
 		"_media_lable" =>"Game Day",
@@ -242,17 +241,15 @@ $data = array(
 		'thumbnail' => basename("http://images.wsu.edu/images/examples/surfinfootball.jpg"),
 	),
 	array(
-		'sku' => 'event_'.getUniqueCode(20),
+		'sku' => 'event_'.getUniqueCode(10),
 		'_type' => Wsu_eventTickets_Model_Product_Type::TYPE_CP_PRODUCT,//'simple',
 		'product_type' => 'main product',
 		'_attribute_set' => 'Events'.$runid,
 		//'attribute_set_id' => 74,
 		'_product_websites' => $websiteCodes,
-		'website' => $websiteCodes,
+		//'website' => $websiteCodeId,
 		'name' => "Event ".getUniqueCode(2),
 		'price' =>35.99,
-		//'special_price' => 0.90,
-		//'cost' => 0.50,
 		'_category' => $eventsCatId,
 		'description' => 'Default',
 		'short_description' => 'Default',
@@ -263,7 +260,6 @@ $data = array(
 		'meta_title' => 'Default',
 		'meta_description' => 'Default',
 		'meta_keywords' => 'Default',
-		//'weight' => 0,
 		'status' => 1,
 		'visibility' => 4,
 		'tax_class_id' => 2,
@@ -271,7 +267,7 @@ $data = array(
 		'is_in_stock' => 1,
 		'enable_googlecheckout' => '0',
 		'gift_message_available' => '0',
-		'url_key' => strtolower(getUniqueCode(20)),
+		'url_key' => strtolower(getUniqueCode(10)),
 		'media_gallery' => $media_gallery_id,
 		"_media_attribute_id" => $media_gallery_id,
 		"_media_lable" =>"Game Day",
@@ -284,17 +280,15 @@ $data = array(
 	),
 	
 	array(
-		'sku' => 'event_'.getUniqueCode(20),
+		'sku' => 'event_'.getUniqueCode(10),
 		'_type' => Wsu_eventTickets_Model_Product_Type::TYPE_CP_PRODUCT,//'simple',
 		'product_type' => 'main product',
 		'_attribute_set' => 'Events'.$runid,
 		//'attribute_set_id' => 74,
 		'_product_websites' => $websiteCodes,
-		'website' => $websiteCodes,
+		//'website' => $websiteCodeId,
 		'name' => "Event ".getUniqueCode(2),
 		'price' =>25.99,
-		//'special_price' => 0.90,
-		//'cost' => 0.50,
 		'_category' => $eventsCatId,
 		'description' => 'Default',
 		'short_description' => 'Default',
@@ -305,7 +299,6 @@ $data = array(
 		'meta_title' => 'Default',
 		'meta_description' => 'Default',
 		'meta_keywords' => 'Default',
-		//'weight' => 0,
 		'status' => 1,
 		'visibility' => 4,
 		'tax_class_id' => 2,
@@ -313,7 +306,7 @@ $data = array(
 		'is_in_stock' => 1,
 		'enable_googlecheckout' => '0',
 		'gift_message_available' => '0',
-		'url_key' => strtolower(getUniqueCode(20)),
+		'url_key' => strtolower(getUniqueCode(10)),
 		'media_gallery' => $media_gallery_id,
 		"_media_attribute_id" => $media_gallery_id,
 		"_media_lable" =>"Game Day",
@@ -326,17 +319,15 @@ $data = array(
 	),
 	
 	array(
-		'sku' => 'event_'.getUniqueCode(20),
+		'sku' => 'event_'.getUniqueCode(10),
 		'_type' => Wsu_eventTickets_Model_Product_Type::TYPE_CP_PRODUCT,//'simple',
 		'product_type' => 'main product',
 		'_attribute_set' => 'Events'.$runid,
 		//'attribute_set_id' => 74,
 		'_product_websites' => $websiteCodes,
-		'website' => $websiteCodes,
+		//'website' => $websiteCodeId,
 		'name' => "Event ".getUniqueCode(2),
 		'price' =>45.99,
-		//'special_price' => 0.90,
-		//'cost' => 0.50,
 		'_category' => $eventsCatId,
 		'description' => 'Default',
 		'short_description' => 'Default',
@@ -347,7 +338,6 @@ $data = array(
 		'meta_title' => 'Default',
 		'meta_description' => 'Default',
 		'meta_keywords' => 'Default',
-		//'weight' => 0,
 		'status' => 1,
 		'visibility' => 4,
 		'tax_class_id' => 2,
@@ -355,7 +345,7 @@ $data = array(
 		'is_in_stock' => 1,
 		'enable_googlecheckout' => '0',
 		'gift_message_available' => '0',
-		'url_key' => strtolower(getUniqueCode(20)),
+		'url_key' => strtolower(getUniqueCode(10)),
 		'media_gallery' => $media_gallery_id,
 		"_media_attribute_id" => $media_gallery_id,
 		"_media_lable" =>"Game Day",
