@@ -19,7 +19,7 @@ Mage::helper('storeutilities/utilities')->make_store("Event store root",
               );
 
 
-$storeCodeId = Mage::getModel( "core/store" )->load( "eventstore" )->getId();
+$storeCodeId = Mage::getModel( "core/store" )->load($storeCodes)->getId();
 $rootcatID = Mage::app()->getStore($storeCodeId)->getRootCategoryId();
 
 echo "creating cat for store ".$storeCodeId;
@@ -77,13 +77,6 @@ Mage::helper('storeutilities/utilities')->createCat($storeCodeId,$rootcatID,arra
 ));
 $eventsCatId=Mage::getModel('catalog/category')->setStoreId($storeCodeId)->loadByAttribute('url_key', 'football')->getId(); 
 echo "added cat ".$eventsCatId."<br/>";
-
-$eventsCatId = (isset($eventsCatId) && $eventsCatId>0) ? $eventsCatId : 8;
-
-
-
-
-
 
 
 $imgAttrIds = array(79,80,81);
