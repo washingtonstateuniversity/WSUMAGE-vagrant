@@ -10,17 +10,15 @@ $websiteCodes = 'eventstore';//array('eventstore');
 $storeCodes = 'eventstore';//array('eventstore');
 /* */
 
-Mage::helper('storeutilities/utilities')->make_store("Event store root",
-                array('code'=>$websiteCodes,'name'=>'Event store'),
-                array('name'=>'Events Store'),
-                array('code'=>$storeCodes,'name'=>'base default veiw'),
-				'events.store.mage.dev',
-				-1
-              );
+echo $websiteCodes.'::websiteCodes'."\n";
+echo $storeCodes.'::storeCodes'."\n";
+
 
 
 $storeCodeId = Mage::getModel( "core/store" )->load($storeCodes)->getId();
 $rootcatID = Mage::app()->getStore($storeCodeId)->getRootCategoryId();
+echo $storeCodeId.'::storeCodeId'."\n";
+echo $rootcatID.'::rootcatID'."\n";
 
 echo "creating cat for store ".$storeCodeId;
 Mage::helper('storeutilities/utilities')->createCat($storeCodeId,$rootcatID,array(
@@ -82,7 +80,7 @@ echo "added cat ".$eventsCatId."<br/>";
 $imgAttrIds = array(79,80,81);
 $imageGalId = 82;	
 $defaultAttrSetId = Mage::getModel('catalog/product')->getDefaultAttributeSetId();
-
+echo $defaultAttrSetId.'::defaultAttrSetId'."\n";
 $runid="";//getUniqueCode(20);//
 $setInfo = Mage::helper('storeutilities/utilities')
 					->createAttributeSet("Events".$runid,
@@ -90,6 +88,7 @@ $setInfo = Mage::helper('storeutilities/utilities')
 										  array('Gift Options','Recurring Profile'),
 										  array('enable_googlecheckout','weight','manufacturer','color','msrp_enabled','msrp_display_actual_price_type','msrp')
 					 );
+var_dump($setInfo);echo '::setInfo'."\n";
 
 					 
 Mage::helper('storeutilities/utilities')->createAttribute("Event start","eventstartdate".$runid, array(
@@ -194,6 +193,10 @@ Mage::helper('storeutilities/utilities')->createAttribute("Away Game","awaygame"
 
 
 $media_gallery_id = Mage::getSingleton('catalog/product')->getResource()->getAttribute('media_gallery') ->getAttributeId();
+echo $media_gallery_id.'::media_gallery_id'."\n";
+echo $websiteCodes.'::websiteCodes'."\n";
+
+
 $data = array(
 	array(
 		'sku' => 'event_'.getUniqueCode(10),
@@ -202,7 +205,7 @@ $data = array(
 		'_attribute_set' => 'Events'.$runid,
 		//'attribute_set_id' => 74,
 		'_product_websites' => $websiteCodes,
-		//'website' => $websiteCodes,
+		'website' => $websiteCodes,
 		'name' => "Event ".getUniqueCode(2),
 		'price' => 14.99,
 		'_category' => $eventsCatId,
@@ -240,7 +243,7 @@ $data = array(
 		'_attribute_set' => 'Events'.$runid,
 		//'attribute_set_id' => 74,
 		'_product_websites' => $websiteCodes,
-		//'website' => $websiteCodeId,
+		'website' => $websiteCodeId,
 		'name' => "Event ".getUniqueCode(2),
 		'price' =>35.99,
 		'_category' => $eventsCatId,
@@ -279,7 +282,7 @@ $data = array(
 		'_attribute_set' => 'Events'.$runid,
 		//'attribute_set_id' => 74,
 		'_product_websites' => $websiteCodes,
-		//'website' => $websiteCodeId,
+		'website' => $websiteCodeId,
 		'name' => "Event ".getUniqueCode(2),
 		'price' =>25.99,
 		'_category' => $eventsCatId,
@@ -318,7 +321,7 @@ $data = array(
 		'_attribute_set' => 'Events'.$runid,
 		//'attribute_set_id' => 74,
 		'_product_websites' => $websiteCodes,
-		//'website' => $websiteCodeId,
+		'website' => $websiteCodeId,
 		'name' => "Event ".getUniqueCode(2),
 		'price' =>45.99,
 		'_category' => $eventsCatId,

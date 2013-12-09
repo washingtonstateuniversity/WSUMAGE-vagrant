@@ -56,6 +56,22 @@ $cDat->saveConfig('admin/url/custom', 'http://store.admin.mage.dev/', 'default',
  
 echo "Applying the default multi-store setup\n";
 
+
+$websiteCodes = 'eventstore';//array('eventstore');
+$storeCodes = 'eventstore';//array('eventstore');
+/* */
+
+echo $websiteCodes.'::websiteCodes'."\n";
+echo $storeCodes.'::storeCodes'."\n";
+Mage::helper('storeutilities/utilities')->make_store("Event store root",
+                array('code'=>$websiteCodes,'name'=>'Event store'),
+                array('name'=>'Events Store'),
+                array('code'=>$storeCodes,'name'=>'base default veiw'),
+				'events.store.mage.dev',
+				-1
+              );
+
+
 Mage::helper('storeutilities/utilities')->make_store("Student store root",
                 array('code'=>'studentstore','name'=>'Student store'),
                 array('name'=>'Student Store'),
@@ -77,6 +93,9 @@ Mage::helper('storeutilities/utilities')->make_store("Tech store root",
 				'tech.store.mage.dev',
 				13
               );
+
+
+
 
 include_once('sample-events.php');
 
