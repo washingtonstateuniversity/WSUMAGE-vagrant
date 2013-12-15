@@ -248,7 +248,7 @@ module MageInstaller
         require 'digest/md5'
     
         file="scripts/installer_settings.json"
-        add_setting(file,"\"bs_MAGEversion\":\"1.8.0.0\",")
+        add_setting(file,"\"bs_MAGEversion\":\"1.8.1.0\",")
 #use defaults?
         if agree("use default settings? <%= color('[y/n]', :bold) %>? ")
             self.set_settings_defaults()
@@ -306,7 +306,7 @@ module MageInstaller
     def set_settings_defaults()
         require 'digest/md5'
         file="scripts/installer_settings.json"
-        add_setting(file,"\"bs_MAGEversion\":\"1.8.0.0\",")
+        add_setting(file,"\"bs_MAGEversion\":\"1.8.1.0\",")
         add_setting(file,"\"bs_url\":\"store.mage.dev\",")
         add_setting(file,"\"bs_dbhost\":\"localhost\",") # if in lite mode then 
         add_setting(file,"\"bs_dbname\":\"mage\",")
