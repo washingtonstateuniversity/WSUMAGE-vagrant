@@ -1,5 +1,7 @@
-#notice:
-Work on this repo most likely will not procced forward as we at WSU have decided that there should be a split between the server adn the app layer.  The combination is https://github.com/washingtonstateuniversity/WSU-Web-Serverbase as the server base, which you can load the application layer of your wish.  In order to gain the same set up with Magento watch https://github.com/washingtonstateuniversity/WSUMAGE-base as that will be where this repo is being ported over to.  The timeline for this port will be quick.  We will leave this repo open as a learning aid as long as WSU can permit.  
+#Notice:
+Work on this repo most likely will not proceed forward, as we at WSU have decided that there should be a split between the server and the application layer. The combination is https://github.com/washingtonstateuniversity/WSU-Web-Serverbase as the server base and optionally load the application layer of your choice. 
+
+In order to gain the same set up with Magento watch https://github.com/washingtonstateuniversity/WSUMAGE-base as that will be where this repo is being ported over to. The timeline for this port will be quick. We will leave this repo open as a learning aid as long as WSU can permit.  
 
 
 
